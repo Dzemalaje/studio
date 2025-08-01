@@ -73,7 +73,7 @@ export function CVPreview() {
         '--primary-h': h,
         '--primary-s': `${s}%`,
         '--primary-l': `${l}%`,
-        '--primary-foreground-l': `${l > 50 ? 10 : 90}%`,
+        '--primary-foreground-l': l > 50 ? '10%' : '98%',
       } as React.CSSProperties}
     >
       <LayoutGroup>

@@ -27,41 +27,39 @@ export function Toolbar() {
     setIsGenerating(true);
 
     try {
+       // A4 dimensions in points (1 point = 1/72 inch)
+      const a4Width = 595.28;
+      const a4Height = 841.89;
+      
       const canvas = await html2canvas(cvElement, {
         scale: 2, // Higher scale for better quality
         useCORS: true,
         logging: false,
+        width: cvElement.scrollWidth,
+        height: cvElement.scrollHeight,
+        windowWidth: cvElement.scrollWidth,
+        windowHeight: cvElement.scrollHeight
       });
 
       const imgData = canvas.toDataURL('image/png');
-      
-      // A4 dimensions in points (1 point = 1/72 inch)
-      const a4Width = 595.28;
-      const a4Height = 841.89;
-      
       const pdf = new jsPDF({
         orientation: 'portrait',
         unit: 'pt',
         format: 'a4',
       });
       
-      const canvasAspectRatio = canvas.width / canvas.height;
-      const a4AspectRatio = a4Width / a4Height;
+      const pdfWidth = a4Width;
+      const pdfHeight = (canvas.height * pdfWidth) / canvas.width;
+      const totalPages = Math.ceil(pdfHeight / a4Height);
 
-      let pdfCanvasWidth, pdfCanvasHeight;
-
-      if (canvasAspectRatio > a4AspectRatio) {
-        pdfCanvasWidth = a4Width;
-        pdfCanvasHeight = a4Width / canvasAspectRatio;
-      } else {
-        pdfCanvasHeight = a4Height;
-        pdfCanvasWidth = a4Height * canvasAspectRatio;
+      for (let i = 0; i < totalPages; i++) {
+        if (i > 0) {
+          pdf.addPage();
+        }
+        const yPos = -(a4Height * i);
+        pdf.addImage(imgData, 'PNG', 0, yPos, pdfWidth, pdfHeight);
       }
-
-      const x = (a4Width - pdfCanvasWidth) / 2;
-      const y = 0; // Start from top
-
-      pdf.addImage(imgData, 'PNG', x, y, pdfCanvasWidth, pdfCanvasHeight);
+     
       pdf.save('ProfiCV_Resume.pdf');
 
     } catch (error) {
