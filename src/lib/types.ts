@@ -1,12 +1,15 @@
-export interface PersonalDetails {
-  name: string;
-  title: string;
-  email: string;
-  phone: string;
-  location: string;
-  website: string;
-  summary: string;
-}
+import { z } from "zod";
+
+export const PersonalDetailsSchema = z.object({
+  name: z.string().min(1, "Full name is required"),
+  title: z.string().min(1, "Job title is required"),
+  email: z.string().email("Invalid email address"),
+  phone: z.string().optional(),
+  location: z.string().optional(),
+  website: z.string().optional(),
+  summary: z.string().optional(),
+});
+export type PersonalDetails = z.infer<typeof PersonalDetailsSchema>;
 
 export interface WorkExperience {
   id: string;
