@@ -165,7 +165,7 @@ export const SidebarTemplate = ({ sidebarPosition }: { sidebarPosition: 'left' |
   );
 
   return (
-    <motion.div layout className={`grid grid-cols-1 md:grid-cols-3 gap-8`}>
+    <motion.div layout className="grid grid-cols-1 md:grid-cols-3 gap-8 bg-card text-card-foreground p-8 cv-page">
         {sidebarPosition === 'left' ? (
             <>
                 <div className="md:col-span-1">{sidebar}</div>

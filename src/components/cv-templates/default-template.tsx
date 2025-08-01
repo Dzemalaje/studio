@@ -23,7 +23,7 @@ export const DefaultTemplate = () => {
   const baseTextSize = FONT_SIZE_MAP[fontSize];
 
   return (
-    <motion.div layout>
+    <motion.div layout className="bg-card text-card-foreground p-8 space-y-8 cv-page">
       <MotionDiv
         layoutId="personal-details-section"
         className={cn(

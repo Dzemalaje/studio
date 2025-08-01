@@ -79,6 +79,25 @@
       transition: color 0.3s ease-in-out, background-color 0.3s ease-in-out, border-color 0.3s ease-in-out, font-size 0.3s ease-in-out;
     }
   }
+
+  .cv-page {
+    page-break-after: always;
+    position: relative;
+  }
+
+  .cv-page:not(:last-child)::after {
+    content: "Page Break";
+    position: absolute;
+    bottom: -1.5rem;
+    left: 50%;
+    transform: translateX(-50%);
+    background: #e2e8f0;
+    color: #4a5568;
+    font-size: 10px;
+    font-weight: bold;
+    padding: 2px 8px;
+    border-radius: 4px;
+  }
 }
 
 @media print {
@@ -101,15 +120,27 @@
     transform: scale(1);
     box-shadow: none;
     border: none;
+    overflow: visible;
   }
 
   .cv-preview {
     box-shadow: none;
     border: none;
     border-radius: 0;
-    height: 100%;
+    height: auto;
     width: 100%;
     page-break-after: always;
     overflow: visible !important;
+  }
+
+  .cv-page {
+    height: 297mm;
+    width: 210mm;
+    overflow: hidden;
+    page-break-after: always;
+  }
+
+  .cv-page::after {
+    display: none;
   }
 }
