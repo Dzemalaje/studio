@@ -28,28 +28,25 @@ const ensureIds = (data: Partial<CVData>): CVData => {
 };
 
 export const CVDataProvider = ({ children }: { children: ReactNode }) => {
+  const [cvData, setCvData] = useState<CVData>(initialCVData);
   const [isMounted, setIsMounted] = useState(false);
 
-  const [cvData, setCvData] = useState<CVData>(() => {
-    if (typeof window === 'undefined') {
-      return initialCVData;
-    }
+  useEffect(() => {
+    // This effect runs only on the client, after the initial render.
     try {
       const storedData = window.localStorage.getItem('proficv-data');
-      return storedData ? ensureIds(JSON.parse(storedData)) : initialCVData;
+      if (storedData) {
+        setCvData(ensureIds(JSON.parse(storedData)));
+      }
     } catch (error) {
       console.error("Failed to read from localStorage on init", error);
-      return initialCVData;
     }
-  });
+    setIsMounted(true);
+  }, []);
 
   useEffect(() => {
-    if (!isMounted) {
-      setIsMounted(true);
-    }
-  }, [isMounted]);
-
-  useEffect(() => {
+    // This effect runs only on the client and only after the component has mounted.
+    // This prevents overwriting localStorage with initial data on the first render.
     if (isMounted) {
       try {
         const dataToStore = JSON.stringify(cvData);
