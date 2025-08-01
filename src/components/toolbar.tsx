@@ -2,13 +2,80 @@
 "use client";
 
 import { Button } from "@/components/ui/button";
-import { Download } from "lucide-react";
-import { cn } from "@/lib/utils";
+import { Download, Loader2 } from "lucide-react";
+import html2canvas from 'html2canvas';
+import jsPDF from 'jspdf';
+import { useState } from "react";
+import { useToast } from "@/hooks/use-toast";
 
 export function Toolbar() {
-  const handlePrint = () => {
-    window.print();
+  const [isGenerating, setIsGenerating] = useState(false);
+  const { toast } = useToast();
+
+  const handleDownloadPdf = async () => {
+    const cvElement = document.querySelector<HTMLElement>('.cv-preview');
+
+    if (!cvElement) {
+      toast({
+        title: "Error",
+        description: "Could not find the CV preview element to download.",
+        variant: "destructive",
+      });
+      return;
+    }
+    
+    setIsGenerating(true);
+
+    try {
+      const canvas = await html2canvas(cvElement, {
+        scale: 2, // Higher scale for better quality
+        useCORS: true,
+        logging: false,
+      });
+
+      const imgData = canvas.toDataURL('image/png');
+      
+      // A4 dimensions in points (1 point = 1/72 inch)
+      const a4Width = 595.28;
+      const a4Height = 841.89;
+      
+      const pdf = new jsPDF({
+        orientation: 'portrait',
+        unit: 'pt',
+        format: 'a4',
+      });
+      
+      const canvasAspectRatio = canvas.width / canvas.height;
+      const a4AspectRatio = a4Width / a4Height;
+
+      let pdfCanvasWidth, pdfCanvasHeight;
+
+      if (canvasAspectRatio > a4AspectRatio) {
+        pdfCanvasWidth = a4Width;
+        pdfCanvasHeight = a4Width / canvasAspectRatio;
+      } else {
+        pdfCanvasHeight = a4Height;
+        pdfCanvasWidth = a4Height * canvasAspectRatio;
+      }
+
+      const x = (a4Width - pdfCanvasWidth) / 2;
+      const y = 0; // Start from top
+
+      pdf.addImage(imgData, 'PNG', x, y, pdfCanvasWidth, pdfCanvasHeight);
+      pdf.save('ProfiCV_Resume.pdf');
+
+    } catch (error) {
+      console.error(error);
+      toast({
+        title: "PDF Generation Failed",
+        description: "An unexpected error occurred while generating the PDF. Please try again.",
+        variant: "destructive",
+      });
+    } finally {
+      setIsGenerating(false);
+    }
   };
+
 
   return (
     <header className="sticky top-0 z-10 w-full border-b bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60 no-print">
@@ -20,12 +87,17 @@ export function Toolbar() {
         </div>
         <div className="flex flex-1 items-center justify-end space-x-2">
             <Button 
-              onClick={handlePrint} 
+              onClick={handleDownloadPdf} 
               size="sm"
               className="shadow-sm transition-transform hover:scale-105 text-white"
+              disabled={isGenerating}
             >
-              <Download className="mr-2 h-4 w-4" />
-              Download PDF
+              {isGenerating ? (
+                <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+              ) : (
+                <Download className="mr-2 h-4 w-4" />
+              )}
+              {isGenerating ? 'Generating...' : 'Download PDF'}
             </Button>
         </div>
       </div>
