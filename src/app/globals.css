@@ -100,6 +100,12 @@
     border: none;
   }
 
+  #cv-preview-container {
+    position: static;
+    height: auto;
+    overflow: visible;
+  }
+
   .no-print {
     display: none;
   }
