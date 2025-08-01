@@ -20,8 +20,7 @@ export function Toolbar() {
         <div className="flex flex-1 items-center justify-end space-x-2">
             <Button 
               onClick={handlePrint} 
-              size="sm" 
-              className="bg-gradient-to-r from-red-500 via-yellow-500 via-green-500 via-blue-500 to-purple-500 bg-[length:200%_auto] animate-rainbow-bg text-white font-bold transition-all duration-300"
+              size="sm"
             >
               <Download className="mr-2 h-4 w-4" />
               Download PDF
