@@ -40,4 +40,6 @@ export interface CVData {
   education: Education[];
   skills: Skill[];
   template: 'default' | 'left-sidebar' | 'right-sidebar';
+  themeColor: string;
+  fontFamily: string;
 }

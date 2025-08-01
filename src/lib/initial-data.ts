@@ -2,6 +2,8 @@ import type { CVData } from "./types";
 
 export const initialCVData: CVData = {
   template: "default",
+  themeColor: "#48A9A6",
+  fontFamily: "PT Sans",
   personalDetails: {
     name: "Jane Doe",
     title: "Full Stack Developer",
