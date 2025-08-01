@@ -22,7 +22,7 @@ export function Toolbar() {
             <Button 
               onClick={handlePrint} 
               size="sm"
-              className="shadow-sm transition-transform hover:scale-105"
+              className="shadow-sm transition-transform hover:scale-105 text-white"
             >
               <Download className="mr-2 h-4 w-4" />
               Download PDF
