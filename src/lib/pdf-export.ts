@@ -38,7 +38,7 @@ export const exportCvToPdf = async (containerId: string, fileName: string): Prom
     });
     
     const pdfWidth = pdf.internal.pageSize.getWidth();
-    const pdfHeight = pdf.internal.pencarian.getHeight();
+    const pdfHeight = pdf.internal.pageSize.getHeight();
 
     const canvasWidth = canvas.width;
     const canvasHeight = canvas.height;
