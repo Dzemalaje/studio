@@ -154,7 +154,7 @@ export function CertificationsForm() {
               </div>
             </SortableContext>
         </DndContext>
-      <Button variant="outline" onClick={handleAddCertification} className="w-full">
+      <Button onClick={handleAddCertification} className="w-full text-white">
         <PlusCircle className="mr-2 h-4 w-4" /> Add Certification
       </Button>
     </div>

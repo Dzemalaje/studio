@@ -155,7 +155,7 @@ export function ProjectsForm() {
                 </div>
             </SortableContext>
         </DndContext>
-      <Button variant="outline" onClick={handleAddProject} className="w-full">
+      <Button onClick={handleAddProject} className="w-full text-white">
         <PlusCircle className="mr-2 h-4 w-4" /> Add Project
       </Button>
     </div>

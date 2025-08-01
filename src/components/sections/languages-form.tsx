@@ -149,7 +149,7 @@ export function LanguagesForm() {
               </div>
             </SortableContext>
         </DndContext>
-      <Button variant="outline" onClick={handleAddLanguage} className="w-full">
+      <Button onClick={handleAddLanguage} className="w-full text-white">
         <PlusCircle className="mr-2 h-4 w-4" /> Add Language
       </Button>
     </div>

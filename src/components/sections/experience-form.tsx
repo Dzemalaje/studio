@@ -225,7 +225,7 @@ export function ExperienceForm() {
             </div>
         </SortableContext>
       </DndContext>
-      <Button variant="outline" onClick={handleAddExperience} className="w-full">
+      <Button onClick={handleAddExperience} className="w-full text-white">
         <PlusCircle className="mr-2 h-4 w-4" /> Add Experience
       </Button>
     </div>

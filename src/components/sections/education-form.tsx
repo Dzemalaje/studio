@@ -163,7 +163,7 @@ export function EducationForm() {
                 </div>
             </SortableContext>
         </DndContext>
-      <Button variant="outline" onClick={handleAddEducation} className="w-full">
+      <Button onClick={handleAddEducation} className="w-full text-white">
         <PlusCircle className="mr-2 h-4 w-4" /> Add Education
       </Button>
     </div>

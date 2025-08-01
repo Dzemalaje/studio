@@ -1,3 +1,4 @@
+
 "use client";
 
 import { useState, useRef } from 'react';
@@ -128,7 +129,7 @@ export function ImageCropper({ imageSrc, onCropComplete }: ImageCropperProps) {
         <ZoomIn className="text-muted-foreground" />
       </div>
 
-      <Button onClick={handleCropImage} className="w-full">
+      <Button onClick={handleCropImage} className="w-full text-white">
         <CropIcon className="mr-2" />
         Crop Image
       </Button>

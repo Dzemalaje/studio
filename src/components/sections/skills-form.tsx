@@ -107,7 +107,7 @@ export function SkillsForm() {
             onKeyDown={handleKeyPress}
             placeholder="e.g., React"
           />
-          <Button onClick={handleAddSkill}>Add</Button>
+          <Button onClick={handleAddSkill} className="text-white">Add</Button>
         </div>
       </div>
       <DndContext
