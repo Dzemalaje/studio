@@ -6,14 +6,14 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Badge } from "@/components/ui/badge";
 import { X } from "lucide-react";
-import { useState, KeyboardEvent } from "react";
+import { useState, KeyboardEvent, useCallback } from "react";
 import { v4 as uuidv4 } from "uuid";
 
 export function SkillsForm() {
   const { cvData, setCvData } = useCvData();
   const [currentSkill, setCurrentSkill] = useState("");
 
-  const handleAddSkill = () => {
+  const handleAddSkill = useCallback(() => {
     if (currentSkill.trim()) {
       setCvData((prev) => ({
         ...prev,
@@ -21,21 +21,21 @@ export function SkillsForm() {
       }));
       setCurrentSkill("");
     }
-  };
+  }, [currentSkill, setCvData]);
 
-  const handleRemoveSkill = (id: string) => {
+  const handleRemoveSkill = useCallback((id: string) => {
     setCvData((prev) => ({
       ...prev,
       skills: prev.skills.filter((skill) => skill.id !== id),
     }));
-  };
+  }, [setCvData]);
   
-  const handleKeyPress = (e: KeyboardEvent<HTMLInputElement>) => {
+  const handleKeyPress = useCallback((e: KeyboardEvent<HTMLInputElement>) => {
     if (e.key === 'Enter') {
       e.preventDefault();
       handleAddSkill();
     }
-  }
+  }, [handleAddSkill]);
 
   return (
     <div className="space-y-4 p-1">
@@ -52,7 +52,7 @@ export function SkillsForm() {
           <Button onClick={handleAddSkill}>Add</Button>
         </div>
       </div>
-      <div className="flex flex-wrap gap-2">
+      <div className="flex flex-wrap gap-2 min-h-[2.5rem] items-center">
         {cvData.skills.length === 0 && (
             <p className="text-sm text-muted-foreground">No skills added yet.</p>
         )}
@@ -62,6 +62,7 @@ export function SkillsForm() {
             <button
               onClick={() => handleRemoveSkill(skill.id)}
               className="ml-2 rounded-full hover:bg-muted-foreground/20 p-0.5"
+              aria-label={`Remove ${skill.name} skill`}
             >
               <X className="h-3 w-3" />
             </button>

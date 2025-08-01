@@ -8,16 +8,17 @@ import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
 import { Loader2, PlusCircle, Sparkles, Trash2 } from "lucide-react";
 import { v4 as uuidv4 } from "uuid";
-import { useState } from "react";
+import { useState, useCallback } from "react";
 import { useToast } from "@/hooks/use-toast";
 import { generateJobSummary } from "@/ai/flows/generate-job-summary";
+import { WorkExperience } from "@/lib/types";
 
 export function ExperienceForm() {
   const { cvData, setCvData } = useCvData();
   const [isLoading, setIsLoading] = useState<string | null>(null);
   const { toast } = useToast();
 
-  const handleAddExperience = () => {
+  const handleAddExperience = useCallback(() => {
     setCvData((prev) => ({
       ...prev,
       workExperience: [
@@ -33,23 +34,23 @@ export function ExperienceForm() {
         },
       ],
     }));
-  };
+  }, [setCvData]);
 
-  const handleRemoveExperience = (id: string) => {
+  const handleRemoveExperience = useCallback((id: string) => {
     setCvData((prev) => ({
       ...prev,
       workExperience: prev.workExperience.filter((exp) => exp.id !== id),
     }));
-  };
+  }, [setCvData]);
 
-  const handleChange = (id: string, field: string, value: string) => {
+  const handleChange = useCallback((id: string, field: keyof WorkExperience, value: string) => {
     setCvData((prev) => ({
       ...prev,
       workExperience: prev.workExperience.map((exp) =>
         exp.id === id ? { ...exp, [field]: value } : exp
       ),
     }));
-  };
+  }, [setCvData]);
 
   const handleGenerateSummary = async (experienceId: string) => {
     setIsLoading(experienceId);
@@ -73,12 +74,8 @@ export function ExperienceForm() {
         responsibilities: experience.description,
       });
 
-      setCvData((prev) => ({
-        ...prev,
-        workExperience: prev.workExperience.map((exp) =>
-          exp.id === experienceId ? { ...exp, summary: result.summary } : exp
-        ),
-      }));
+      handleChange(experienceId, 'summary', result.summary);
+      
       toast({
         title: "Summary Generated",
         description: "AI summary has been successfully added.",
@@ -97,7 +94,7 @@ export function ExperienceForm() {
 
   return (
     <div className="space-y-4">
-      {cvData.workExperience.map((exp, index) => (
+      {cvData.workExperience.map((exp) => (
         <Card key={exp.id}>
           <CardContent className="pt-6 space-y-4">
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">

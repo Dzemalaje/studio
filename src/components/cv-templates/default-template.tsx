@@ -1,0 +1,105 @@
+"use client";
+
+import { useCvData } from "@/hooks/use-cv-data";
+import { Briefcase, GraduationCap, Calendar, Mail, Phone, Globe, MapPin } from "lucide-react";
+import { cn } from "@/lib/utils";
+import { motion } from "framer-motion";
+
+const FONT_SIZE_MAP = {
+    sm: "text-sm",
+    base: "text-base",
+    lg: "text-lg",
+};
+
+const MotionDiv = motion.div;
+
+export const DefaultTemplate = () => {
+  const { cvData } = useCvData();
+  const { personalDetails, workExperience, education, skills, fontSize } = cvData;
+  const baseTextSize = FONT_SIZE_MAP[fontSize];
+
+  return (
+    <motion.div layout>
+      <MotionDiv layoutId="personal-details-section">
+        <header className="text-center mb-8">
+          <h1 className={cn("text-4xl font-bold font-headline text-primary", { 'text-5xl': fontSize === 'lg', 'text-3xl': fontSize === 'sm' })}>{personalDetails.name}</h1>
+          <p className={cn("text-xl text-muted-foreground font-light", {'text-2xl': fontSize === 'lg', 'text-lg': fontSize === 'sm'})}>{personalDetails.title}</p>
+          <div className={cn("flex justify-center items-center flex-wrap gap-x-4 gap-y-2 mt-4 text-sm text-muted-foreground", baseTextSize)}>
+            {personalDetails.email && <div className="flex items-center gap-2"><Mail className="h-4 w-4" /><span>{personalDetails.email}</span></div>}
+            {personalDetails.phone && <div className="flex items-center gap-2"><Phone className="h-4 w-4" /><span>{personalDetails.phone}</span></div>}
+            {personalDetails.website && <div className="flex items-center gap-2"><Globe className="h-4 w-4" /><span>{personalDetails.website}</span></div>}
+            {personalDetails.location && <div className="flex items-center gap-2"><MapPin className="h-4 w-4" /><span>{personalDetails.location}</span></div>}
+          </div>
+        </header>
+      </MotionDiv>
+
+      <main className={baseTextSize}>
+        {personalDetails.summary && (
+          <MotionDiv layoutId="summary-section" className="mb-8">
+            <h2 className="text-2xl font-bold font-headline border-b-2 border-primary pb-2 mb-4 text-primary">Summary</h2>
+            <p className="whitespace-pre-wrap text-foreground/80">{personalDetails.summary}</p>
+          </MotionDiv>
+        )}
+        
+        {workExperience.length > 0 && (
+          <MotionDiv layoutId="experience-section" className="mb-8">
+            <h2 className="text-2xl font-bold font-headline border-b-2 border-primary pb-2 mb-4 text-primary flex items-center gap-2"><Briefcase className="h-6 w-6"/>Work Experience</h2>
+            <div className="space-y-6">
+              {workExperience.map((job) => (
+                <div key={job.id}>
+                  <div className="flex justify-between items-baseline">
+                    <h3 className="text-lg font-bold">{job.role}</h3>
+                    <div className="text-sm text-muted-foreground flex items-center gap-2">
+                      <Calendar className="h-4 w-4"/>
+                      <span>{job.startDate} - {job.endDate || 'Present'}</span>
+                    </div>
+                  </div>
+                  <p className="text-md font-semibold text-primary">{job.company}</p>
+                  {job.summary && (
+                     <div className="mt-2 p-3 bg-primary/5 border-l-4 border-primary rounded-r-md">
+                        <p className="italic whitespace-pre-wrap text-foreground/90">{job.summary}</p>
+                     </div>
+                  )}
+                  <p className="mt-2 whitespace-pre-wrap text-foreground/80">{job.description}</p>
+                </div>
+              ))}
+            </div>
+          </MotionDiv>
+        )}
+
+        {education.length > 0 && (
+           <MotionDiv layoutId="education-section" className="mb-8">
+            <h2 className="text-2xl font-bold font-headline border-b-2 border-primary pb-2 mb-4 text-primary flex items-center gap-2"><GraduationCap className="h-6 w-6"/>Education</h2>
+            <div className="space-y-4">
+              {education.map((edu) => (
+                <div key={edu.id}>
+                  <div className="flex justify-between items-baseline">
+                    <h3 className="text-lg font-bold">{edu.degree}</h3>
+                    <div className="text-sm text-muted-foreground flex items-center gap-2">
+                        <Calendar className="h-4 w-4"/>
+                        <span>{edu.startDate} - {edu.endDate || 'Present'}</span>
+                    </div>
+                  </div>
+                  <p className="text-md text-muted-foreground">{edu.institution}</p>
+                </div>
+              ))}
+            </div>
+           </MotionDiv>
+        )}
+
+        {skills.length > 0 && (
+          <MotionDiv layoutId="skills-section">
+            <h2 className="text-2xl font-bold font-headline border-b-2 border-primary pb-2 mb-4 text-primary">Skills</h2>
+            <div className="flex flex-wrap gap-2">
+              {skills.map((skill) => (
+                <div key={skill.id} className="bg-primary/10 text-primary font-medium px-3 py-1 rounded-full">
+                  {skill.name}
+                </div>
+              ))}
+            </div>
+          </MotionDiv>
+        )}
+      </main>
+    </motion.div>
+  )
+}

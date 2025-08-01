@@ -8,12 +8,12 @@ import {
     SelectValue,
 } from "@/components/ui/select";
 import { Label } from "@/components/ui/label";
-import { Languages, LayoutTemplate, Palette, Type, Scaling } from "lucide-react";
+import { Languages, Type, Scaling } from "lucide-react";
 import { useCvData } from "@/hooks/use-cv-data";
-import { Input } from "../ui/input";
 import { cn } from "@/lib/utils";
-import { Button } from "../ui/button";
 import { FontSize } from "@/lib/types";
+import { useCallback } from "react";
+import { ModernColorPicker } from "../modern-color-picker";
 
 const FONT_OPTIONS = [
     { label: "PT Sans", value: "PT Sans" },
@@ -60,21 +60,21 @@ const LayoutPreview = ({ layout }: { layout: 'default' | 'left-sidebar' | 'right
 export function CustomizationForm() {
     const { cvData, setCvData } = useCvData();
 
-    const handleTemplateChange = (value: 'default' | 'left-sidebar' | 'right-sidebar') => {
+    const handleTemplateChange = useCallback((value: 'default' | 'left-sidebar' | 'right-sidebar') => {
         setCvData((prev) => ({...prev, template: value}));
-    };
+    }, [setCvData]);
 
-    const handleColorChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-        setCvData(prev => ({ ...prev, themeColor: e.target.value }));
-    }
+    const handleColorChange = useCallback((color: string) => {
+        setCvData(prev => ({ ...prev, themeColor: color }));
+    }, [setCvData]);
 
-    const handleFontChange = (value: string) => {
+    const handleFontChange = useCallback((value: string) => {
         setCvData(prev => ({...prev, fontFamily: value}));
-    }
+    }, [setCvData]);
 
-    const handleFontSizeChange = (value: FontSize) => {
+    const handleFontSizeChange = useCallback((value: FontSize) => {
         setCvData(prev => ({...prev, fontSize: value}));
-    }
+    }, [setCvData]);
 
     return (
         <div className="space-y-6 p-1">
@@ -89,6 +89,8 @@ export function CustomizationForm() {
                                     "w-full rounded-lg border-2 p-1 transition-colors",
                                     cvData.template === template.value ? "border-primary" : "border-transparent hover:border-primary/50"
                                 )}
+                                aria-label={`Select ${template.label} template`}
+                                aria-pressed={cvData.template === template.value}
                             >
                                <LayoutPreview layout={template.value} />
                             </button>
@@ -117,22 +119,7 @@ export function CustomizationForm() {
 
                 <div className="space-y-2">
                     <Label>Theme Color</Label>
-                    <div className="relative flex items-center">
-                        <Palette className="absolute left-3 h-4 w-4 text-muted-foreground" />
-                        <Input 
-                            type="text" 
-                            value={cvData.themeColor || ''} 
-                            onChange={handleColorChange} 
-                            className="pl-9"
-                            placeholder="#000000"
-                        />
-                        <Input 
-                            type="color" 
-                            value={cvData.themeColor || ''} 
-                            onChange={handleColorChange} 
-                            className="absolute right-1 top-1/2 -translate-y-1/2 h-8 w-8 p-1 cursor-pointer"
-                        />
-                    </div>
+                    <ModernColorPicker color={cvData.themeColor} onChange={handleColorChange} />
                 </div>
                 <div className="space-y-2">
                     <Label>Font Family</Label>

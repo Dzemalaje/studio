@@ -3,7 +3,7 @@
 import { useCvData } from "@/hooks/use-cv-data";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
-import { useForm } from "react-hook-form";
+import { useForm, useWatch } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { PersonalDetails, PersonalDetailsSchema } from "@/lib/types";
 import {
@@ -14,7 +14,8 @@ import {
   FormLabel,
   FormMessage,
 } from "@/components/ui/form";
-import { useEffect } from "react";
+import { useEffect, useCallback } from "react";
+import debounce from 'lodash.debounce';
 
 export function PersonalDetailsForm() {
   const { cvData, setCvData } = useCvData();
@@ -22,20 +23,33 @@ export function PersonalDetailsForm() {
   const form = useForm<PersonalDetails>({
     resolver: zodResolver(PersonalDetailsSchema),
     defaultValues: cvData.personalDetails,
-    mode: "onBlur",
+    mode: "onChange",
   });
 
-  useEffect(() => {
-    const subscription = form.watch((value) => {
+  const debouncedSetCvData = useCallback(
+    debounce((data: PersonalDetails) => {
       setCvData((prev) => ({
         ...prev,
-        personalDetails: value as PersonalDetails,
+        personalDetails: data,
       }));
-    });
-    return () => subscription.unsubscribe();
-  }, [form, setCvData]);
+    }, 300),
+    [setCvData]
+  );
+
+  const watchedData = useWatch({ control: form.control });
 
   useEffect(() => {
+    if (form.formState.isDirty) {
+      debouncedSetCvData(watchedData as PersonalDetails);
+    }
+    return () => {
+      debouncedSetCvData.cancel();
+    };
+  }, [watchedData, form.formState.isDirty, debouncedSetCvData]);
+
+
+  useEffect(() => {
+    // Reset form when external data changes, avoiding unnecessary re-renders
     if (JSON.stringify(form.getValues()) !== JSON.stringify(cvData.personalDetails)) {
         form.reset(cvData.personalDetails);
     }

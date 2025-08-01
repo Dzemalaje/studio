@@ -7,11 +7,13 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { PlusCircle, Trash2 } from "lucide-react";
 import { v4 as uuidv4 } from 'uuid';
+import { useCallback } from "react";
+import { Education } from "@/lib/types";
 
 export function EducationForm() {
   const { cvData, setCvData } = useCvData();
 
-  const handleAddEducation = () => {
+  const handleAddEducation = useCallback(() => {
     setCvData((prev) => ({
       ...prev,
       education: [
@@ -19,27 +21,27 @@ export function EducationForm() {
         { id: uuidv4(), degree: "", institution: "", startDate: "", endDate: "" },
       ],
     }));
-  };
+  }, [setCvData]);
 
-  const handleRemoveEducation = (id: string) => {
+  const handleRemoveEducation = useCallback((id: string) => {
     setCvData((prev) => ({
       ...prev,
       education: prev.education.filter((edu) => edu.id !== id),
     }));
-  };
+  }, [setCvData]);
 
-  const handleChange = (id: string, field: string, value: string) => {
+  const handleChange = useCallback((id: string, field: keyof Education, value: string) => {
     setCvData((prev) => ({
       ...prev,
       education: prev.education.map((edu) =>
         edu.id === id ? { ...edu, [field]: value } : edu
       ),
     }));
-  };
+  }, [setCvData]);
 
   return (
     <div className="space-y-4">
-      {cvData.education.map((edu, index) => (
+      {cvData.education.map((edu) => (
         <Card key={edu.id}>
           <CardContent className="pt-6">
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
@@ -85,6 +87,7 @@ export function EducationForm() {
               size="icon"
               className="mt-4 text-destructive hover:bg-destructive/10"
               onClick={() => handleRemoveEducation(edu.id)}
+              aria-label={`Remove ${edu.institution} education entry`}
             >
               <Trash2 className="h-4 w-4" />
             </Button>
