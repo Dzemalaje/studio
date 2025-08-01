@@ -3,7 +3,7 @@ import { Toaster } from "@/components/ui/toaster"
 import './globals.css';
 
 export const metadata: Metadata = {
-  title: 'CV Canvas',
+  title: 'ProfiCV',
   description: 'A modern CV builder to craft your perfect resume.',
 };
 

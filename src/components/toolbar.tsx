@@ -14,7 +14,7 @@ export function Toolbar() {
       <div className="container flex h-16 items-center">
         <div className="mr-4 flex items-center">
           <h1 className="text-2xl font-bold font-logo">
-            CV Canvas
+            ProfiCV
           </h1>
         </div>
         <div className="flex flex-1 items-center justify-end space-x-2">
