@@ -6,6 +6,7 @@ import { Briefcase, GraduationCap, Calendar, Mail, Phone, Globe, MapPin, AppWind
 import { cn } from "@/lib/utils";
 import { motion } from "framer-motion";
 import Image from "next/image";
+import { Progress } from "../ui/progress";
 
 const FONT_SIZE_MAP = {
     sm: "text-sm",
@@ -14,6 +15,7 @@ const FONT_SIZE_MAP = {
 };
 
 const MotionDiv = motion.div;
+const PROFICIENCY_LEVELS = ["Beginner", "Intermediate", "Advanced", "Fluent", "Native"];
 
 export const SidebarTemplate = ({ sidebarPosition }: { sidebarPosition: 'left' | 'right' }) => {
   const { cvData } = useCvData();
@@ -81,10 +83,14 @@ export const SidebarTemplate = ({ sidebarPosition }: { sidebarPosition: 'left' |
          {languages.length > 0 && (
           <MotionDiv layoutId="languages-section">
             <h2 className="text-xl font-bold font-headline border-b-2 border-primary pb-2 mb-4 text-primary flex items-center gap-2"><LanguagesIcon className="h-5 w-5"/>Languages</h2>
-            <div className="space-y-2">
+            <div className="space-y-3">
               {languages.map((lang) => (
                 <div key={lang.id}>
-                  <span className="font-semibold">{lang.name}:</span> <span className="text-muted-foreground">{lang.proficiency}</span>
+                  <div className="flex justify-between items-center mb-1 text-sm">
+                    <span className="font-semibold">{lang.name}</span>
+                    <span className="text-muted-foreground">{PROFICIENCY_LEVELS[lang.level]}</span>
+                  </div>
+                  <Progress value={(lang.level + 1) * 20} className="h-1.5" />
                 </div>
               ))}
             </div>

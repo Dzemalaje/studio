@@ -6,6 +6,7 @@ import { Briefcase, GraduationCap, Calendar, Mail, Phone, Globe, MapPin, AppWind
 import { cn } from "@/lib/utils";
 import { motion } from "framer-motion";
 import Image from "next/image";
+import { Progress } from "../ui/progress";
 
 const FONT_SIZE_MAP = {
     sm: "text-sm",
@@ -14,6 +15,7 @@ const FONT_SIZE_MAP = {
 };
 
 const MotionDiv = motion.div;
+const PROFICIENCY_LEVELS = ["Beginner", "Intermediate", "Advanced", "Fluent", "Native"];
 
 export const DefaultTemplate = () => {
   const { cvData } = useCvData();
@@ -147,10 +149,14 @@ export const DefaultTemplate = () => {
         {languages.length > 0 && (
           <MotionDiv layoutId="languages-section">
             <h2 className="text-2xl font-bold font-headline border-b-2 border-primary pb-2 mb-4 text-primary flex items-center gap-2"><Languages className="h-6 w-6"/>Languages</h2>
-            <div className="flex flex-wrap gap-4">
+            <div className="grid grid-cols-2 gap-4">
               {languages.map((lang) => (
                 <div key={lang.id}>
-                  <span className="font-bold">{lang.name}:</span> <span className="text-muted-foreground">{lang.proficiency}</span>
+                  <div className="flex justify-between items-center mb-1">
+                    <span className="font-bold">{lang.name}</span>
+                    <span className="text-sm text-muted-foreground">{PROFICIENCY_LEVELS[lang.level]}</span>
+                  </div>
+                   <Progress value={(lang.level + 1) * 20} className="h-2" />
                 </div>
               ))}
             </div>

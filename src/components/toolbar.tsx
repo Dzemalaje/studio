@@ -3,6 +3,7 @@
 
 import { Button } from "@/components/ui/button";
 import { Download } from "lucide-react";
+import { cn } from "@/lib/utils";
 
 export function Toolbar() {
   const handlePrint = () => {
@@ -21,6 +22,7 @@ export function Toolbar() {
             <Button 
               onClick={handlePrint} 
               size="sm"
+              className="shadow-sm transition-transform hover:scale-105"
             >
               <Download className="mr-2 h-4 w-4" />
               Download PDF

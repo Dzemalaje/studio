@@ -58,5 +58,8 @@ export const initialCVData: CVData = {
   ],
   projects: [],
   certifications: [],
-  languages: [],
+  languages: [
+    { id: 'lang-1', name: 'English', level: 4 },
+    { id: 'lang-2', name: 'Spanish', level: 2 },
+  ],
 };

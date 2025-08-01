@@ -53,7 +53,7 @@ export interface Certification {
 export interface Language {
   id: string;
   name: string;
-  proficiency: string;
+  level: number;
 }
 
 export type FontSize = 'sm' | 'base' | 'lg';

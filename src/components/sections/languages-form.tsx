@@ -13,8 +13,11 @@ import { Language } from "@/lib/types";
 import { DndContext, closestCenter, KeyboardSensor, PointerSensor, useSensor, useSensors, DragEndEvent } from '@dnd-kit/core';
 import { arrayMove, SortableContext, sortableKeyboardCoordinates, useSortable, verticalListSortingStrategy } from '@dnd-kit/sortable';
 import { CSS } from '@dnd-kit/utilities';
+import { Slider } from "../ui/slider";
 
-const SortableLanguageItem = ({ lang, onRemove, onChange }: { lang: Language; onRemove: (id: string) => void; onChange: (id: string, field: keyof Language, value: string) => void; }) => {
+const PROFICIENCY_LEVELS = ["Beginner", "Intermediate", "Advanced", "Fluent", "Native"];
+
+const SortableLanguageItem = ({ lang, onRemove, onChange }: { lang: Language; onRemove: (id: string) => void; onChange: (id: string, field: keyof Language, value: any) => void; }) => {
     const {
         attributes,
         listeners,
@@ -36,7 +39,7 @@ const SortableLanguageItem = ({ lang, onRemove, onChange }: { lang: Language; on
                         <div {...listeners} className="cursor-grab p-2 -ml-2 mt-6">
                             <GripVertical className="h-5 w-5 text-muted-foreground" />
                         </div>
-                        <div className="flex-grow grid grid-cols-1 sm:grid-cols-2 gap-4">
+                        <div className="flex-grow grid grid-cols-1 sm:grid-cols-1 gap-4">
                           <div className="space-y-2">
                             <Label htmlFor={`lang-name-${lang.id}`}>Language</Label>
                             <Input
@@ -47,12 +50,13 @@ const SortableLanguageItem = ({ lang, onRemove, onChange }: { lang: Language; on
                             />
                           </div>
                           <div className="space-y-2">
-                            <Label htmlFor={`lang-proficiency-${lang.id}`}>Proficiency</Label>
-                            <Input
-                              id={`lang-proficiency-${lang.id}`}
-                              value={lang.proficiency}
-                              onChange={(e) => onChange(lang.id, "proficiency", e.target.value)}
-                              placeholder="e.g., Native or Fluent"
+                            <Label htmlFor={`lang-proficiency-${lang.id}`}>Proficiency: <span className="font-semibold text-primary">{PROFICIENCY_LEVELS[lang.level]}</span></Label>
+                             <Slider
+                                id={`lang-proficiency-${lang.id}`}
+                                value={[lang.level]}
+                                onValueChange={(value) => onChange(lang.id, "level", value[0])}
+                                max={4}
+                                step={1}
                             />
                           </div>
                         </div>
@@ -87,7 +91,7 @@ export function LanguagesForm() {
       ...prev,
       languages: [
         ...prev.languages,
-        { id: uuidv4(), name: "", proficiency: "" },
+        { id: uuidv4(), name: "", level: 2 },
       ],
     }));
   }, [setCvData]);
@@ -99,7 +103,7 @@ export function LanguagesForm() {
     }));
   }, [setCvData]);
 
-  const handleChange = useCallback((id: string, field: keyof Language, value: string) => {
+  const handleChange = useCallback((id: string, field: keyof Language, value: any) => {
     setCvData((prev) => ({
       ...prev,
       languages: prev.languages.map((lang) =>
