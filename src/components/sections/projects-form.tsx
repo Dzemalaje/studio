@@ -7,13 +7,90 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
-import { PlusCircle, Trash2 } from "lucide-react";
+import { GripVertical, PlusCircle, Trash2 } from "lucide-react";
 import { v4 as uuidv4 } from 'uuid';
 import { useCallback } from "react";
 import { Project } from "@/lib/types";
+import { DndContext, closestCenter, KeyboardSensor, PointerSensor, useSensor, useSensors, DragEndEvent } from '@dnd-kit/core';
+import { arrayMove, SortableContext, sortableKeyboardCoordinates, useSortable, verticalListSortingStrategy } from '@dnd-kit/sortable';
+import { CSS } from '@dnd-kit/utilities';
+
+const SortableProjectItem = ({ proj, onRemove, onChange }: { proj: Project; onRemove: (id: string) => void; onChange: (id: string, field: keyof Project, value: string) => void; }) => {
+    const {
+        attributes,
+        listeners,
+        setNodeRef,
+        transform,
+        transition,
+    } = useSortable({id: proj.id});
+
+    const style = {
+        transform: CSS.Transform.toString(transform),
+        transition,
+    };
+
+    return (
+        <div ref={setNodeRef} style={style} {...attributes} >
+            <Card>
+                <CardContent className="pt-6">
+                    <div className="flex gap-2 items-start">
+                        <div {...listeners} className="cursor-grab p-2 -ml-2 mt-6">
+                            <GripVertical className="h-5 w-5 text-muted-foreground" />
+                        </div>
+                        <div className="flex-grow grid grid-cols-1 sm:grid-cols-2 gap-4">
+                          <div className="space-y-2">
+                            <Label htmlFor={`project-name-${proj.id}`}>Project Name</Label>
+                            <Input
+                              id={`project-name-${proj.id}`}
+                              value={proj.name}
+                              onChange={(e) => onChange(proj.id, "name", e.target.value)}
+                              placeholder="e.g., My Awesome App"
+                            />
+                          </div>
+                          <div className="space-y-2">
+                            <Label htmlFor={`project-link-${proj.id}`}>Link</Label>
+                            <Input
+                              id={`project-link-${proj.id}`}
+                              value={proj.link}
+                              onChange={(e) => onChange(proj.id, "link", e.target.value)}
+                              placeholder="e.g., myawesomeapp.com"
+                            />
+                          </div>
+                          <div className="sm:col-span-2 space-y-2">
+                            <Label htmlFor={`project-description-${proj.id}`}>Description</Label>
+                            <Textarea
+                              id={`project-description-${proj.id}`}
+                              value={proj.description}
+                              onChange={(e) => onChange(proj.id, "description", e.target.value)}
+                              placeholder="Describe your project"
+                            />
+                          </div>
+                        </div>
+                        <Button
+                          variant="ghost"
+                          size="icon"
+                          className="text-destructive hover:bg-destructive/10"
+                          onClick={() => onRemove(proj.id)}
+                          aria-label={`Remove ${proj.name} project entry`}
+                        >
+                          <Trash2 className="h-4 w-4" />
+                        </Button>
+                    </div>
+                </CardContent>
+            </Card>
+        </div>
+    );
+};
+
 
 export function ProjectsForm() {
   const { cvData, setCvData } = useCvData();
+  const sensors = useSensors(
+    useSensor(PointerSensor),
+    useSensor(KeyboardSensor, {
+      coordinateGetter: sortableKeyboardCoordinates,
+    })
+  );
 
   const handleAddProject = useCallback(() => {
     setCvData((prev) => ({
@@ -41,52 +118,43 @@ export function ProjectsForm() {
     }));
   }, [setCvData]);
 
+  const handleDragEnd = useCallback((event: DragEndEvent) => {
+    const { active, over } = event;
+    if (over && active.id !== over.id) {
+      setCvData((prev) => {
+        const oldIndex = prev.projects.findIndex((p) => p.id === active.id);
+        const newIndex = prev.projects.findIndex((p) => p.id === over.id);
+        return {
+          ...prev,
+          projects: arrayMove(prev.projects, oldIndex, newIndex),
+        };
+      });
+    }
+  }, [setCvData]);
+
   return (
     <div className="space-y-4">
-      {cvData.projects.map((proj) => (
-        <Card key={proj.id}>
-          <CardContent className="pt-6">
-            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-              <div className="space-y-2">
-                <Label htmlFor={`project-name-${proj.id}`}>Project Name</Label>
-                <Input
-                  id={`project-name-${proj.id}`}
-                  value={proj.name}
-                  onChange={(e) => handleChange(proj.id, "name", e.target.value)}
-                  placeholder="e.g., My Awesome App"
-                />
-              </div>
-              <div className="space-y-2">
-                <Label htmlFor={`project-link-${proj.id}`}>Link</Label>
-                <Input
-                  id={`project-link-${proj.id}`}
-                  value={proj.link}
-                  onChange={(e) => handleChange(proj.id, "link", e.target.value)}
-                  placeholder="e.g., myawesomeapp.com"
-                />
-              </div>
-              <div className="sm:col-span-2 space-y-2">
-                <Label htmlFor={`project-description-${proj.id}`}>Description</Label>
-                <Textarea
-                  id={`project-description-${proj.id}`}
-                  value={proj.description}
-                  onChange={(e) => handleChange(proj.id, "description", e.target.value)}
-                  placeholder="Describe your project"
-                />
-              </div>
-            </div>
-            <Button
-              variant="ghost"
-              size="icon"
-              className="mt-4 text-destructive hover:bg-destructive/10"
-              onClick={() => handleRemoveProject(proj.id)}
-              aria-label={`Remove ${proj.name} project entry`}
+        <DndContext
+            sensors={sensors}
+            collisionDetection={closestCenter}
+            onDragEnd={handleDragEnd}
+        >
+            <SortableContext
+                items={cvData.projects}
+                strategy={verticalListSortingStrategy}
             >
-              <Trash2 className="h-4 w-4" />
-            </Button>
-          </CardContent>
-        </Card>
-      ))}
+                <div className="space-y-4">
+                    {cvData.projects.map((proj) => (
+                        <SortableProjectItem 
+                            key={proj.id} 
+                            proj={proj} 
+                            onRemove={handleRemoveProject}
+                            onChange={handleChange}
+                        />
+                    ))}
+                </div>
+            </SortableContext>
+        </DndContext>
       <Button variant="outline" onClick={handleAddProject} className="w-full">
         <PlusCircle className="mr-2 h-4 w-4" /> Add Project
       </Button>
