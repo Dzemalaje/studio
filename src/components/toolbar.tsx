@@ -12,7 +12,7 @@ export function Toolbar() {
     <header className="sticky top-0 z-10 w-full border-b bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60 no-print">
       <div className="container flex h-16 items-center">
         <div className="mr-4 flex items-center">
-          <h1 className="text-2xl font-bold font-headline">
+          <h1 className="text-2xl font-bold font-logo">
             ProfiCV
           </h1>
         </div>
