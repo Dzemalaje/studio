@@ -87,7 +87,7 @@ export default {
       animation: {
         'accordion-down': 'accordion-down 0.2s ease-out',
         'accordion-up': 'accordion-up 0.2s ease-out',
-        'rainbow-bg': 'rainbow-bg 4s ease infinite',
+        'rainbow-bg': 'rainbow-bg 8s ease infinite',
       },
     },
   },
