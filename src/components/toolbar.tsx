@@ -3,12 +3,23 @@
 
 import { Button } from "@/components/ui/button";
 import { Download } from "lucide-react";
-import html2pdf from 'html2pdf.js';
 
 export function Toolbar() {
-  const handleDownloadPdf = () => {
+  const handleDownloadPdf = async () => {
     const element = document.getElementById('cv-preview');
     if (!element) return;
+    
+    // Dynamically import the library only on the client-side
+    const html2pdf = (await import('html2pdf.js')).default;
+
+    // Clone the element to render it in isolation
+    const clonedElement = element.cloneNode(true) as HTMLElement;
+    
+    // Style the cloned element to be off-screen and at a defined size
+    clonedElement.style.position = 'absolute';
+    clonedElement.style.left = '-9999px';
+    clonedElement.style.width = '800px'; 
+    document.body.appendChild(clonedElement);
 
     const opt = {
       margin:       5,
@@ -18,11 +29,14 @@ export function Toolbar() {
       jsPDF:        { unit: 'mm', format: 'a4', orientation: 'portrait' }
     };
 
-    html2pdf().from(element).set(opt).save();
+    html2pdf().from(clonedElement).set(opt).save().then(() => {
+        // Clean up the cloned element after PDF is generated
+        document.body.removeChild(clonedElement);
+    });
   };
 
   return (
-    <header className="sticky top-0 z-10 w-full border-b bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60">
+    <header className="sticky top-0 z-10 w-full border-b bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60 no-print">
       <div className="container flex h-16 items-center">
         <div className="mr-4 flex items-center">
           <h1 className="text-2xl font-bold font-logo">
