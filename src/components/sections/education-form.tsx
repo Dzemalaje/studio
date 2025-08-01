@@ -8,13 +8,13 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { GripVertical, PlusCircle, Trash2 } from "lucide-react";
 import { v4 as uuidv4 } from 'uuid';
-import { useCallback } from "react";
+import { useCallback, memo } from "react";
 import { Education } from "@/lib/types";
 import { DndContext, closestCenter, KeyboardSensor, PointerSensor, useSensor, useSensors, DragEndEvent } from '@dnd-kit/core';
 import { arrayMove, SortableContext, sortableKeyboardCoordinates, useSortable, verticalListSortingStrategy } from '@dnd-kit/sortable';
 import { CSS } from '@dnd-kit/utilities';
 
-const SortableEducationItem = ({ edu, onRemove, onChange }: { edu: Education; onRemove: (id: string) => void; onChange: (id: string, field: keyof Education, value: string) => void; }) => {
+const SortableEducationItem = memo(({ edu, onRemove, onChange }: { edu: Education; onRemove: (id: string) => void; onChange: (id: string, field: keyof Education, value: string) => void; }) => {
     const {
         attributes,
         listeners,
@@ -33,7 +33,7 @@ const SortableEducationItem = ({ edu, onRemove, onChange }: { edu: Education; on
             <Card>
                 <CardContent className="pt-6">
                     <div className="flex gap-2">
-                        <div {...listeners} className="cursor-grab p-2 -ml-2">
+                        <div {...listeners} className="cursor-grab p-2 -ml-2 mt-6">
                             <GripVertical className="h-5 w-5 text-muted-foreground" />
                         </div>
                         <div className="flex-grow grid grid-cols-1 sm:grid-cols-2 gap-4">
@@ -88,7 +88,8 @@ const SortableEducationItem = ({ edu, onRemove, onChange }: { edu: Education; on
             </Card>
         </div>
     );
-};
+});
+SortableEducationItem.displayName = 'SortableEducationItem';
 
 
 export function EducationForm() {

@@ -8,13 +8,13 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { GripVertical, PlusCircle, Trash2 } from "lucide-react";
 import { v4 as uuidv4 } from 'uuid';
-import { useCallback } from "react";
+import { useCallback, memo } from "react";
 import { Certification } from "@/lib/types";
 import { DndContext, closestCenter, KeyboardSensor, PointerSensor, useSensor, useSensors, DragEndEvent } from '@dnd-kit/core';
 import { arrayMove, SortableContext, sortableKeyboardCoordinates, useSortable, verticalListSortingStrategy } from '@dnd-kit/sortable';
 import { CSS } from '@dnd-kit/utilities';
 
-const SortableCertificationItem = ({ cert, onRemove, onChange }: { cert: Certification; onRemove: (id: string) => void; onChange: (id: string, field: keyof Certification, value: string) => void; }) => {
+const SortableCertificationItem = memo(({ cert, onRemove, onChange }: { cert: Certification; onRemove: (id: string) => void; onChange: (id: string, field: keyof Certification, value: string) => void; }) => {
     const {
         attributes,
         listeners,
@@ -79,7 +79,8 @@ const SortableCertificationItem = ({ cert, onRemove, onChange }: { cert: Certifi
             </Card>
         </div>
     );
-};
+});
+SortableCertificationItem.displayName = 'SortableCertificationItem';
 
 export function CertificationsForm() {
   const { cvData, setCvData } = useCvData();

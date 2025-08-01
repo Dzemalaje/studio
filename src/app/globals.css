@@ -74,16 +74,6 @@
 }
 
 @layer components {
-  .cv-preview-container {
-    * {
-      transition: color 0.3s ease-in-out, background-color 0.3s ease-in-out, border-color 0.3s ease-in-out, font-size 0.3s ease-in-out;
-    }
-  }
-
-  .cv-page {
-    position: relative;
-  }
-
   .cv-preview-container .cv-page:not(:last-child) {
      margin-bottom: 2rem;
   }
@@ -130,18 +120,15 @@
     width: 100% !important;
     overflow: visible !important;
   }
-
   .cv-page {
-    height: 297mm; /* A4 height */
-    width: 210mm; /* A4 width */
-    page-break-after: always !important;
-    overflow: hidden !important;
+    height: 297mm;
+    width: 210mm;
+    overflow: hidden;
+    page-break-after: always;
   }
-
   .cv-page::after {
     display: none !important;
   }
-
   .break-inside-avoid {
     page-break-inside: avoid;
   }

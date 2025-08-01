@@ -8,7 +8,7 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { GripVertical, PlusCircle, Trash2 } from "lucide-react";
 import { v4 as uuidv4 } from 'uuid';
-import { useCallback } from "react";
+import { useCallback, memo } from "react";
 import { Language } from "@/lib/types";
 import { DndContext, closestCenter, KeyboardSensor, PointerSensor, useSensor, useSensors, DragEndEvent } from '@dnd-kit/core';
 import { arrayMove, SortableContext, sortableKeyboardCoordinates, useSortable, verticalListSortingStrategy } from '@dnd-kit/sortable';
@@ -17,7 +17,7 @@ import { Slider } from "../ui/slider";
 
 const PROFICIENCY_LEVELS = ["Beginner", "Intermediate", "Advanced", "Fluent", "Native"];
 
-const SortableLanguageItem = ({ lang, onRemove, onChange }: { lang: Language; onRemove: (id: string) => void; onChange: (id: string, field: keyof Language, value: any) => void; }) => {
+const SortableLanguageItem = memo(({ lang, onRemove, onChange }: { lang: Language; onRemove: (id: string) => void; onChange: (id: string, field: keyof Language, value: any) => void; }) => {
     const {
         attributes,
         listeners,
@@ -74,7 +74,8 @@ const SortableLanguageItem = ({ lang, onRemove, onChange }: { lang: Language; on
             </Card>
         </div>
     );
-};
+});
+SortableLanguageItem.displayName = 'SortableLanguageItem';
 
 
 export function LanguagesForm() {

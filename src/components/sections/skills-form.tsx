@@ -7,14 +7,14 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Badge } from "@/components/ui/badge";
 import { GripVertical, X } from "lucide-react";
-import { useState, KeyboardEvent, useCallback } from "react";
+import { useState, KeyboardEvent, useCallback, memo } from "react";
 import { v4 as uuidv4 } from "uuid";
 import { DndContext, closestCenter, KeyboardSensor, PointerSensor, useSensor, useSensors, DragEndEvent } from '@dnd-kit/core';
 import { arrayMove, SortableContext, sortableKeyboardCoordinates, useSortable, rectSortingStrategy } from '@dnd-kit/sortable';
 import { CSS } from '@dnd-kit/utilities';
 import { Skill } from "@/lib/types";
 
-const SortableSkill = ({ skill, onRemove }: { skill: Skill; onRemove: (id: string) => void }) => {
+const SortableSkill = memo(({ skill, onRemove }: { skill: Skill; onRemove: (id: string) => void }) => {
     const {
         attributes,
         listeners,
@@ -45,7 +45,8 @@ const SortableSkill = ({ skill, onRemove }: { skill: Skill; onRemove: (id: strin
             </Badge>
         </div>
     );
-};
+});
+SortableSkill.displayName = 'SortableSkill';
 
 export function SkillsForm() {
   const { cvData, setCvData } = useCvData();

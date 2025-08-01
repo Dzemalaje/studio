@@ -9,7 +9,7 @@ import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
 import { GripVertical, Loader2, PlusCircle, Sparkles, Trash2 } from "lucide-react";
 import { v4 as uuidv4 } from "uuid";
-import { useState, useCallback } from "react";
+import { useState, useCallback, memo } from "react";
 import { useToast } from "@/hooks/use-toast";
 import { generateJobSummary } from "@/ai/flows/generate-job-summary";
 import { WorkExperience } from "@/lib/types";
@@ -17,7 +17,7 @@ import { DndContext, closestCenter, KeyboardSensor, PointerSensor, useSensor, us
 import { arrayMove, SortableContext, sortableKeyboardCoordinates, useSortable, verticalListSortingStrategy } from '@dnd-kit/sortable';
 import { CSS } from '@dnd-kit/utilities';
 
-const SortableExperienceItem = ({
+const SortableExperienceItem = memo(({
     exp,
     onRemove,
     onChange,
@@ -97,7 +97,8 @@ const SortableExperienceItem = ({
             </Card>
         </div>
     )
-}
+});
+SortableExperienceItem.displayName = 'SortableExperienceItem';
 
 
 export function ExperienceForm() {

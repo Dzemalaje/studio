@@ -14,35 +14,33 @@ interface CVDataContextType {
 const CVDataContext = createContext<CVDataContextType | undefined>(undefined);
 
 const ensureIds = (data: CVData): CVData => {
-  const personalDetailsBackground = data.personalDetailsBackground === undefined ? true : data.personalDetailsBackground;
   return {
     ...data,
-    personalDetailsBackground,
-    workExperience: data.workExperience?.map(item => ({ ...item, id: item.id || uuidv4() })) || [],
-    education: data.education?.map(item => ({ ...item, id: item.id || uuidv4() })) || [],
-    skills: data.skills?.map(item => ({ ...item, id: item.id || uuidv4() })) || [],
-    projects: data.projects?.map(item => ({ ...item, id: item.id || uuidv4() })) || [],
-    certifications: data.certifications?.map(item => ({ ...item, id: item.id || uuidv4() })) || [],
-    languages: data.languages?.map(item => ({ ...item, id: item.id || uuidv4() })) || [],
+    personalDetails: { ...initialCVData.personalDetails, ...data.personalDetails },
+    workExperience: (data.workExperience || []).map(item => ({ ...item, id: item.id || uuidv4() })),
+    education: (data.education || []).map(item => ({ ...item, id: item.id || uuidv4() })),
+    skills: (data.skills || []).map(item => ({ ...item, id: item.id || uuidv4() })),
+    projects: (data.projects || []).map(item => ({ ...item, id: item.id || uuidv4() })),
+    certifications: (data.certifications || []).map(item => ({ ...item, id: item.id || uuidv4() })),
+    languages: (data.languages || []).map(item => ({ ...item, id: item.id || uuidv4() })),
+    personalDetailsBackground: data.personalDetailsBackground ?? true,
   };
 };
 
 export const CVDataProvider = ({ children }: { children: ReactNode }) => {
   const [isMounted, setIsMounted] = useState(false);
-  const [cvData, setCvData] = useState<CVData>(initialCVData);
+  const [cvData, setCvData] = useState<CVData>(ensureIds(initialCVData));
 
   useEffect(() => {
+    let storedData;
     try {
-      const item = window.localStorage.getItem('proficv-data');
-      if (item) {
-        const parsedData = JSON.parse(item);
+      storedData = window.localStorage.getItem('proficv-data');
+      if (storedData) {
+        const parsedData = JSON.parse(storedData);
         setCvData(ensureIds(parsedData));
-      } else {
-        setCvData(ensureIds(initialCVData));
       }
     } catch (error) {
       console.error("Failed to read from localStorage", error);
-      setCvData(ensureIds(initialCVData));
     }
     setIsMounted(true);
   }, []);
@@ -50,13 +48,7 @@ export const CVDataProvider = ({ children }: { children: ReactNode }) => {
   useEffect(() => {
     if (isMounted) {
       try {
-        const dataToStore = {
-          ...cvData,
-          projects: cvData.projects || [],
-          certifications: cvData.certifications || [],
-          languages: cvData.languages || [],
-        };
-        window.localStorage.setItem('proficv-data', JSON.stringify(dataToStore));
+        window.localStorage.setItem('proficv-data', JSON.stringify(cvData));
       } catch (error) {
         console.error("Failed to write to localStorage", error);
       }

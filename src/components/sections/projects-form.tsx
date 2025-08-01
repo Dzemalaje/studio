@@ -9,13 +9,13 @@ import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
 import { GripVertical, PlusCircle, Trash2 } from "lucide-react";
 import { v4 as uuidv4 } from 'uuid';
-import { useCallback } from "react";
+import { useCallback, memo } from "react";
 import { Project } from "@/lib/types";
 import { DndContext, closestCenter, KeyboardSensor, PointerSensor, useSensor, useSensors, DragEndEvent } from '@dnd-kit/core';
 import { arrayMove, SortableContext, sortableKeyboardCoordinates, useSortable, verticalListSortingStrategy } from '@dnd-kit/sortable';
 import { CSS } from '@dnd-kit/utilities';
 
-const SortableProjectItem = ({ proj, onRemove, onChange }: { proj: Project; onRemove: (id: string) => void; onChange: (id: string, field: keyof Project, value: string) => void; }) => {
+const SortableProjectItem = memo(({ proj, onRemove, onChange }: { proj: Project; onRemove: (id: string) => void; onChange: (id: string, field: keyof Project, value: string) => void; }) => {
     const {
         attributes,
         listeners,
@@ -80,7 +80,8 @@ const SortableProjectItem = ({ proj, onRemove, onChange }: { proj: Project; onRe
             </Card>
         </div>
     );
-};
+});
+SortableProjectItem.displayName = 'SortableProjectItem';
 
 
 export function ProjectsForm() {
