@@ -1,3 +1,4 @@
+
 "use client";
 
 import { useCvData } from "@/hooks/use-cv-data";
@@ -124,6 +125,13 @@ export function PersonalDetailsForm() {
              >
                 <Camera className="w-4 h-4" />
              </Button>
+            {cvData.personalDetails.profilePicture && (
+              <div className="absolute inset-0 bg-black/50 rounded-full flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity">
+                <Button type="button" variant="ghost" size="icon" className="text-destructive-foreground hover:text-destructive-foreground" onClick={handleRemoveImage}>
+                  <Trash2 className="w-5 h-5" />
+                </Button>
+              </div>
+            )}
           </div>
           <div className="flex-1">
             <FormField
@@ -140,11 +148,6 @@ export function PersonalDetailsForm() {
               )}
             />
           </div>
-          {cvData.personalDetails.profilePicture && (
-            <Button type="button" variant="ghost" size="icon" className="text-destructive self-end" onClick={handleRemoveImage}>
-              <Trash2 className="w-4 h-4" />
-            </Button>
-          )}
         </div>
 
         <input
@@ -249,3 +252,5 @@ export function PersonalDetailsForm() {
     </Form>
   );
 }
+
+    
