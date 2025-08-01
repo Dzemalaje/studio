@@ -65,7 +65,7 @@ export function CVPreview() {
   return (
     <div
       className={cn(
-        "shadow-lg rounded-lg w-full max-w-[800px] mx-auto overflow-y-auto max-h-[calc(100vh-10rem)] cv-preview",
+        "w-full max-w-[800px] mx-auto cv-preview",
         baseFontSize
       )}
       style={{
