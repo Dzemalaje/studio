@@ -22,10 +22,23 @@ export function CVForm() {
   return (
     <Accordion
       type="single"
-      defaultValue="personal"
+      defaultValue="customization"
       collapsible
       className="w-full space-y-4"
     >
+      <Card>
+        <AccordionItem value="customization" className="border-b-0">
+          <AccordionTrigger className="px-6">
+            <div className="flex items-center gap-2">
+              <Palette className="h-5 w-5" />
+              <span className="text-lg font-headline">Customization</span>
+            </div>
+          </AccordionTrigger>
+          <AccordionContent className="px-6">
+            <CustomizationForm />
+          </AccordionContent>
+        </AccordionItem>
+      </Card>
       <Card>
         <AccordionItem value="personal" className="border-b-0">
           <AccordionTrigger className="px-6">
@@ -114,19 +127,6 @@ export function CVForm() {
           </AccordionTrigger>
           <AccordionContent className="px-6">
             <LanguagesForm />
-          </AccordionContent>
-        </AccordionItem>
-      </Card>
-      <Card>
-        <AccordionItem value="customization" className="border-b-0">
-          <AccordionTrigger className="px-6">
-            <div className="flex items-center gap-2">
-              <Palette className="h-5 w-5" />
-              <span className="text-lg font-headline">Customization</span>
-            </div>
-          </AccordionTrigger>
-          <AccordionContent className="px-6">
-            <CustomizationForm />
           </AccordionContent>
         </AccordionItem>
       </Card>
