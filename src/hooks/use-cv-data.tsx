@@ -24,7 +24,6 @@ const ensureIds = (data: Partial<CVData>): CVData => {
     projects: (fullData.projects || []).map(item => ({ ...item, id: item.id || uuidv4() })),
     certifications: (fullData.certifications || []).map(item => ({ ...item, id: item.id || uuidv4() })),
     languages: (fullData.languages || []).map(item => ({ ...item, id: item.id || uuidv4() })),
-    personalDetailsBackground: fullData.personalDetailsBackground ?? true,
   };
 };
 

@@ -12,7 +12,7 @@ const PROFICIENCY_LEVELS = ["Beginner", "Intermediate", "Advanced", "Fluent", "N
 
 export const DefaultTemplate = () => {
   const { cvData } = useCvData();
-  const { personalDetails, workExperience, education, skills, projects, certifications, languages, personalDetailsBackground } = cvData;
+  const { personalDetails, workExperience, education, skills, projects, certifications, languages } = cvData;
 
   const getResponsiveValue = (base: number, multiplier = 1) => {
     return { fontSize: `${base * multiplier}em` };
@@ -22,7 +22,7 @@ export const DefaultTemplate = () => {
     <motion.div layout className="bg-card text-card-foreground p-8 space-y-8 break-inside-avoid">
       <MotionDiv
         layoutId="personal-details-section"
-        className={`mb-8 break-inside-avoid ${personalDetailsBackground ? 'bg-primary/5 p-8 rounded-lg' : ''}`}
+        className="mb-8 break-inside-avoid"
       >
         <header className="text-center">
           {personalDetails.profilePicture && (

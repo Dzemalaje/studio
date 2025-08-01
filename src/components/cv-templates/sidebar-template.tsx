@@ -12,7 +12,7 @@ const PROFICIENCY_LEVELS = ["Beginner", "Intermediate", "Advanced", "Fluent", "N
 
 export const SidebarTemplate = ({ sidebarPosition }: { sidebarPosition: 'left' | 'right' }) => {
   const { cvData } = useCvData();
-  const { personalDetails, workExperience, education, skills, projects, certifications, languages, personalDetailsBackground } = cvData;
+  const { personalDetails, workExperience, education, skills, projects, certifications, languages } = cvData;
 
   const getResponsiveValue = (base: number, multiplier = 1) => {
     return { fontSize: `${base * multiplier}em` };
@@ -21,7 +21,7 @@ export const SidebarTemplate = ({ sidebarPosition }: { sidebarPosition: 'left' |
   const sidebar = (
     <motion.aside
       layoutId="sidebar"
-      className={`p-6 rounded-lg space-y-6 h-full break-inside-avoid ${personalDetailsBackground ? 'bg-primary/5' : ''}`}
+      className="p-6 rounded-lg space-y-6 h-full break-inside-avoid"
     >
       <MotionDiv layoutId="personal-details-section">
         <div className="text-center">

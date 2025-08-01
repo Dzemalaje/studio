@@ -86,10 +86,6 @@ export function CustomizationForm() {
         setCvData(prev => ({...prev, fontSize: parseInt(value, 10) as FontSize}));
     }, [setCvData]);
 
-    const handleBackgroundChange = useCallback((checked: boolean) => {
-        setCvData(prev => ({...prev, personalDetailsBackground: checked}));
-    }, [setCvData]);
-
     return (
         <div className="space-y-6 p-1">
             <div className="space-y-2">
@@ -171,19 +167,6 @@ export function CustomizationForm() {
                         </SelectContent>
                     </Select>
                 </div>
-            </div>
-             <div className="flex items-center space-x-2">
-                <Checkbox
-                    id="personal-details-background"
-                    checked={cvData.personalDetailsBackground}
-                    onCheckedChange={handleBackgroundChange}
-                />
-                <label
-                    htmlFor="personal-details-background"
-                    className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
-                >
-                    Show background on personal details
-                </label>
             </div>
         </div>
     );

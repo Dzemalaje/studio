@@ -70,5 +70,4 @@ export interface CVData {
   themeColor: string;
   fontFamily: string;
   fontSize: FontSize;
-  personalDetailsBackground: boolean;
 }
