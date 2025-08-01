@@ -36,4 +36,5 @@ export interface CVData {
   workExperience: WorkExperience[];
   education: Education[];
   skills: Skill[];
+  template: 'default' | 'left-sidebar' | 'right-sidebar';
 }

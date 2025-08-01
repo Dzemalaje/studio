@@ -1,6 +1,7 @@
 import type { CVData } from "./types";
 
 export const initialCVData: CVData = {
+  template: "default",
   personalDetails: {
     name: "Jane Doe",
     title: "Full Stack Developer",

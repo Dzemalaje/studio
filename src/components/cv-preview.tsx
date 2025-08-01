@@ -1,15 +1,14 @@
 "use client";
 
 import { useCvData } from "@/hooks/use-cv-data";
-import { Separator } from "@/components/ui/separator";
-import { Mail, Phone, Globe, MapPin, Briefcase, GraduationCap, Calendar, Sparkles } from "lucide-react";
+import { Briefcase, GraduationCap, Calendar, Mail, Phone, Globe, MapPin } from "lucide-react";
 
-export function CVPreview() {
+const DefaultTemplate = () => {
   const { cvData } = useCvData();
   const { personalDetails, workExperience, education, skills } = cvData;
 
   return (
-    <div className="bg-card text-card-foreground shadow-lg rounded-lg p-8 aspect-[210/297] w-full max-w-[800px] mx-auto overflow-y-auto cv-preview">
+    <>
       <header className="text-center mb-8">
         <h1 className="text-4xl font-bold font-headline text-primary">{personalDetails.name}</h1>
         <p className="text-xl text-muted-foreground font-light">{personalDetails.title}</p>
@@ -88,6 +87,125 @@ export function CVPreview() {
           </section>
         )}
       </main>
+    </>
+  )
+}
+
+const SidebarTemplate = ({ sidebarPosition }: { sidebarPosition: 'left' | 'right' }) => {
+  const { cvData } = useCvData();
+  const { personalDetails, workExperience, education, skills } = cvData;
+
+  const sidebar = (
+    <aside className="bg-primary/5 p-6 rounded-lg space-y-6">
+       <div className="text-center">
+        <h1 className="text-3xl font-bold font-headline text-primary">{personalDetails.name}</h1>
+        <p className="text-lg text-muted-foreground font-light">{personalDetails.title}</p>
+      </div>
+      <div>
+        <h2 className="text-xl font-bold font-headline border-b-2 border-primary pb-2 mb-4 text-primary">Contact</h2>
+        <div className="space-y-3 text-sm">
+            {personalDetails.email && <div className="flex items-center gap-2"><Mail className="h-4 w-4 text-primary"/><span>{personalDetails.email}</span></div>}
+            {personalDetails.phone && <div className="flex items-center gap-2"><Phone className="h-4 w-4 text-primary"/><span>{personalDetails.phone}</span></div>}
+            {personalDetails.website && <div className="flex items-center gap-2"><Globe className="h-4 w-4 text-primary"/><span>{personalDetails.website}</span></div>}
+            {personalDetails.location && <div className="flex items-center gap-2"><MapPin className="h-4 w-4 text-primary"/><span>{personalDetails.location}</span></div>}
+        </div>
+      </div>
+       {skills.length > 0 && (
+          <section>
+            <h2 className="text-xl font-bold font-headline border-b-2 border-primary pb-2 mb-4 text-primary">Skills</h2>
+            <div className="flex flex-wrap gap-2">
+              {skills.map((skill) => (
+                <div key={skill.id} className="bg-primary/10 text-primary font-medium text-sm px-3 py-1 rounded-full">
+                  {skill.name}
+                </div>
+              ))}
+            </div>
+          </section>
+        )}
+        {education.length > 0 && (
+          <section>
+            <h2 className="text-xl font-bold font-headline border-b-2 border-primary pb-2 mb-4 text-primary flex items-center gap-2"><GraduationCap className="h-5 w-5"/>Education</h2>
+            <div className="space-y-4">
+              {education.map((edu) => (
+                <div key={edu.id}>
+                    <h3 className="text-md font-bold">{edu.degree}</h3>
+                    <p className="text-sm text-muted-foreground">{edu.institution}</p>
+                    <div className="text-xs text-muted-foreground/80 flex items-center gap-2 mt-1">
+                        <Calendar className="h-3 w-3"/>
+                        <span>{edu.startDate} - {edu.endDate || 'Present'}</span>
+                    </div>
+                </div>
+              ))}
+            </div>
+          </section>
+        )}
+    </aside>
+  );
+
+  const mainContent = (
+     <main className="space-y-8">
+        {personalDetails.summary && (
+          <section>
+            <h2 className="text-2xl font-bold font-headline border-b-2 border-primary pb-2 mb-4 text-primary">Summary</h2>
+            <p className="text-sm text-foreground/80 whitespace-pre-wrap">{personalDetails.summary}</p>
+          </section>
+        )}
+        {workExperience.length > 0 && (
+          <section>
+            <h2 className="text-2xl font-bold font-headline border-b-2 border-primary pb-2 mb-4 text-primary flex items-center gap-2"><Briefcase className="h-6 w-6"/>Work Experience</h2>
+            <div className="space-y-6">
+              {workExperience.map((job) => (
+                <div key={job.id}>
+                  <div className="flex justify-between items-baseline">
+                    <h3 className="text-lg font-bold">{job.role}</h3>
+                    <div className="text-sm text-muted-foreground flex items-center gap-2">
+                      <Calendar className="h-4 w-4"/>
+                      <span>{job.startDate} - {job.endDate || 'Present'}</span>
+                    </div>
+                  </div>
+                  <p className="text-md font-semibold text-primary">{job.company}</p>
+                   {job.summary && (
+                     <div className="mt-2 p-3 bg-primary/5 border-l-4 border-primary rounded-r-md">
+                        <p className="text-sm text-foreground/90 italic whitespace-pre-wrap">{job.summary}</p>
+                     </div>
+                  )}
+                  <p className="text-sm text-foreground/80 mt-2 whitespace-pre-wrap">{job.description}</p>
+                </div>
+              ))}
+            </div>
+          </section>
+        )}
+      </main>
+  );
+
+  return (
+    <div className={`grid grid-cols-1 md:grid-cols-3 gap-8`}>
+        {sidebarPosition === 'left' && <div className="md:col-span-1">{sidebar}</div>}
+        <div className="md:col-span-2">{mainContent}</div>
+        {sidebarPosition === 'right' && <div className="md:col-span-1">{sidebar}</div>}
+    </div>
+  )
+}
+
+
+export function CVPreview() {
+  const { cvData } = useCvData();
+
+  const renderTemplate = () => {
+    switch (cvData.template) {
+      case 'left-sidebar':
+        return <SidebarTemplate sidebarPosition="left" />;
+      case 'right-sidebar':
+        return <SidebarTemplate sidebarPosition="right" />;
+      case 'default':
+      default:
+        return <DefaultTemplate />;
+    }
+  }
+
+  return (
+    <div className="bg-card text-card-foreground shadow-lg rounded-lg p-8 aspect-[210/297] w-full max-w-[800px] mx-auto overflow-y-auto cv-preview">
+      {renderTemplate()}
     </div>
   );
 }
