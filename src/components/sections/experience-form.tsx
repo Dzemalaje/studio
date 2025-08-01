@@ -146,7 +146,7 @@ export function ExperienceForm() {
     }));
   }, [setCvData]);
 
-  const handleGenerateSummary = async (experienceId: string) => {
+  const handleGenerateSummary = useCallback(async (experienceId: string) => {
     setIsLoading(experienceId);
     const experience = cvData.workExperience.find(
       (exp) => exp.id === experienceId
@@ -184,7 +184,7 @@ export function ExperienceForm() {
     } finally {
       setIsLoading(null);
     }
-  };
+  }, [cvData.workExperience, handleChange, toast]);
 
   const handleDragEnd = useCallback((event: DragEndEvent) => {
     const { active, over } = event;

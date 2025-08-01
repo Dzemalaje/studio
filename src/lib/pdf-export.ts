@@ -18,11 +18,9 @@ export const exportCvToPdf = async (containerId: string, fileName: string): Prom
   }
 
   const originalContainerClassName = printContainer.className;
-  const originalBodyClassName = document.body.className;
-
+  
   // Temporarily modify styles to ensure the entire CV is captured correctly.
-  printContainer.className = '';
-  document.body.className += ' overflow-hidden';
+  printContainer.className = 'cv-preview-container';
   window.scrollTo(0, 0);
   
   try {
@@ -68,6 +66,5 @@ export const exportCvToPdf = async (containerId: string, fileName: string): Prom
     alert('An error occurred while generating the PDF.');
   } finally {
     printContainer.className = originalContainerClassName;
-    document.body.className = originalBodyClassName;
   }
 };
