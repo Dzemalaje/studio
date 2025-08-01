@@ -102,32 +102,13 @@
   .no-print {
     display: none !important;
   }
-  .cv-preview-container {
-    transform: scale(1) !important;
-    height: auto !important;
-    width: 100% !important;
-    overflow: visible !important;
-    box-shadow: none !important;
-    border: none !important;
-    margin: 0 !important;
-    padding: 0 !important;
-  }
-  .cv-preview {
-    box-shadow: none !important;
-    border: none !important;
-    border-radius: 0 !important;
-    height: auto !important;
-    width: 100% !important;
-    overflow: visible !important;
-  }
   .cv-page {
     height: 297mm;
     width: 210mm;
     overflow: hidden;
     page-break-after: always;
-  }
-  .cv-page::after {
-    display: none !important;
+    box-shadow: none !important;
+    border: none !important;
   }
   .break-inside-avoid {
     page-break-inside: avoid;

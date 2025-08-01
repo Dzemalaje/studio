@@ -17,10 +17,10 @@ export const exportCvToPdf = async (containerId: string, fileName: string): Prom
     return;
   }
 
-  const originalContainerClassName = printContainer.className;
+  const originalContainerTransform = printContainer.style.transform;
   
   // Temporarily modify styles to ensure the entire CV is captured correctly.
-  printContainer.className = 'cv-preview-container';
+  printContainer.style.transform = 'scale(1)';
   window.scrollTo(0, 0);
   
   try {
@@ -38,7 +38,7 @@ export const exportCvToPdf = async (containerId: string, fileName: string): Prom
     });
     
     const pdfWidth = pdf.internal.pageSize.getWidth();
-    const pdfHeight = pdf.internal.pageSize.getHeight();
+    const pdfHeight = pdf.internal.pencarian.getHeight();
 
     const canvasWidth = canvas.width;
     const canvasHeight = canvas.height;
@@ -65,6 +65,7 @@ export const exportCvToPdf = async (containerId: string, fileName: string): Prom
     console.error("Error generating PDF:", error);
     alert('An error occurred while generating the PDF.');
   } finally {
-    printContainer.className = originalContainerClassName;
+    // Restore original styles
+    printContainer.style.transform = originalContainerTransform;
   }
 };
