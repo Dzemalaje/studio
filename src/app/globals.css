@@ -81,11 +81,14 @@
   }
 
   .cv-page {
-    page-break-after: always;
     position: relative;
   }
 
-  .cv-page:not(:last-child)::after {
+  .cv-preview-container .cv-page:not(:last-child) {
+     margin-bottom: 2rem;
+  }
+
+  .cv-preview-container .cv-page:not(:last-child)::after {
     content: "Page Break";
     position: absolute;
     bottom: -1.5rem;
@@ -97,6 +100,7 @@
     font-weight: bold;
     padding: 2px 8px;
     border-radius: 4px;
+    z-index: 10;
   }
 }
 
@@ -128,8 +132,10 @@
   }
 
   .cv-page {
+    height: 297mm; /* A4 height */
+    width: 210mm; /* A4 width */
     page-break-after: always !important;
-    overflow: visible !important;
+    overflow: hidden !important;
   }
 
   .cv-page::after {

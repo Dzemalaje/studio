@@ -83,7 +83,7 @@ export const DefaultTemplate = () => {
         )}
         
         {projects.length > 0 && (
-          <MotionDiv layoutId="projects-section" className="mb-8">
+          <MotionDiv layoutId="projects-section" className="mb-8 break-inside-avoid">
             <h2 className="text-2xl font-bold font-headline border-b-2 border-primary pb-2 mb-4 text-primary flex items-center gap-2"><AppWindow className="h-6 w-6"/>Projects</h2>
             <div className="space-y-6">
               {projects.map((proj) => (
@@ -100,7 +100,7 @@ export const DefaultTemplate = () => {
         )}
 
         {education.length > 0 && (
-           <MotionDiv layoutId="education-section" className="mb-8">
+           <MotionDiv layoutId="education-section" className="mb-8 break-inside-avoid">
             <h2 className="text-2xl font-bold font-headline border-b-2 border-primary pb-2 mb-4 text-primary flex items-center gap-2"><GraduationCap className="h-6 w-6"/>Education</h2>
             <div className="space-y-4">
               {education.map((edu) => (
@@ -137,7 +137,7 @@ export const DefaultTemplate = () => {
             <h2 className="text-2xl font-bold font-headline border-b-2 border-primary pb-2 mb-4 text-primary flex items-center gap-2"><Award className="h-6 w-6"/>Certifications</h2>
             <div className="space-y-4">
               {certifications.map((cert) => (
-                <div key={cert.id}>
+                <div key={cert.id} className="break-inside-avoid">
                   <h3 className="text-lg font-bold">{cert.name}</h3>
                   <p className="text-md text-muted-foreground">{cert.issuer} - {cert.date}</p>
                 </div>
@@ -151,7 +151,7 @@ export const DefaultTemplate = () => {
             <h2 className="text-2xl font-bold font-headline border-b-2 border-primary pb-2 mb-4 text-primary flex items-center gap-2"><Languages className="h-6 w-6"/>Languages</h2>
             <div className="grid grid-cols-2 gap-4">
               {languages.map((lang) => (
-                <div key={lang.id}>
+                <div key={lang.id} className="break-inside-avoid">
                   <div className="flex justify-between items-center mb-1">
                     <span className="font-bold">{lang.name}</span>
                     <span className="text-sm text-muted-foreground">{PROFICIENCY_LEVELS[lang.level]}</span>

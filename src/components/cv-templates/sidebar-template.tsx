@@ -26,12 +26,12 @@ export const SidebarTemplate = ({ sidebarPosition }: { sidebarPosition: 'left' |
     <motion.aside
       layoutId="sidebar"
       className={cn(
-        "p-6 rounded-lg space-y-6 h-full break-inside-avoid",
+        "p-6 rounded-lg space-y-6 h-full",
         baseTextSize,
         { 'bg-primary/5': personalDetailsBackground }
       )}
     >
-      <MotionDiv layoutId="personal-details-section">
+      <MotionDiv layoutId="personal-details-section" className="break-inside-avoid">
         <div className="text-center">
           {personalDetails.profilePicture && (
             <motion.div layoutId="profile-picture" className="w-32 h-32 mx-auto rounded-full overflow-hidden mb-4 ring-4 ring-primary/20">
@@ -52,7 +52,7 @@ export const SidebarTemplate = ({ sidebarPosition }: { sidebarPosition: 'left' |
         </div>
       </MotionDiv>
        {skills.length > 0 && (
-          <MotionDiv layoutId="skills-section">
+          <MotionDiv layoutId="skills-section" className="break-inside-avoid">
             <h2 className="text-xl font-bold font-headline border-b-2 border-primary pb-2 mb-4 text-primary">Skills</h2>
             <div className="flex flex-wrap gap-2">
               {skills.map((skill) => (
@@ -64,7 +64,7 @@ export const SidebarTemplate = ({ sidebarPosition }: { sidebarPosition: 'left' |
           </MotionDiv>
         )}
         {education.length > 0 && (
-          <MotionDiv layoutId="education-section">
+          <MotionDiv layoutId="education-section" className="break-inside-avoid">
             <h2 className="text-xl font-bold font-headline border-b-2 border-primary pb-2 mb-4 text-primary flex items-center gap-2"><GraduationCap className="h-5 w-5"/>Education</h2>
             <div className="space-y-4">
               {education.map((edu) => (
@@ -81,7 +81,7 @@ export const SidebarTemplate = ({ sidebarPosition }: { sidebarPosition: 'left' |
           </MotionDiv>
         )}
          {languages.length > 0 && (
-          <MotionDiv layoutId="languages-section">
+          <MotionDiv layoutId="languages-section" className="break-inside-avoid">
             <h2 className="text-xl font-bold font-headline border-b-2 border-primary pb-2 mb-4 text-primary flex items-center gap-2"><LanguagesIcon className="h-5 w-5"/>Languages</h2>
             <div className="space-y-3">
               {languages.map((lang) => (
@@ -133,7 +133,7 @@ export const SidebarTemplate = ({ sidebarPosition }: { sidebarPosition: 'left' |
           </MotionDiv>
         )}
          {projects.length > 0 && (
-          <MotionDiv layoutId="projects-section" className="mb-8">
+          <MotionDiv layoutId="projects-section" className="mb-8 break-inside-avoid">
             <h2 className="text-2xl font-bold font-headline border-b-2 border-primary pb-2 mb-4 text-primary flex items-center gap-2"><AppWindow className="h-6 w-6"/>Projects</h2>
             <div className="space-y-6">
               {projects.map((proj) => (
@@ -153,7 +153,7 @@ export const SidebarTemplate = ({ sidebarPosition }: { sidebarPosition: 'left' |
             <h2 className="text-2xl font-bold font-headline border-b-2 border-primary pb-2 mb-4 text-primary flex items-center gap-2"><Award className="h-6 w-6"/>Certifications</h2>
             <div className="space-y-4">
               {certifications.map((cert) => (
-                <div key={cert.id}>
+                <div key={cert.id} className="break-inside-avoid">
                   <h3 className="text-lg font-bold">{cert.name}</h3>
                   <p className="text-md text-muted-foreground">{cert.issuer} - {cert.date}</p>
                 </div>
