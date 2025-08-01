@@ -73,7 +73,7 @@ export function CustomizationForm() {
                     <Label>Theme Color</Label>
                     <div className="flex items-center gap-2">
                         <Palette className="h-4 w-4" />
-                        <Input type="color" value={cvData.themeColor} onChange={handleColorChange} className="p-1 h-10"/>
+                        <Input type="color" value={cvData.themeColor || ''} onChange={handleColorChange} className="p-1 h-10"/>
                     </div>
                 </div>
                 <div className="space-y-2">
