@@ -77,3 +77,7 @@
 .html2pdf__page-break {
   height: 1rem;
 }
+
+.break-inside-avoid {
+  page-break-inside: avoid;
+}
