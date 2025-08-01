@@ -3,7 +3,6 @@
 
 import { Button } from "@/components/ui/button";
 import { Download } from "lucide-react";
-import { cn } from "@/lib/utils";
 
 export function Toolbar() {
   const handlePrint = () => {
@@ -22,7 +21,7 @@ export function Toolbar() {
             <Button 
               onClick={handlePrint} 
               size="sm" 
-              className="transition-all duration-300 bg-gradient-to-r from-red-500 via-yellow-500 via-green-500 via-blue-500 to-purple-500 bg-[length:100%_100%] hover:bg-[length:200%_200%] text-white font-bold hover:animate-rainbow-bg"
+              className="transition-all duration-300 bg-gradient-to-r from-red-500 via-yellow-500 via-green-500 via-blue-500 to-purple-500 bg-[length:200%_200%] animate-rainbow-bg text-white font-bold"
             >
               <Download className="mr-2 h-4 w-4" />
               Download PDF
