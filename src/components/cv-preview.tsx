@@ -27,20 +27,25 @@ export function CVPreview() {
 
   return (
     <div
-      id="cv-preview"
+      id="cv-preview-container"
       className="w-full max-w-[800px] mx-auto"
-      style={{
-        fontFamily: `'${cvData.fontFamily}', sans-serif`,
-        fontSize: `${cvData.fontSize}px`,
-        '--primary-h': h,
-        '--primary-s': `${s}%`,
-        '--primary-l': `${l}%`,
-        '--primary-foreground-l': l > 50 ? '10%' : '98%',
-      } as React.CSSProperties}
     >
-      <LayoutGroup>
-        {renderTemplate()}
-      </LayoutGroup>
+        <div
+            id="cv-preview"
+            className="cv-preview"
+            style={{
+                fontFamily: `'${cvData.fontFamily}', sans-serif`,
+                fontSize: `${cvData.fontSize}px`,
+                '--primary-h': h,
+                '--primary-s': `${s}%`,
+                '--primary-l': `${l}%`,
+                '--primary-foreground-l': l > 50 ? '10%' : '98%',
+            } as React.CSSProperties}
+        >
+          <LayoutGroup>
+            {renderTemplate()}
+          </LayoutGroup>
+        </div>
     </div>
   );
 }
