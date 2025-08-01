@@ -76,30 +76,3 @@
 .break-inside-avoid {
   page-break-inside: avoid;
 }
-
-@media print {
-  body * {
-    visibility: hidden;
-  }
-  
-  .cv-preview, .cv-preview * {
-    visibility: visible;
-  }
-
-  .cv-preview {
-    position: absolute;
-    left: 0;
-    top: 0;
-    width: 100%;
-    height: auto;
-    overflow: visible;
-    box-shadow: none;
-    margin: 0;
-    border: none;
-    max-width: 100%;
-  }
-
-  .no-print {
-    display: none;
-  }
-}
