@@ -15,14 +15,14 @@ export function Toolbar() {
       <div className="container flex h-16 items-center">
         <div className="mr-4 flex items-center">
           <h1 className="text-2xl font-bold font-logo">
-            ProfiCV
+            CV Canvas
           </h1>
         </div>
         <div className="flex flex-1 items-center justify-end space-x-2">
             <Button 
               onClick={handlePrint} 
               size="sm" 
-              className="animate-rainbow-bg bg-gradient-to-r from-red-500 via-yellow-500 via-green-500 via-blue-500 to-purple-500 bg-[length:200%_200%] text-white font-bold"
+              className="transition-all duration-300 bg-gradient-to-r from-red-500 via-yellow-500 via-green-500 via-blue-500 to-purple-500 bg-[length:100%_100%] hover:bg-[length:200%_200%] text-white font-bold hover:animate-rainbow-bg"
             >
               <Download className="mr-2 h-4 w-4" />
               Download PDF
