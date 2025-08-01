@@ -258,17 +258,9 @@ export function CVPreview() {
       } as React.CSSProperties}
     >
       <LayoutGroup>
-        <AnimatePresence mode="wait">
-          <motion.div
-            key={cvData.template}
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            exit={{ opacity: 0 }}
-            transition={{ duration: 0.3 }}
-          >
-            {renderTemplate()}
-          </motion.div>
-        </AnimatePresence>
+        <motion.div key={cvData.template}>
+          {renderTemplate()}
+        </motion.div>
       </LayoutGroup>
     </div>
   );
