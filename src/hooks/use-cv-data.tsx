@@ -24,24 +24,22 @@ const ensureIds = (data: CVData): CVData => {
 
 export const CVDataProvider = ({ children }: { children: ReactNode }) => {
   const [isMounted, setIsMounted] = useState(false);
-  const [cvData, setCvData] = useState<CVData>(() => {
-    if (typeof window === 'undefined') {
-      return initialCVData;
-    }
+  const [cvData, setCvData] = useState<CVData>(initialCVData);
+
+  useEffect(() => {
     try {
       const item = window.localStorage.getItem('cv-canvas-data');
       if (item) {
         const parsedData = JSON.parse(item);
-        return ensureIds(parsedData);
+        setCvData(ensureIds(parsedData));
+      } else {
+        // Set initial data with IDs only on the client
+        setCvData(ensureIds(initialCVData));
       }
-      return initialCVData;
     } catch (error) {
       console.error("Failed to read from localStorage", error);
-      return initialCVData;
+      setCvData(ensureIds(initialCVData));
     }
-  });
-
-  useEffect(() => {
     setIsMounted(true);
   }, []);
 

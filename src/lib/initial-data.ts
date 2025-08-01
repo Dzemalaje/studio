@@ -1,5 +1,4 @@
 import type { CVData } from "./types";
-import { v4 as uuidv4 } from "uuid";
 
 export const initialCVData: CVData = {
   personalDetails: {
@@ -13,7 +12,7 @@ export const initialCVData: CVData = {
   },
   workExperience: [
     {
-      id: uuidv4(),
+      id: "work-1",
       role: "Senior Frontend Developer",
       company: "Tech Solutions Inc.",
       startDate: "Jan 2020",
@@ -22,7 +21,7 @@ export const initialCVData: CVData = {
       summary: "As a Senior Frontend Developer, I spearheaded the creation of a cutting-edge client dashboard, driving significant performance gains and fostering team growth through mentorship.",
     },
     {
-      id: uuidv4(),
+      id: "work-2",
       role: "Backend Developer",
       company: "Innovate Co.",
       startDate: "Jun 2017",
@@ -33,7 +32,7 @@ export const initialCVData: CVData = {
   ],
   education: [
     {
-      id: uuidv4(),
+      id: "edu-1",
       degree: "B.S. in Computer Science",
       institution: "University of Technology",
       startDate: "Sep 2013",
@@ -41,13 +40,13 @@ export const initialCVData: CVData = {
     },
   ],
   skills: [
-    { id: uuidv4(), name: "JavaScript" },
-    { id: uuidv4(), name: "TypeScript" },
-    { id: uuidv4(), name: "React" },
-    { id: uuidv4(), name: "Next.js" },
-    { id: uuidv4(), name: "Node.js" },
-    { id: uuidv4(), name: "GraphQL" },
-    { id: uuidv4(), name: "PostgreSQL" },
-    { id: uuidv4(), name: "Docker" },
+    { id: "skill-1", name: "JavaScript" },
+    { id: "skill-2", name: "TypeScript" },
+    { id: "skill-3", name: "React" },
+    { id: "skill-4", name: "Next.js" },
+    { id: "skill-5", name: "Node.js" },
+    { id: "skill-6", name: "GraphQL" },
+    { id: "skill-7", name: "PostgreSQL" },
+    { id: "skill-8", name: "Docker" },
   ],
 };
