@@ -4,6 +4,7 @@ import { useCvData } from "@/hooks/use-cv-data";
 import { Briefcase, GraduationCap, Calendar, Mail, Phone, Globe, MapPin } from "lucide-react";
 import React from "react";
 import { cn } from "@/lib/utils";
+import { motion, AnimatePresence, LayoutGroup } from "framer-motion";
 
 const FONT_SIZE_MAP = {
     sm: "text-sm",
@@ -11,14 +12,15 @@ const FONT_SIZE_MAP = {
     lg: "text-lg",
 };
 
+const MotionDiv = motion.div;
+
 const DefaultTemplate = () => {
   const { cvData } = useCvData();
   const { personalDetails, workExperience, education, skills, fontSize } = cvData;
-
   const baseTextSize = FONT_SIZE_MAP[fontSize];
 
   return (
-    <>
+    <motion.div layout>
       <header className="text-center mb-8">
         <h1 className={cn("text-4xl font-bold font-headline text-primary", { 'text-5xl': fontSize === 'lg', 'text-3xl': fontSize === 'sm' })}>{personalDetails.name}</h1>
         <p className={cn("text-xl text-muted-foreground font-light", {'text-2xl': fontSize === 'lg', 'text-lg': fontSize === 'sm'})}>{personalDetails.title}</p>
@@ -32,14 +34,14 @@ const DefaultTemplate = () => {
 
       <main className={baseTextSize}>
         {personalDetails.summary && (
-          <section className="mb-8">
+          <MotionDiv layoutId="summary-section" className="mb-8">
             <h2 className="text-2xl font-bold font-headline border-b-2 border-primary pb-2 mb-4 text-primary">Summary</h2>
             <p className="whitespace-pre-wrap text-foreground/80">{personalDetails.summary}</p>
-          </section>
+          </MotionDiv>
         )}
         
         {workExperience.length > 0 && (
-          <section className="mb-8">
+          <MotionDiv layoutId="experience-section" className="mb-8">
             <h2 className="text-2xl font-bold font-headline border-b-2 border-primary pb-2 mb-4 text-primary flex items-center gap-2"><Briefcase className="h-6 w-6"/>Work Experience</h2>
             <div className="space-y-6">
               {workExperience.map((job) => (
@@ -61,11 +63,11 @@ const DefaultTemplate = () => {
                 </div>
               ))}
             </div>
-          </section>
+          </MotionDiv>
         )}
 
         {education.length > 0 && (
-          <section className="mb-8">
+           <MotionDiv layoutId="education-section" className="mb-8">
             <h2 className="text-2xl font-bold font-headline border-b-2 border-primary pb-2 mb-4 text-primary flex items-center gap-2"><GraduationCap className="h-6 w-6"/>Education</h2>
             <div className="space-y-4">
               {education.map((edu) => (
@@ -81,11 +83,11 @@ const DefaultTemplate = () => {
                 </div>
               ))}
             </div>
-          </section>
+           </MotionDiv>
         )}
 
         {skills.length > 0 && (
-          <section>
+          <MotionDiv layoutId="skills-section">
             <h2 className="text-2xl font-bold font-headline border-b-2 border-primary pb-2 mb-4 text-primary">Skills</h2>
             <div className="flex flex-wrap gap-2">
               {skills.map((skill) => (
@@ -94,10 +96,10 @@ const DefaultTemplate = () => {
                 </div>
               ))}
             </div>
-          </section>
+          </MotionDiv>
         )}
       </main>
-    </>
+    </motion.div>
   )
 }
 
@@ -107,7 +109,7 @@ const SidebarTemplate = ({ sidebarPosition }: { sidebarPosition: 'left' | 'right
   const baseTextSize = FONT_SIZE_MAP[fontSize];
 
   const sidebar = (
-    <aside className={cn("bg-primary/5 p-6 rounded-lg space-y-6", baseTextSize)}>
+    <motion.aside layoutId="sidebar" className={cn("bg-primary/5 p-6 rounded-lg space-y-6", baseTextSize)}>
        <div className="text-center">
         <h1 className={cn("text-3xl font-bold font-headline text-primary", { 'text-4xl': fontSize === 'lg', 'text-2xl': fontSize === 'sm' })}>{personalDetails.name}</h1>
         <p className={cn("text-lg text-muted-foreground font-light", { 'text-xl': fontSize === 'lg', 'text-base': fontSize === 'sm' })}>{personalDetails.title}</p>
@@ -122,7 +124,7 @@ const SidebarTemplate = ({ sidebarPosition }: { sidebarPosition: 'left' | 'right
         </div>
       </div>
        {skills.length > 0 && (
-          <section>
+          <MotionDiv layoutId="skills-section">
             <h2 className="text-xl font-bold font-headline border-b-2 border-primary pb-2 mb-4 text-primary">Skills</h2>
             <div className="flex flex-wrap gap-2">
               {skills.map((skill) => (
@@ -131,10 +133,10 @@ const SidebarTemplate = ({ sidebarPosition }: { sidebarPosition: 'left' | 'right
                 </div>
               ))}
             </div>
-          </section>
+          </MotionDiv>
         )}
         {education.length > 0 && (
-          <section>
+          <MotionDiv layoutId="education-section">
             <h2 className="text-xl font-bold font-headline border-b-2 border-primary pb-2 mb-4 text-primary flex items-center gap-2"><GraduationCap className="h-5 w-5"/>Education</h2>
             <div className="space-y-4">
               {education.map((edu) => (
@@ -148,21 +150,21 @@ const SidebarTemplate = ({ sidebarPosition }: { sidebarPosition: 'left' | 'right
                 </div>
               ))}
             </div>
-          </section>
+          </MotionDiv>
         )}
-    </aside>
+    </motion.aside>
   );
 
   const mainContent = (
-     <main className={cn("space-y-8", baseTextSize)}>
+     <motion.main layoutId="main-content" className={cn("space-y-8", baseTextSize)}>
         {personalDetails.summary && (
-          <section>
+          <MotionDiv layoutId="summary-section">
             <h2 className="text-2xl font-bold font-headline border-b-2 border-primary pb-2 mb-4 text-primary">Summary</h2>
             <p className="whitespace-pre-wrap text-foreground/80">{personalDetails.summary}</p>
-          </section>
+          </MotionDiv>
         )}
         {workExperience.length > 0 && (
-          <section>
+          <MotionDiv layoutId="experience-section">
             <h2 className="text-2xl font-bold font-headline border-b-2 border-primary pb-2 mb-4 text-primary flex items-center gap-2"><Briefcase className="h-6 w-6"/>Work Experience</h2>
             <div className="space-y-6">
               {workExperience.map((job) => (
@@ -184,17 +186,17 @@ const SidebarTemplate = ({ sidebarPosition }: { sidebarPosition: 'left' | 'right
                 </div>
               ))}
             </div>
-          </section>
+          </MotionDiv>
         )}
-      </main>
+      </motion.main>
   );
 
   return (
-    <div className={`grid grid-cols-1 md:grid-cols-3 gap-8`}>
+    <motion.div layout className={`grid grid-cols-1 md:grid-cols-3 gap-8`}>
         {sidebarPosition === 'left' && <div className="md:col-span-1">{sidebar}</div>}
         <div className="md:col-span-2">{mainContent}</div>
         {sidebarPosition === 'right' && <div className="md:col-span-1">{sidebar}</div>}
-    </div>
+    </motion.div>
   )
 }
 
@@ -244,7 +246,7 @@ export function CVPreview() {
   return (
     <div 
       className={cn(
-        "bg-card text-card-foreground shadow-lg rounded-lg p-8 aspect-[210/297] w-full max-w-[800px] mx-auto overflow-y-auto cv-preview transition-all duration-300 ease-in-out",
+        "bg-card text-card-foreground shadow-lg rounded-lg p-8 aspect-[210/297] w-full max-w-[800px] mx-auto overflow-hidden cv-preview transition-all duration-300 ease-in-out",
         baseFontSize
       )}
       style={{
@@ -255,7 +257,19 @@ export function CVPreview() {
         '--primary-foreground-l': `${l > 50 ? 10 : 90}%`,
       } as React.CSSProperties}
     >
-      {renderTemplate()}
+      <LayoutGroup>
+        <AnimatePresence mode="wait">
+          <motion.div
+            key={cvData.template}
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            transition={{ duration: 0.3 }}
+          >
+            {renderTemplate()}
+          </motion.div>
+        </AnimatePresence>
+      </LayoutGroup>
     </div>
   );
 }
