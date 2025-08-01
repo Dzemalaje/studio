@@ -14,9 +14,10 @@ interface CVDataContextType {
 const CVDataContext = createContext<CVDataContextType | undefined>(undefined);
 
 const ensureIds = (data: CVData): CVData => {
+  const personalDetailsBackground = data.personalDetailsBackground === undefined ? true : data.personalDetailsBackground;
   return {
     ...data,
-    personalDetailsBackground: data.personalDetailsBackground ?? true,
+    personalDetailsBackground,
     workExperience: data.workExperience?.map(item => ({ ...item, id: item.id || uuidv4() })) || [],
     education: data.education?.map(item => ({ ...item, id: item.id || uuidv4() })) || [],
     skills: data.skills?.map(item => ({ ...item, id: item.id || uuidv4() })) || [],

@@ -24,7 +24,7 @@ export const SidebarTemplate = ({ sidebarPosition }: { sidebarPosition: 'left' |
     <motion.aside
       layoutId="sidebar"
       className={cn(
-        "p-6 rounded-lg space-y-6",
+        "p-6 rounded-lg space-y-6 h-full",
         baseTextSize,
         { 'bg-primary/5': personalDetailsBackground }
       )}
@@ -94,7 +94,7 @@ export const SidebarTemplate = ({ sidebarPosition }: { sidebarPosition: 'left' |
   );
 
   const mainContent = (
-     <motion.main layoutId="main-content" className={cn("space-y-8", baseTextSize)}>
+     <motion.main layoutId="main-content" className={cn("space-y-8 p-6", baseTextSize)}>
         {personalDetails.summary && (
           <MotionDiv layoutId="summary-section">
             <h2 className="text-2xl font-bold font-headline border-b-2 border-primary pb-2 mb-4 text-primary">Summary</h2>
