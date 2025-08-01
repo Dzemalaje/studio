@@ -12,7 +12,6 @@ interface CVDataContextType {
 
 const CVDataContext = createContext<CVDataContextType | undefined>(undefined);
 
-// A function to ensure data from localStorage has IDs if it's an older format.
 const ensureIds = (data: CVData): CVData => {
   return {
     ...data,
@@ -33,7 +32,6 @@ export const CVDataProvider = ({ children }: { children: ReactNode }) => {
         const parsedData = JSON.parse(item);
         setCvData(ensureIds(parsedData));
       } else {
-        // Set initial data with IDs only on the client
         setCvData(ensureIds(initialCVData));
       }
     } catch (error) {

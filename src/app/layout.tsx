@@ -1,7 +1,6 @@
 import type { Metadata } from 'next';
 import { Toaster } from "@/components/ui/toaster"
 import './globals.css';
-import { useCvData } from '@/hooks/use-cv-data';
 
 export const metadata: Metadata = {
   title: 'ProfiCV',
