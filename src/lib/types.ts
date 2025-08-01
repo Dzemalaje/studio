@@ -1,3 +1,4 @@
+
 import { z } from "zod";
 
 export const PersonalDetailsSchema = z.object({
@@ -35,6 +36,26 @@ export interface Skill {
   name: string;
 }
 
+export interface Project {
+  id: string;
+  name: string;
+  link: string;
+  description: string;
+}
+
+export interface Certification {
+  id: string;
+  name: string;
+  issuer: string;
+  date: string;
+}
+
+export interface Language {
+  id: string;
+  name: string;
+  proficiency: string;
+}
+
 export type FontSize = 'sm' | 'base' | 'lg';
 
 export interface CVData {
@@ -42,6 +63,9 @@ export interface CVData {
   workExperience: WorkExperience[];
   education: Education[];
   skills: Skill[];
+  projects: Project[];
+  certifications: Certification[];
+  languages: Language[];
   template: 'default' | 'left-sidebar' | 'right-sidebar';
   themeColor: string;
   fontFamily: string;

@@ -1,3 +1,4 @@
+
 import type { CVData } from "./types";
 
 export const initialCVData: CVData = {
@@ -54,4 +55,7 @@ export const initialCVData: CVData = {
     { id: "skill-7", name: "PostgreSQL" },
     { id: "skill-8", name: "Docker" },
   ],
+  projects: [],
+  certifications: [],
+  languages: [],
 };

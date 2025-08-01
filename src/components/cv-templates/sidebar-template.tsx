@@ -1,7 +1,8 @@
+
 "use client";
 
 import { useCvData } from "@/hooks/use-cv-data";
-import { Briefcase, GraduationCap, Calendar, Mail, Phone, Globe, MapPin } from "lucide-react";
+import { Briefcase, GraduationCap, Calendar, Mail, Phone, Globe, MapPin, AppWindow, Link as LinkIcon, Award, Languages as LanguagesIcon } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { motion } from "framer-motion";
 import Image from "next/image";
@@ -16,7 +17,7 @@ const MotionDiv = motion.div;
 
 export const SidebarTemplate = ({ sidebarPosition }: { sidebarPosition: 'left' | 'right' }) => {
   const { cvData } = useCvData();
-  const { personalDetails, workExperience, education, skills, fontSize } = cvData;
+  const { personalDetails, workExperience, education, skills, projects, certifications, languages, fontSize } = cvData;
   const baseTextSize = FONT_SIZE_MAP[fontSize];
 
   const sidebar = (
@@ -70,6 +71,18 @@ export const SidebarTemplate = ({ sidebarPosition }: { sidebarPosition: 'left' |
             </div>
           </MotionDiv>
         )}
+         {languages.length > 0 && (
+          <MotionDiv layoutId="languages-section">
+            <h2 className="text-xl font-bold font-headline border-b-2 border-primary pb-2 mb-4 text-primary flex items-center gap-2"><LanguagesIcon className="h-5 w-5"/>Languages</h2>
+            <div className="space-y-2">
+              {languages.map((lang) => (
+                <div key={lang.id}>
+                  <span className="font-semibold">{lang.name}:</span> <span className="text-muted-foreground">{lang.proficiency}</span>
+                </div>
+              ))}
+            </div>
+          </MotionDiv>
+        )}
     </motion.aside>
   );
 
@@ -101,6 +114,35 @@ export const SidebarTemplate = ({ sidebarPosition }: { sidebarPosition: 'left' |
                      </div>
                   )}
                   <p className="mt-2 whitespace-pre-wrap text-foreground/80">{job.description}</p>
+                </div>
+              ))}
+            </div>
+          </MotionDiv>
+        )}
+         {projects.length > 0 && (
+          <MotionDiv layoutId="projects-section" className="mb-8">
+            <h2 className="text-2xl font-bold font-headline border-b-2 border-primary pb-2 mb-4 text-primary flex items-center gap-2"><AppWindow className="h-6 w-6"/>Projects</h2>
+            <div className="space-y-6">
+              {projects.map((proj) => (
+                <div key={proj.id}>
+                  <div className="flex justify-between items-baseline">
+                    <h3 className="text-lg font-bold">{proj.name}</h3>
+                    {proj.link && <a href={proj.link} target="_blank" rel="noopener noreferrer" className="text-sm text-muted-foreground flex items-center gap-1 hover:text-primary"><LinkIcon className="h-3 w-3" /><span>{proj.link}</span></a>}
+                  </div>
+                  <p className="mt-2 whitespace-pre-wrap text-foreground/80">{proj.description}</p>
+                </div>
+              ))}
+            </div>
+          </MotionDiv>
+        )}
+         {certifications.length > 0 && (
+          <MotionDiv layoutId="certifications-section" className="mb-8">
+            <h2 className="text-2xl font-bold font-headline border-b-2 border-primary pb-2 mb-4 text-primary flex items-center gap-2"><Award className="h-6 w-6"/>Certifications</h2>
+            <div className="space-y-4">
+              {certifications.map((cert) => (
+                <div key={cert.id}>
+                  <h3 className="text-lg font-bold">{cert.name}</h3>
+                  <p className="text-md text-muted-foreground">{cert.issuer} - {cert.date}</p>
                 </div>
               ))}
             </div>

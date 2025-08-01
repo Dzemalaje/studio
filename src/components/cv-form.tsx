@@ -1,3 +1,4 @@
+
 "use client";
 
 import {
@@ -10,9 +11,12 @@ import { PersonalDetailsForm } from "@/components/sections/personal-details-form
 import { ExperienceForm } from "@/components/sections/experience-form";
 import { EducationForm } from "@/components/sections/education-form";
 import { SkillsForm } from "@/components/sections/skills-form";
-import { Briefcase, GraduationCap, User, Wrench, Palette } from "lucide-react";
+import { Briefcase, GraduationCap, User, Wrench, Palette, AppWindow, Award, Languages as LanguagesIcon } from "lucide-react";
 import { CustomizationForm } from "./sections/customization-form";
 import { Card } from "@/components/ui/card";
+import { ProjectsForm } from "./sections/projects-form";
+import { CertificationsForm } from "./sections/certifications-form";
+import { LanguagesForm } from "./sections/languages-form";
 
 export function CVForm() {
   return (
@@ -61,6 +65,19 @@ export function CVForm() {
           </AccordionContent>
         </AccordionItem>
       </Card>
+       <Card>
+        <AccordionItem value="projects" className="border-b-0">
+          <AccordionTrigger className="px-6">
+            <div className="flex items-center gap-2">
+              <AppWindow className="h-5 w-5" />
+              <span className="text-lg font-headline">Projects</span>
+            </div>
+          </AccordionTrigger>
+          <AccordionContent className="px-6">
+            <ProjectsForm />
+          </AccordionContent>
+        </AccordionItem>
+      </Card>
       <Card>
         <AccordionItem value="skills" className="border-b-0">
           <AccordionTrigger className="px-6">
@@ -71,6 +88,32 @@ export function CVForm() {
           </AccordionTrigger>
           <AccordionContent className="px-6">
             <SkillsForm />
+          </AccordionContent>
+        </AccordionItem>
+      </Card>
+       <Card>
+        <AccordionItem value="certifications" className="border-b-0">
+          <AccordionTrigger className="px-6">
+            <div className="flex items-center gap-2">
+              <Award className="h-5 w-5" />
+              <span className="text-lg font-headline">Certifications</span>
+            </div>
+          </AccordionTrigger>
+          <AccordionContent className="px-6">
+            <CertificationsForm />
+          </AccordionContent>
+        </AccordionItem>
+      </Card>
+       <Card>
+        <AccordionItem value="languages" className="border-b-0">
+          <AccordionTrigger className="px-6">
+            <div className="flex items-center gap-2">
+              <LanguagesIcon className="h-5 w-5" />
+              <span className="text-lg font-headline">Languages</span>
+            </div>
+          </AccordionTrigger>
+          <AccordionContent className="px-6">
+            <LanguagesForm />
           </AccordionContent>
         </AccordionItem>
       </Card>

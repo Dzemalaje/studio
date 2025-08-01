@@ -1,3 +1,4 @@
+
 "use client";
 
 import { createContext, useContext, useState, Dispatch, SetStateAction, useEffect, ReactNode } from 'react';
@@ -18,6 +19,9 @@ const ensureIds = (data: CVData): CVData => {
     workExperience: data.workExperience?.map(item => ({ ...item, id: item.id || uuidv4() })) || [],
     education: data.education?.map(item => ({ ...item, id: item.id || uuidv4() })) || [],
     skills: data.skills?.map(item => ({ ...item, id: item.id || uuidv4() })) || [],
+    projects: data.projects?.map(item => ({ ...item, id: item.id || uuidv4() })) || [],
+    certifications: data.certifications?.map(item => ({ ...item, id: item.id || uuidv4() })) || [],
+    languages: data.languages?.map(item => ({ ...item, id: item.id || uuidv4() })) || [],
   };
 };
 
@@ -44,7 +48,13 @@ export const CVDataProvider = ({ children }: { children: ReactNode }) => {
   useEffect(() => {
     if (isMounted) {
       try {
-        window.localStorage.setItem('proficv-data', JSON.stringify(cvData));
+        const dataToStore = {
+          ...cvData,
+          projects: cvData.projects || [],
+          certifications: cvData.certifications || [],
+          languages: cvData.languages || [],
+        };
+        window.localStorage.setItem('proficv-data', JSON.stringify(dataToStore));
       } catch (error) {
         console.error("Failed to write to localStorage", error);
       }
