@@ -5,14 +5,14 @@ import { Button } from "@/components/ui/button";
 import { Download, Loader2 } from "lucide-react";
 import { useState } from "react";
 import { useToast } from "@/hooks/use-toast";
-import html2pdf from 'html2pdf.js';
 
 export function Toolbar() {
   const [isGenerating, setIsGenerating] = useState(false);
   const { toast } = useToast();
 
-  const handleDownloadPdf = () => {
+  const handleDownloadPdf = async () => {
     setIsGenerating(true);
+    
     const element = document.getElementById('cv-preview');
     if (!element) {
       toast({
@@ -24,26 +24,30 @@ export function Toolbar() {
       return;
     }
 
-    const opt = {
-      margin: 0,
-      filename: 'CV-Canvas.pdf',
-      image: { type: 'jpeg', quality: 0.98 },
-      html2canvas: { scale: 3, useCORS: true },
-      jsPDF: { unit: 'mm', format: 'a4', orientation: 'portrait' },
-      pagebreak: { mode: ['css', 'legacy'] }
-    };
+    try {
+      const html2pdf = (await import('html2pdf.js')).default;
+      
+      const opt = {
+        margin: 0,
+        filename: 'CV-Canvas.pdf',
+        image: { type: 'jpeg', quality: 0.98 },
+        html2canvas: { scale: 3, useCORS: true },
+        jsPDF: { unit: 'mm', format: 'a4', orientation: 'portrait' },
+        pagebreak: { mode: ['css', 'legacy'] }
+      };
 
-    html2pdf().from(element).set(opt).save().then(() => {
-      setIsGenerating(false);
-    }).catch(err => {
+      await html2pdf().from(element).set(opt).save();
+
+    } catch (err) {
       console.error(err);
       toast({
         title: "PDF Generation Failed",
         description: "An unexpected error occurred. Please try again.",
         variant: "destructive",
       });
+    } finally {
       setIsGenerating(false);
-    });
+    }
   };
 
 
