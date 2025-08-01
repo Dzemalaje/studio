@@ -16,8 +16,9 @@ import { CustomizationForm } from "./sections/customization-form";
 export function CVForm() {
   return (
     <Accordion
-      type="multiple"
-      defaultValue={["personal", "experience", "education", "skills", "customization"]}
+      type="single"
+      defaultValue="personal"
+      collapsible
       className="w-full"
     >
       <AccordionItem value="personal">
