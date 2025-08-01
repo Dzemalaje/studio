@@ -82,21 +82,18 @@
     visibility: hidden;
   }
   
-  #cv-preview-container, #cv-preview-container * {
+  .cv-preview, .cv-preview * {
     visibility: visible;
   }
 
-  #cv-preview-container {
-    display: block !important;
+  .cv-preview {
+    display: block;
     position: absolute;
     left: 0;
     top: 0;
     width: 100%;
     height: auto;
     overflow: visible;
-  }
-
-  .cv-preview {
     box-shadow: none;
     margin: 0;
     max-width: 100%;
