@@ -64,6 +64,7 @@ export function CVPreview() {
 
   return (
     <div
+      id="cv-preview"
       className={cn(
         "w-full max-w-[800px] mx-auto cv-preview",
         baseFontSize
