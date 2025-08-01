@@ -2,7 +2,6 @@
 
 import { useCvData } from "@/hooks/use-cv-data";
 import { Input } from "@/components/ui/input";
-import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
@@ -37,7 +36,9 @@ export function PersonalDetailsForm() {
   }, [form, setCvData]);
 
   useEffect(() => {
-    form.reset(cvData.personalDetails);
+    if (JSON.stringify(form.getValues()) !== JSON.stringify(cvData.personalDetails)) {
+        form.reset(cvData.personalDetails);
+    }
   }, [cvData.personalDetails, form]);
 
 
