@@ -1,7 +1,7 @@
 "use client";
 
 import { Button } from "@/components/ui/button";
-import { Download, Github } from "lucide-react";
+import { Download } from "lucide-react";
 
 export function Toolbar() {
   const handlePrint = () => {
@@ -40,12 +40,6 @@ export function Toolbar() {
           </h1>
         </div>
         <div className="flex flex-1 items-center justify-end space-x-2">
-            <Button variant="outline" size="sm" asChild>
-                <a href="https://github.com/firebase/studio-examples/tree/main/profi-cv" target="_blank" rel="noopener noreferrer">
-                    <Github className="mr-2 h-4 w-4" />
-                    Star on GitHub
-                </a>
-            </Button>
             <Button onClick={handlePrint} size="sm">
               <Download className="mr-2 h-4 w-4" />
               Download PDF
