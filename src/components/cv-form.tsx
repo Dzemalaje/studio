@@ -10,13 +10,14 @@ import { PersonalDetailsForm } from "@/components/sections/personal-details-form
 import { ExperienceForm } from "@/components/sections/experience-form";
 import { EducationForm } from "@/components/sections/education-form";
 import { SkillsForm } from "@/components/sections/skills-form";
-import { Briefcase, GraduationCap, User, Wrench } from "lucide-react";
+import { Briefcase, GraduationCap, User, Wrench, Palette } from "lucide-react";
+import { CustomizationForm } from "./sections/customization-form";
 
 export function CVForm() {
   return (
     <Accordion
       type="multiple"
-      defaultValue={["personal", "experience", "education", "skills"]}
+      defaultValue={["personal", "experience", "education", "skills", "customization"]}
       className="w-full"
     >
       <AccordionItem value="personal">
@@ -61,6 +62,17 @@ export function CVForm() {
         </AccordionTrigger>
         <AccordionContent>
           <SkillsForm />
+        </AccordionContent>
+      </AccordionItem>
+      <AccordionItem value="customization">
+        <AccordionTrigger>
+          <div className="flex items-center gap-2">
+            <Palette className="h-5 w-5" />
+            <span className="text-lg font-headline">Customization</span>
+          </div>
+        </AccordionTrigger>
+        <AccordionContent>
+          <CustomizationForm />
         </AccordionContent>
       </AccordionItem>
     </Accordion>
