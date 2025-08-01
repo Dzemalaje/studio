@@ -17,13 +17,19 @@ const MotionDiv = motion.div;
 
 export const DefaultTemplate = () => {
   const { cvData } = useCvData();
-  const { personalDetails, workExperience, education, skills, projects, certifications, languages, fontSize } = cvData;
+  const { personalDetails, workExperience, education, skills, projects, certifications, languages, fontSize, personalDetailsBackground } = cvData;
   const baseTextSize = FONT_SIZE_MAP[fontSize];
 
   return (
     <motion.div layout>
-      <MotionDiv layoutId="personal-details-section">
-        <header className="text-center mb-8">
+      <MotionDiv
+        layoutId="personal-details-section"
+        className={cn(
+          'mb-8',
+          { 'bg-primary/5 p-8 rounded-lg': personalDetailsBackground }
+        )}
+      >
+        <header className="text-center">
           {personalDetails.profilePicture && (
             <motion.div layoutId="profile-picture" className="w-32 h-32 mx-auto rounded-full overflow-hidden mb-4 ring-4 ring-primary/20">
               <Image src={personalDetails.profilePicture} alt="Profile" width={128} height={128} className="object-cover w-full h-full" />

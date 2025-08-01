@@ -17,11 +17,18 @@ const MotionDiv = motion.div;
 
 export const SidebarTemplate = ({ sidebarPosition }: { sidebarPosition: 'left' | 'right' }) => {
   const { cvData } = useCvData();
-  const { personalDetails, workExperience, education, skills, projects, certifications, languages, fontSize } = cvData;
+  const { personalDetails, workExperience, education, skills, projects, certifications, languages, fontSize, personalDetailsBackground } = cvData;
   const baseTextSize = FONT_SIZE_MAP[fontSize];
 
   const sidebar = (
-    <motion.aside layoutId="sidebar" className={cn("bg-primary/5 p-6 rounded-lg space-y-6", baseTextSize)}>
+    <motion.aside
+      layoutId="sidebar"
+      className={cn(
+        "p-6 rounded-lg space-y-6",
+        baseTextSize,
+        { 'bg-primary/5': personalDetailsBackground }
+      )}
+    >
       <MotionDiv layoutId="personal-details-section">
         <div className="text-center">
           {personalDetails.profilePicture && (

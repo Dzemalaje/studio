@@ -1,3 +1,4 @@
+
 "use client";
 
 import {
@@ -15,6 +16,7 @@ import { FontSize } from "@/lib/types";
 import { useCallback } from "react";
 import { ModernColorPicker } from "../modern-color-picker";
 import debounce from 'lodash.debounce';
+import { Checkbox } from "../ui/checkbox";
 
 const FONT_OPTIONS = [
     { label: "PT Sans", value: "PT Sans" },
@@ -82,6 +84,10 @@ export function CustomizationForm() {
 
     const handleFontSizeChange = useCallback((value: FontSize) => {
         setCvData(prev => ({...prev, fontSize: value}));
+    }, [setCvData]);
+
+    const handleBackgroundChange = useCallback((checked: boolean) => {
+        setCvData(prev => ({...prev, personalDetailsBackground: checked}));
     }, [setCvData]);
 
     return (
@@ -165,6 +171,19 @@ export function CustomizationForm() {
                         </SelectContent>
                     </Select>
                 </div>
+            </div>
+             <div className="flex items-center space-x-2">
+                <Checkbox
+                    id="personal-details-background"
+                    checked={cvData.personalDetailsBackground}
+                    onCheckedChange={handleBackgroundChange}
+                />
+                <label
+                    htmlFor="personal-details-background"
+                    className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
+                >
+                    Show background on personal details
+                </label>
             </div>
         </div>
     );
