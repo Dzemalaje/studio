@@ -14,7 +14,7 @@ export function Toolbar() {
   const handleDownloadPdf = async () => {
     setIsGenerating(true);
     try {
-      await exportCvToPdf('cv-preview', 'ProfiCV_Resume.pdf');
+      await exportCvToPdf('cv-preview-container', 'ProfiCV_Resume.pdf');
     } catch (error) {
       console.error(error);
       toast({

@@ -2,25 +2,26 @@
 import { jsPDF } from 'jspdf';
 import html2canvas from 'html2canvas';
 
-export const exportCvToPdf = async (elementId: string, fileName: string): Promise<void> => {
-  const cvElement = document.getElementById(elementId);
-  if (!cvElement) {
-    console.error(`Element with id "${elementId}" not found.`);
-    alert('Could not find the CV element to export.');
+export const exportCvToPdf = async (containerId: string, fileName: string): Promise<void> => {
+  const printContainer = document.getElementById(containerId);
+  if (!printContainer) {
+    console.error(`Element with id "${containerId}" not found.`);
+    alert('Could not find the CV container to export.');
     return;
   }
   
-  const stickyParent = cvElement.parentElement;
-  if (!stickyParent) {
-    console.error('Could not find parent of CV element.');
+  const cvElement = printContainer.querySelector<HTMLElement>('.cv-preview');
+   if (!cvElement) {
+    console.error(`Element with class ".cv-preview" not found inside "#${containerId}".`);
+    alert('Could not find the CV element to export.');
     return;
   }
 
-  const originalParentClassName = stickyParent.className;
+  const originalContainerClassName = printContainer.className;
   const originalBodyClassName = document.body.className;
 
   // Temporarily modify styles to ensure the entire CV is captured correctly.
-  stickyParent.className = '';
+  printContainer.className = '';
   document.body.className += ' overflow-hidden';
   window.scrollTo(0, 0);
   
@@ -66,7 +67,7 @@ export const exportCvToPdf = async (elementId: string, fileName: string): Promis
     console.error("Error generating PDF:", error);
     alert('An error occurred while generating the PDF.');
   } finally {
-    stickyParent.className = originalParentClassName;
+    printContainer.className = originalContainerClassName;
     document.body.className = originalBodyClassName;
   }
 };

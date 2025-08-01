@@ -39,7 +39,7 @@ export function CVBuilder() {
         </div>
         
         <div className={`${mobileView === 'preview' ? 'block' : 'hidden'} lg:block`}>
-          <div className="lg:sticky lg:top-24 h-[calc(100vh-10rem)] overflow-y-auto cv-preview-container">
+          <div id="cv-preview-container" className="lg:sticky lg:top-24 h-[calc(100vh-10rem)] overflow-y-auto">
             <CVPreview />
           </div>
         </div>
