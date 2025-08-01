@@ -23,11 +23,11 @@ export const DefaultTemplate = () => {
   const baseTextSize = FONT_SIZE_MAP[fontSize];
 
   return (
-    <motion.div layout className="bg-card text-card-foreground p-8 space-y-8 cv-page">
+    <motion.div layout className="bg-card text-card-foreground p-8 space-y-8">
       <MotionDiv
         layoutId="personal-details-section"
         className={cn(
-          'mb-8 break-inside-avoid',
+          'mb-8',
           { 'bg-primary/5 p-8 rounded-lg': personalDetailsBackground }
         )}
       >
@@ -50,18 +50,20 @@ export const DefaultTemplate = () => {
 
       <main className={baseTextSize}>
         {personalDetails.summary && (
-          <MotionDiv layoutId="summary-section" className="mb-8 break-inside-avoid">
+          <MotionDiv layoutId="summary-section" className="mb-8">
             <h2 className="text-2xl font-bold font-headline border-b-2 border-primary pb-2 mb-4 text-primary">Summary</h2>
             <p className="whitespace-pre-wrap text-foreground/80">{personalDetails.summary}</p>
           </MotionDiv>
         )}
+
+        <div className="html2pdf__page-break" />
         
         {workExperience.length > 0 && (
           <MotionDiv layoutId="experience-section" className="mb-8">
             <h2 className="text-2xl font-bold font-headline border-b-2 border-primary pb-2 mb-4 text-primary flex items-center gap-2"><Briefcase className="h-6 w-6"/>Work Experience</h2>
             <div className="space-y-6">
               {workExperience.map((job) => (
-                <div key={job.id} className="break-inside-avoid">
+                <div key={job.id}>
                   <div className="flex justify-between items-baseline">
                     <h3 className="text-lg font-bold">{job.role}</h3>
                     <div className="text-sm text-muted-foreground flex items-center gap-2">
@@ -82,12 +84,14 @@ export const DefaultTemplate = () => {
           </MotionDiv>
         )}
         
+        <div className="html2pdf__page-break" />
+
         {projects.length > 0 && (
-          <MotionDiv layoutId="projects-section" className="mb-8 break-inside-avoid">
+          <MotionDiv layoutId="projects-section" className="mb-8">
             <h2 className="text-2xl font-bold font-headline border-b-2 border-primary pb-2 mb-4 text-primary flex items-center gap-2"><AppWindow className="h-6 w-6"/>Projects</h2>
             <div className="space-y-6">
               {projects.map((proj) => (
-                <div key={proj.id} className="break-inside-avoid">
+                <div key={proj.id}>
                   <div className="flex justify-between items-baseline">
                     <h3 className="text-lg font-bold">{proj.name}</h3>
                     {proj.link && <a href={proj.link} target="_blank" rel="noopener noreferrer" className="text-sm text-muted-foreground flex items-center gap-1 hover:text-primary"><LinkIcon className="h-3 w-3" /><span>{proj.link}</span></a>}
@@ -99,12 +103,14 @@ export const DefaultTemplate = () => {
           </MotionDiv>
         )}
 
+        <div className="html2pdf__page-break" />
+
         {education.length > 0 && (
-           <MotionDiv layoutId="education-section" className="mb-8 break-inside-avoid">
+           <MotionDiv layoutId="education-section" className="mb-8">
             <h2 className="text-2xl font-bold font-headline border-b-2 border-primary pb-2 mb-4 text-primary flex items-center gap-2"><GraduationCap className="h-6 w-6"/>Education</h2>
             <div className="space-y-4">
               {education.map((edu) => (
-                <div key={edu.id} className="break-inside-avoid">
+                <div key={edu.id}>
                   <div className="flex justify-between items-baseline">
                     <h3 className="text-lg font-bold">{edu.degree}</h3>
                     <div className="text-sm text-muted-foreground flex items-center gap-2">
@@ -119,8 +125,10 @@ export const DefaultTemplate = () => {
            </MotionDiv>
         )}
 
+        <div className="html2pdf__page-break" />
+
         {skills.length > 0 && (
-          <MotionDiv layoutId="skills-section" className="mb-8 break-inside-avoid">
+          <MotionDiv layoutId="skills-section" className="mb-8">
             <h2 className="text-2xl font-bold font-headline border-b-2 border-primary pb-2 mb-4 text-primary">Skills</h2>
             <div className="flex flex-wrap gap-2">
               {skills.map((skill) => (
@@ -133,11 +141,11 @@ export const DefaultTemplate = () => {
         )}
 
         {certifications.length > 0 && (
-          <MotionDiv layoutId="certifications-section" className="mb-8 break-inside-avoid">
+          <MotionDiv layoutId="certifications-section" className="mb-8">
             <h2 className="text-2xl font-bold font-headline border-b-2 border-primary pb-2 mb-4 text-primary flex items-center gap-2"><Award className="h-6 w-6"/>Certifications</h2>
             <div className="space-y-4">
               {certifications.map((cert) => (
-                <div key={cert.id} className="break-inside-avoid">
+                <div key={cert.id}>
                   <h3 className="text-lg font-bold">{cert.name}</h3>
                   <p className="text-md text-muted-foreground">{cert.issuer} - {cert.date}</p>
                 </div>
@@ -147,11 +155,11 @@ export const DefaultTemplate = () => {
         )}
 
         {languages.length > 0 && (
-          <MotionDiv layoutId="languages-section" className="break-inside-avoid">
+          <MotionDiv layoutId="languages-section">
             <h2 className="text-2xl font-bold font-headline border-b-2 border-primary pb-2 mb-4 text-primary flex items-center gap-2"><Languages className="h-6 w-6"/>Languages</h2>
             <div className="grid grid-cols-2 gap-4">
               {languages.map((lang) => (
-                <div key={lang.id} className="break-inside-avoid">
+                <div key={lang.id}>
                   <div className="flex justify-between items-center mb-1">
                     <span className="font-bold">{lang.name}</span>
                     <span className="text-sm text-muted-foreground">{PROFICIENCY_LEVELS[lang.level]}</span>

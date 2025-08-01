@@ -31,7 +31,7 @@ export const SidebarTemplate = ({ sidebarPosition }: { sidebarPosition: 'left' |
         { 'bg-primary/5': personalDetailsBackground }
       )}
     >
-      <MotionDiv layoutId="personal-details-section" className="break-inside-avoid">
+      <MotionDiv layoutId="personal-details-section">
         <div className="text-center">
           {personalDetails.profilePicture && (
             <motion.div layoutId="profile-picture" className="w-32 h-32 mx-auto rounded-full overflow-hidden mb-4 ring-4 ring-primary/20">
@@ -52,7 +52,7 @@ export const SidebarTemplate = ({ sidebarPosition }: { sidebarPosition: 'left' |
         </div>
       </MotionDiv>
        {skills.length > 0 && (
-          <MotionDiv layoutId="skills-section" className="break-inside-avoid">
+          <MotionDiv layoutId="skills-section">
             <h2 className="text-xl font-bold font-headline border-b-2 border-primary pb-2 mb-4 text-primary">Skills</h2>
             <div className="flex flex-wrap gap-2">
               {skills.map((skill) => (
@@ -64,7 +64,7 @@ export const SidebarTemplate = ({ sidebarPosition }: { sidebarPosition: 'left' |
           </MotionDiv>
         )}
         {education.length > 0 && (
-          <MotionDiv layoutId="education-section" className="break-inside-avoid">
+          <MotionDiv layoutId="education-section">
             <h2 className="text-xl font-bold font-headline border-b-2 border-primary pb-2 mb-4 text-primary flex items-center gap-2"><GraduationCap className="h-5 w-5"/>Education</h2>
             <div className="space-y-4">
               {education.map((edu) => (
@@ -81,7 +81,7 @@ export const SidebarTemplate = ({ sidebarPosition }: { sidebarPosition: 'left' |
           </MotionDiv>
         )}
          {languages.length > 0 && (
-          <MotionDiv layoutId="languages-section" className="break-inside-avoid">
+          <MotionDiv layoutId="languages-section">
             <h2 className="text-xl font-bold font-headline border-b-2 border-primary pb-2 mb-4 text-primary flex items-center gap-2"><LanguagesIcon className="h-5 w-5"/>Languages</h2>
             <div className="space-y-3">
               {languages.map((lang) => (
@@ -102,17 +102,20 @@ export const SidebarTemplate = ({ sidebarPosition }: { sidebarPosition: 'left' |
   const mainContent = (
      <motion.main layoutId="main-content" className={cn("space-y-8 p-6", baseTextSize)}>
         {personalDetails.summary && (
-          <MotionDiv layoutId="summary-section" className="break-inside-avoid">
+          <MotionDiv layoutId="summary-section">
             <h2 className="text-2xl font-bold font-headline border-b-2 border-primary pb-2 mb-4 text-primary">Summary</h2>
             <p className="whitespace-pre-wrap text-foreground/80">{personalDetails.summary}</p>
           </MotionDiv>
         )}
+
+        <div className="html2pdf__page-break" />
+
         {workExperience.length > 0 && (
           <MotionDiv layoutId="experience-section">
             <h2 className="text-2xl font-bold font-headline border-b-2 border-primary pb-2 mb-4 text-primary flex items-center gap-2"><Briefcase className="h-6 w-6"/>Work Experience</h2>
             <div className="space-y-6">
               {workExperience.map((job) => (
-                <div key={job.id} className="break-inside-avoid">
+                <div key={job.id}>
                   <div className="flex justify-between items-baseline">
                     <h3 className="text-lg font-bold">{job.role}</h3>
                     <div className="text-sm text-muted-foreground flex items-center gap-2">
@@ -132,12 +135,15 @@ export const SidebarTemplate = ({ sidebarPosition }: { sidebarPosition: 'left' |
             </div>
           </MotionDiv>
         )}
+
+         <div className="html2pdf__page-break" />
+
          {projects.length > 0 && (
-          <MotionDiv layoutId="projects-section" className="mb-8 break-inside-avoid">
+          <MotionDiv layoutId="projects-section" className="mb-8">
             <h2 className="text-2xl font-bold font-headline border-b-2 border-primary pb-2 mb-4 text-primary flex items-center gap-2"><AppWindow className="h-6 w-6"/>Projects</h2>
             <div className="space-y-6">
               {projects.map((proj) => (
-                <div key={proj.id} className="break-inside-avoid">
+                <div key={proj.id}>
                   <div className="flex justify-between items-baseline">
                     <h3 className="text-lg font-bold">{proj.name}</h3>
                     {proj.link && <a href={proj.link} target="_blank" rel="noopener noreferrer" className="text-sm text-muted-foreground flex items-center gap-1 hover:text-primary"><LinkIcon className="h-3 w-3" /><span>{proj.link}</span></a>}
@@ -149,11 +155,11 @@ export const SidebarTemplate = ({ sidebarPosition }: { sidebarPosition: 'left' |
           </MotionDiv>
         )}
          {certifications.length > 0 && (
-          <MotionDiv layoutId="certifications-section" className="mb-8 break-inside-avoid">
+          <MotionDiv layoutId="certifications-section" className="mb-8">
             <h2 className="text-2xl font-bold font-headline border-b-2 border-primary pb-2 mb-4 text-primary flex items-center gap-2"><Award className="h-6 w-6"/>Certifications</h2>
             <div className="space-y-4">
               {certifications.map((cert) => (
-                <div key={cert.id} className="break-inside-avoid">
+                <div key={cert.id}>
                   <h3 className="text-lg font-bold">{cert.name}</h3>
                   <p className="text-md text-muted-foreground">{cert.issuer} - {cert.date}</p>
                 </div>
@@ -165,7 +171,7 @@ export const SidebarTemplate = ({ sidebarPosition }: { sidebarPosition: 'left' |
   );
 
   return (
-    <motion.div layout className="grid grid-cols-1 md:grid-cols-3 gap-8 bg-card text-card-foreground p-8 cv-page">
+    <motion.div layout className="grid grid-cols-1 md:grid-cols-3 gap-8 bg-card text-card-foreground p-8">
         {sidebarPosition === 'left' ? (
             <>
                 <div className="md:col-span-1">{sidebar}</div>

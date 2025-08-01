@@ -4,7 +4,9 @@ import { CVDataProvider } from '@/hooks/use-cv-data';
 export default function Home() {
   return (
     <CVDataProvider>
-      <CVBuilder />
+      <main className="min-h-screen">
+        <CVBuilder />
+      </main>
     </CVDataProvider>
   );
 }

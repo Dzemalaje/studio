@@ -18,9 +18,9 @@ export default {
     },
     extend: {
       fontFamily: {
-        body: ['"PT Sans"', 'sans-serif'],
-        headline: ['"Poppins"', 'sans-serif'],
-        logo: ['"Poppins"', 'sans-serif'],
+        body: ['var(--font-pt-sans)', 'sans-serif'],
+        headline: ['var(--font-playfair-display)', 'serif'],
+        logo: ['var(--font-playfair-display)', 'serif'],
       },
       colors: {
         border: "hsl(var(--border))",

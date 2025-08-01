@@ -5,26 +5,45 @@ import { Button } from "@/components/ui/button";
 import { Download, Loader2 } from "lucide-react";
 import { useState } from "react";
 import { useToast } from "@/hooks/use-toast";
-import { exportCvToPdf } from "@/lib/pdf-export";
+import html2pdf from 'html2pdf.js';
 
 export function Toolbar() {
   const [isGenerating, setIsGenerating] = useState(false);
   const { toast } = useToast();
 
-  const handleDownloadPdf = async () => {
+  const handleDownloadPdf = () => {
     setIsGenerating(true);
-    try {
-      await exportCvToPdf('cv-preview-container', 'ProfiCV_Resume.pdf');
-    } catch (error) {
-      console.error(error);
+    const element = document.getElementById('cv-preview');
+    if (!element) {
       toast({
-        title: "PDF Generation Failed",
-        description: "An unexpected error occurred while generating the PDF. Please try again.",
+        title: "Error",
+        description: "CV preview element not found.",
         variant: "destructive",
       });
-    } finally {
       setIsGenerating(false);
+      return;
     }
+
+    const opt = {
+      margin: 0,
+      filename: 'CV-Canvas.pdf',
+      image: { type: 'jpeg', quality: 0.98 },
+      html2canvas: { scale: 3, useCORS: true },
+      jsPDF: { unit: 'mm', format: 'a4', orientation: 'portrait' },
+      pagebreak: { mode: ['css', 'legacy'] }
+    };
+
+    html2pdf().from(element).set(opt).save().then(() => {
+      setIsGenerating(false);
+    }).catch(err => {
+      console.error(err);
+      toast({
+        title: "PDF Generation Failed",
+        description: "An unexpected error occurred. Please try again.",
+        variant: "destructive",
+      });
+      setIsGenerating(false);
+    });
   };
 
 
@@ -33,7 +52,7 @@ export function Toolbar() {
       <div className="container flex h-16 items-center">
         <div className="mr-4 flex items-center">
           <h1 className="text-2xl font-bold font-logo">
-            ProfiCV
+            CV Canvas
           </h1>
         </div>
         <div className="flex flex-1 items-center justify-end space-x-2">

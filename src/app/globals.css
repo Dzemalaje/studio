@@ -10,9 +10,9 @@
     --card-foreground: 224 71.4% 4.1%;
     --popover: 220 13% 100%;
     --popover-foreground: 224 71.4% 4.1%;
-    --primary-h: 222.2;
-    --primary-s: 47.4%;
-    --primary-l: 11.2%;
+    --primary-h: 178;
+    --primary-s: 39%;
+    --primary-l: 48%;
     --primary: hsl(var(--primary-h) var(--primary-s) var(--primary-l));
     --primary-foreground-l: 98%;
     --primary-foreground-hsl: 0 0% var(--primary-foreground-l);
@@ -21,11 +21,11 @@
     --secondary-foreground: 220 9.1% 43.1%;
     --muted: 220 14.3% 95.9%;
     --muted-foreground: 220 8.9% 46.1%;
-    --accent-h: var(--primary-h);
-    --accent-s: var(--primary-s);
-    --accent-l: var(--primary-l);
-    --accent: hsl(var(--accent-h) var(--primary-s) var(--primary-l));
-    --accent-foreground: hsl(var(--primary-foreground-hsl));
+    --accent-h: 211;
+    --accent-s: 98%;
+    --accent-l: 75%;
+    --accent: hsl(var(--accent-h) var(--accent-s) var(--accent-l));
+    --accent-foreground: hsl(224 71.4% 4.1%);
     --destructive: 0 84.2% 60.2%;
     --destructive-foreground: 0 0% 98%;
     --border: 220 13% 91%;
@@ -40,9 +40,9 @@
     --card-foreground: 210 20% 98%;
     --popover: 224 71.4% 4.1%;
     --popover-foreground: 210 20% 98%;
-    --primary-h: 217.2;
-    --primary-s: 91.2%;
-    --primary-l: 59.8%;
+    --primary-h: 178;
+    --primary-s: 39%;
+    --primary-l: 48%;
     --primary: hsl(var(--primary-h) var(--primary-s) var(--primary-l));
     --primary-foreground-l: 98%;
     --primary-foreground-hsl: 0 0% var(--primary-foreground-l);
@@ -51,11 +51,11 @@
     --secondary-foreground: 210 20% 98%;
     --muted: 215 27.9% 16.9%;
     --muted-foreground: 217.9 10.6% 64.9%;
-    --accent-h: var(--primary-h);
-    --accent-s: var(--primary-s);
-    --accent-l: var(--primary-l);
-    --accent: hsl(var(--accent-h) var(--primary-s) var(--primary-l));
-    --accent-foreground: hsl(var(--primary-foreground-hsl));
+    --accent-h: 211;
+    --accent-s: 98%;
+    --accent-l: 75%;
+    --accent: hsl(var(--accent-h) var(--accent-s) var(--accent-l));
+    --accent-foreground: hsl(224 71.4% 4.1%);
     --destructive: 0 62.8% 30.6%;
     --destructive-foreground: 0 85.7% 97.3%;
     --border: 215 27.9% 16.9%;
@@ -70,47 +70,10 @@
   }
   body {
     @apply bg-background text-foreground;
+    background-color: #F0F0F0 !important;
   }
 }
 
-@layer components {
-  .cv-preview-container .cv-page:not(:last-child) {
-     margin-bottom: 2rem;
-  }
-
-  .cv-preview-container .cv-page:not(:last-child)::after {
-    content: "Page Break";
-    position: absolute;
-    bottom: -1.5rem;
-    left: 50%;
-    transform: translateX(-50%);
-    background: #e2e8f0;
-    color: #4a5568;
-    font-size: 10px;
-    font-weight: bold;
-    padding: 2px 8px;
-    border-radius: 4px;
-    z-index: 10;
-  }
-}
-
-@media print {
-  body {
-    background-color: white !important;
-    -webkit-print-color-adjust: exact;
-  }
-  .no-print {
-    display: none !important;
-  }
-  .cv-page {
-    height: 297mm;
-    width: 210mm;
-    overflow: hidden;
-    page-break-after: always;
-    box-shadow: none !important;
-    border: none !important;
-  }
-  .break-inside-avoid {
-    page-break-inside: avoid;
-  }
+.html2pdf__page-break {
+  height: 1rem;
 }
