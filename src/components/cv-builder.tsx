@@ -15,7 +15,7 @@ export function CVBuilder() {
     <div className="min-h-screen bg-background text-foreground">
       <Toolbar />
       <main className="grid grid-cols-1 lg:grid-cols-2 gap-8 p-4 sm:p-8">
-        <div className="lg:hidden no-print mb-4">
+        <div className="lg:hidden no-print sticky top-16 z-10 bg-background py-2 -mx-4 sm:-mx-8 px-4 sm:px-8 mb-4">
           <div className="flex justify-center gap-2">
             <Button
               variant={mobileView === 'form' ? 'default' : 'outline'}
