@@ -56,7 +56,7 @@ export interface Language {
   level: number;
 }
 
-export type FontSize = 'sm' | 'base' | 'lg';
+export type FontSize = 10 | 12 | 14;
 
 export interface CVData {
   personalDetails: PersonalDetails;

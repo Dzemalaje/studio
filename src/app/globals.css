@@ -81,9 +81,3 @@
 .break-inside-avoid {
   page-break-inside: avoid;
 }
-
-@media print {
-  html {
-    font-size: 10px;
-  }
-}

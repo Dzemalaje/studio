@@ -5,7 +5,7 @@ export const initialCVData: CVData = {
   template: "default",
   themeColor: "#48A9A6",
   fontFamily: "PT Sans",
-  fontSize: "base",
+  fontSize: 12,
   personalDetailsBackground: true,
   personalDetails: {
     name: "Jane Doe",

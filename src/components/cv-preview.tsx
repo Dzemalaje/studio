@@ -8,12 +8,6 @@ import { LayoutGroup } from "framer-motion";
 import { DefaultTemplate } from "@/components/cv-templates/default-template";
 import { SidebarTemplate } from "@/components/cv-templates/sidebar-template";
 
-const FONT_SIZE_MAP = {
-  sm: "text-sm",
-  base: "text-base",
-  lg: "text-lg",
-};
-
 export function CVPreview() {
   const { cvData } = useCvData();
 
@@ -30,17 +24,14 @@ export function CVPreview() {
   };
 
   const [h, s, l] = useMemo(() => hexToHsl(cvData.themeColor), [cvData.themeColor]);
-  const baseFontSize = FONT_SIZE_MAP[cvData.fontSize];
 
   return (
     <div
       id="cv-preview"
-      className={cn(
-        "w-full max-w-[800px] mx-auto",
-        baseFontSize
-      )}
+      className="w-full max-w-[800px] mx-auto"
       style={{
         fontFamily: `'${cvData.fontFamily}', sans-serif`,
+        fontSize: `${cvData.fontSize}px`,
         '--primary-h': h,
         '--primary-s': `${s}%`,
         '--primary-l': `${l}%`,

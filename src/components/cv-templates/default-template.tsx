@@ -8,19 +8,16 @@ import { motion } from "framer-motion";
 import Image from "next/image";
 import { Progress } from "../ui/progress";
 
-const FONT_SIZE_MAP = {
-    sm: "text-sm",
-    base: "text-base",
-    lg: "text-lg",
-};
-
 const MotionDiv = motion.div;
 const PROFICIENCY_LEVELS = ["Beginner", "Intermediate", "Advanced", "Fluent", "Native"];
 
 export const DefaultTemplate = () => {
   const { cvData } = useCvData();
-  const { personalDetails, workExperience, education, skills, projects, certifications, languages, fontSize, personalDetailsBackground } = cvData;
-  const baseTextSize = FONT_SIZE_MAP[fontSize];
+  const { personalDetails, workExperience, education, skills, projects, certifications, languages, personalDetailsBackground } = cvData;
+
+  const getResponsiveValue = (base: number, multiplier = 1) => {
+    return { fontSize: `${base * multiplier}em` };
+  };
 
   return (
     <motion.div layout className="bg-card text-card-foreground p-8 space-y-8">
@@ -37,9 +34,9 @@ export const DefaultTemplate = () => {
               <Image src={personalDetails.profilePicture} alt="Profile" width={128} height={128} className="object-cover w-full h-full" />
             </motion.div>
           )}
-          <h1 className={cn("text-4xl font-bold font-headline text-primary", { 'text-5xl': fontSize === 'lg', 'text-3xl': fontSize === 'sm' })}>{personalDetails.name}</h1>
-          <p className={cn("text-xl text-muted-foreground font-light", {'text-2xl': fontSize === 'lg', 'text-lg': fontSize === 'sm'})}>{personalDetails.title}</p>
-          <div className={cn("flex justify-center items-center flex-wrap gap-x-4 gap-y-2 mt-4 text-sm text-muted-foreground", baseTextSize)}>
+          <h1 className="font-bold font-headline text-primary" style={getResponsiveValue(3)}>{personalDetails.name}</h1>
+          <p className="font-light text-muted-foreground" style={getResponsiveValue(1.5)}>{personalDetails.title}</p>
+          <div className="flex justify-center items-center flex-wrap gap-x-4 gap-y-2 mt-4 text-muted-foreground" style={getResponsiveValue(0.9)}>
             {personalDetails.email && <div className="flex items-center gap-2"><Mail className="h-4 w-4" /><span>{personalDetails.email}</span></div>}
             {personalDetails.phone && <div className="flex items-center gap-2"><Phone className="h-4 w-4" /><span>{personalDetails.phone}</span></div>}
             {personalDetails.website && <div className="flex items-center gap-2"><Globe className="h-4 w-4" /><span>{personalDetails.website}</span></div>}
@@ -48,28 +45,28 @@ export const DefaultTemplate = () => {
         </header>
       </MotionDiv>
 
-      <main className={baseTextSize}>
+      <main>
         {personalDetails.summary && (
           <MotionDiv layoutId="summary-section" className="mb-8 break-inside-avoid">
-            <h2 className="text-2xl font-bold font-headline border-b-2 border-primary pb-2 mb-4 text-primary">Summary</h2>
+            <h2 className="font-bold font-headline border-b-2 border-primary pb-2 mb-4 text-primary" style={getResponsiveValue(1.8)}>Summary</h2>
             <p className="whitespace-pre-wrap text-foreground/80">{personalDetails.summary}</p>
           </MotionDiv>
         )}
         
         {workExperience.length > 0 && (
           <MotionDiv layoutId="experience-section" className="mb-8 break-inside-avoid">
-            <h2 className="text-2xl font-bold font-headline border-b-2 border-primary pb-2 mb-4 text-primary flex items-center gap-2"><Briefcase className="h-6 w-6"/>Work Experience</h2>
+            <h2 className="font-bold font-headline border-b-2 border-primary pb-2 mb-4 text-primary flex items-center gap-2" style={getResponsiveValue(1.8)}><Briefcase className="h-6 w-6"/>Work Experience</h2>
             <div className="space-y-6">
               {workExperience.map((job) => (
                 <div key={job.id} className="break-inside-avoid">
                   <div className="flex justify-between items-baseline">
-                    <h3 className="text-lg font-bold">{job.role}</h3>
-                    <div className="text-sm text-muted-foreground flex items-center gap-2">
+                    <h3 className="font-bold" style={getResponsiveValue(1.2)}>{job.role}</h3>
+                    <div className="text-muted-foreground flex items-center gap-2" style={getResponsiveValue(0.9)}>
                       <Calendar className="h-4 w-4"/>
                       <span>{job.startDate} - {job.endDate || 'Present'}</span>
                     </div>
                   </div>
-                  <p className="text-md font-semibold text-primary">{job.company}</p>
+                  <p className="font-semibold text-primary" style={getResponsiveValue(1.1)}>{job.company}</p>
                   {job.summary && (
                      <div className="mt-2 p-3 bg-primary/5 border-l-4 border-primary rounded-r-md">
                         <p className="italic whitespace-pre-wrap text-foreground/90">{job.summary}</p>
@@ -84,13 +81,13 @@ export const DefaultTemplate = () => {
 
         {projects.length > 0 && (
           <MotionDiv layoutId="projects-section" className="mb-8 break-inside-avoid">
-            <h2 className="text-2xl font-bold font-headline border-b-2 border-primary pb-2 mb-4 text-primary flex items-center gap-2"><AppWindow className="h-6 w-6"/>Projects</h2>
+            <h2 className="font-bold font-headline border-b-2 border-primary pb-2 mb-4 text-primary flex items-center gap-2" style={getResponsiveValue(1.8)}><AppWindow className="h-6 w-6"/>Projects</h2>
             <div className="space-y-6">
               {projects.map((proj) => (
                 <div key={proj.id} className="break-inside-avoid">
                   <div className="flex justify-between items-baseline">
-                    <h3 className="text-lg font-bold">{proj.name}</h3>
-                    {proj.link && <a href={proj.link} target="_blank" rel="noopener noreferrer" className="text-sm text-muted-foreground flex items-center gap-1 hover:text-primary"><LinkIcon className="h-3 w-3" /><span>{proj.link}</span></a>}
+                    <h3 className="font-bold" style={getResponsiveValue(1.2)}>{proj.name}</h3>
+                    {proj.link && <a href={proj.link} target="_blank" rel="noopener noreferrer" className="text-muted-foreground flex items-center gap-1 hover:text-primary" style={getResponsiveValue(0.9)}><LinkIcon className="h-3 w-3" /><span>{proj.link}</span></a>}
                   </div>
                   <p className="mt-2 whitespace-pre-wrap text-foreground/80">{proj.description}</p>
                 </div>
@@ -101,18 +98,18 @@ export const DefaultTemplate = () => {
 
         {education.length > 0 && (
            <MotionDiv layoutId="education-section" className="mb-8 break-inside-avoid">
-            <h2 className="text-2xl font-bold font-headline border-b-2 border-primary pb-2 mb-4 text-primary flex items-center gap-2"><GraduationCap className="h-6 w-6"/>Education</h2>
+            <h2 className="font-bold font-headline border-b-2 border-primary pb-2 mb-4 text-primary flex items-center gap-2" style={getResponsiveValue(1.8)}><GraduationCap className="h-6 w-6"/>Education</h2>
             <div className="space-y-4">
               {education.map((edu) => (
                 <div key={edu.id} className="break-inside-avoid">
                   <div className="flex justify-between items-baseline">
-                    <h3 className="text-lg font-bold">{edu.degree}</h3>
-                    <div className="text-sm text-muted-foreground flex items-center gap-2">
+                    <h3 className="font-bold" style={getResponsiveValue(1.2)}>{edu.degree}</h3>
+                    <div className="text-muted-foreground flex items-center gap-2" style={getResponsiveValue(0.9)}>
                         <Calendar className="h-4 w-4"/>
                         <span>{edu.startDate} - {edu.endDate || 'Present'}</span>
                     </div>
                   </div>
-                  <p className="text-md text-muted-foreground">{edu.institution}</p>
+                  <p className="text-muted-foreground">{edu.institution}</p>
                 </div>
               ))}
             </div>
@@ -121,10 +118,10 @@ export const DefaultTemplate = () => {
 
         {skills.length > 0 && (
           <MotionDiv layoutId="skills-section" className="mb-8 break-inside-avoid">
-            <h2 className="text-2xl font-bold font-headline border-b-2 border-primary pb-2 mb-4 text-primary">Skills</h2>
+            <h2 className="font-bold font-headline border-b-2 border-primary pb-2 mb-4 text-primary" style={getResponsiveValue(1.8)}>Skills</h2>
             <div className="flex flex-wrap gap-2">
               {skills.map((skill) => (
-                <div key={skill.id} className="bg-primary/10 text-primary font-medium px-3 py-1 rounded-full">
+                <div key={skill.id} className="bg-primary/10 text-primary font-medium px-3 py-1 rounded-full text-sm">
                   {skill.name}
                 </div>
               ))}
@@ -134,12 +131,12 @@ export const DefaultTemplate = () => {
 
         {certifications.length > 0 && (
           <MotionDiv layoutId="certifications-section" className="mb-8 break-inside-avoid">
-            <h2 className="text-2xl font-bold font-headline border-b-2 border-primary pb-2 mb-4 text-primary flex items-center gap-2"><Award className="h-6 w-6"/>Certifications</h2>
+            <h2 className="font-bold font-headline border-b-2 border-primary pb-2 mb-4 text-primary flex items-center gap-2" style={getResponsiveValue(1.8)}><Award className="h-6 w-6"/>Certifications</h2>
             <div className="space-y-4">
               {certifications.map((cert) => (
                 <div key={cert.id} className="break-inside-avoid">
-                  <h3 className="text-lg font-bold">{cert.name}</h3>
-                  <p className="text-md text-muted-foreground">{cert.issuer} - {cert.date}</p>
+                  <h3 className="font-bold" style={getResponsiveValue(1.2)}>{cert.name}</h3>
+                  <p className="text-muted-foreground">{cert.issuer} - {cert.date}</p>
                 </div>
               ))}
             </div>
@@ -148,13 +145,13 @@ export const DefaultTemplate = () => {
 
         {languages.length > 0 && (
           <MotionDiv layoutId="languages-section" className="break-inside-avoid">
-            <h2 className="text-2xl font-bold font-headline border-b-2 border-primary pb-2 mb-4 text-primary flex items-center gap-2"><Languages className="h-6 w-6"/>Languages</h2>
+            <h2 className="font-bold font-headline border-b-2 border-primary pb-2 mb-4 text-primary flex items-center gap-2" style={getResponsiveValue(1.8)}><Languages className="h-6 w-6"/>Languages</h2>
             <div className="grid grid-cols-2 gap-4">
               {languages.map((lang) => (
                 <div key={lang.id}>
                   <div className="flex justify-between items-center mb-1">
                     <span className="font-bold">{lang.name}</span>
-                    <span className="text-sm text-muted-foreground">{PROFICIENCY_LEVELS[lang.level]}</span>
+                    <span className="text-muted-foreground" style={getResponsiveValue(0.9)}>{PROFICIENCY_LEVELS[lang.level]}</span>
                   </div>
                    <Progress value={(lang.level + 1) * 20} className="h-2" />
                 </div>

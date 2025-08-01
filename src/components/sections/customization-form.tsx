@@ -34,9 +34,9 @@ const TEMPLATE_OPTIONS: { value: 'default' | 'left-sidebar' | 'right-sidebar', l
 ];
 
 const FONT_SIZE_OPTIONS: { value: FontSize, label: string }[] = [
-    { value: 'sm', label: 'Small' },
-    { value: 'base', label: 'Medium' },
-    { value: 'lg', label: 'Large' },
+    { value: 10, label: '10px' },
+    { value: 12, label: '12px' },
+    { value: 14, label: '14px' },
 ]
 
 const LayoutPreview = ({ layout }: { layout: 'default' | 'left-sidebar' | 'right-sidebar' }) => {
@@ -82,8 +82,8 @@ export function CustomizationForm() {
         setCvData(prev => ({...prev, fontFamily: value}));
     }, [setCvData]);
 
-    const handleFontSizeChange = useCallback((value: FontSize) => {
-        setCvData(prev => ({...prev, fontSize: value}));
+    const handleFontSizeChange = useCallback((value: string) => {
+        setCvData(prev => ({...prev, fontSize: parseInt(value, 10) as FontSize}));
     }, [setCvData]);
 
     const handleBackgroundChange = useCallback((checked: boolean) => {
@@ -155,7 +155,7 @@ export function CustomizationForm() {
                 </div>
                  <div className="space-y-2">
                     <Label>Font Size</Label>
-                    <Select value={cvData.fontSize} onValueChange={handleFontSizeChange}>
+                    <Select value={String(cvData.fontSize)} onValueChange={handleFontSizeChange}>
                         <SelectTrigger>
                              <div className="flex items-center gap-2">
                                 <Scaling className="h-4 w-4" />
@@ -164,7 +164,7 @@ export function CustomizationForm() {
                         </SelectTrigger>
                         <SelectContent>
                            {FONT_SIZE_OPTIONS.map(option => (
-                                <SelectItem key={option.value} value={option.value}>
+                                <SelectItem key={option.value} value={String(option.value)}>
                                     {option.label}
                                 </SelectItem>
                            ))}
