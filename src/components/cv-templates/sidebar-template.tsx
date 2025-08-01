@@ -26,7 +26,7 @@ export const SidebarTemplate = ({ sidebarPosition }: { sidebarPosition: 'left' |
     <motion.aside
       layoutId="sidebar"
       className={cn(
-        "p-6 rounded-lg space-y-6 h-full",
+        "p-6 rounded-lg space-y-6 h-full break-inside-avoid",
         baseTextSize,
         { 'bg-primary/5': personalDetailsBackground }
       )}
@@ -102,7 +102,7 @@ export const SidebarTemplate = ({ sidebarPosition }: { sidebarPosition: 'left' |
   const mainContent = (
      <motion.main layoutId="main-content" className={cn("space-y-8 p-6", baseTextSize)}>
         {personalDetails.summary && (
-          <MotionDiv layoutId="summary-section">
+          <MotionDiv layoutId="summary-section" className="break-inside-avoid">
             <h2 className="text-2xl font-bold font-headline border-b-2 border-primary pb-2 mb-4 text-primary">Summary</h2>
             <p className="whitespace-pre-wrap text-foreground/80">{personalDetails.summary}</p>
           </MotionDiv>
@@ -112,7 +112,7 @@ export const SidebarTemplate = ({ sidebarPosition }: { sidebarPosition: 'left' |
             <h2 className="text-2xl font-bold font-headline border-b-2 border-primary pb-2 mb-4 text-primary flex items-center gap-2"><Briefcase className="h-6 w-6"/>Work Experience</h2>
             <div className="space-y-6">
               {workExperience.map((job) => (
-                <div key={job.id}>
+                <div key={job.id} className="break-inside-avoid">
                   <div className="flex justify-between items-baseline">
                     <h3 className="text-lg font-bold">{job.role}</h3>
                     <div className="text-sm text-muted-foreground flex items-center gap-2">
@@ -137,7 +137,7 @@ export const SidebarTemplate = ({ sidebarPosition }: { sidebarPosition: 'left' |
             <h2 className="text-2xl font-bold font-headline border-b-2 border-primary pb-2 mb-4 text-primary flex items-center gap-2"><AppWindow className="h-6 w-6"/>Projects</h2>
             <div className="space-y-6">
               {projects.map((proj) => (
-                <div key={proj.id}>
+                <div key={proj.id} className="break-inside-avoid">
                   <div className="flex justify-between items-baseline">
                     <h3 className="text-lg font-bold">{proj.name}</h3>
                     {proj.link && <a href={proj.link} target="_blank" rel="noopener noreferrer" className="text-sm text-muted-foreground flex items-center gap-1 hover:text-primary"><LinkIcon className="h-3 w-3" /><span>{proj.link}</span></a>}
@@ -149,7 +149,7 @@ export const SidebarTemplate = ({ sidebarPosition }: { sidebarPosition: 'left' |
           </MotionDiv>
         )}
          {certifications.length > 0 && (
-          <MotionDiv layoutId="certifications-section" className="mb-8">
+          <MotionDiv layoutId="certifications-section" className="mb-8 break-inside-avoid">
             <h2 className="text-2xl font-bold font-headline border-b-2 border-primary pb-2 mb-4 text-primary flex items-center gap-2"><Award className="h-6 w-6"/>Certifications</h2>
             <div className="space-y-4">
               {certifications.map((cert) => (
