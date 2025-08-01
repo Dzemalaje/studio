@@ -12,6 +12,7 @@ import { Languages, LayoutTemplate, Palette, Type } from "lucide-react";
 import { useCvData } from "@/hooks/use-cv-data";
 import { Input } from "../ui/input";
 import { cn } from "@/lib/utils";
+import { Button } from "../ui/button";
 
 const FONT_OPTIONS = [
     { label: "PT Sans", value: "PT Sans" },
@@ -19,6 +20,7 @@ const FONT_OPTIONS = [
     { label: "Open Sans", value: "Open Sans" },
     { label: "Lato", value: "Lato" },
     { label: "Montserrat", value: "Montserrat" },
+    { label: "Poppins", value: "Poppins" },
 ];
 
 const TEMPLATE_OPTIONS: { value: 'default' | 'left-sidebar' | 'right-sidebar', label: string }[] = [
@@ -104,9 +106,21 @@ export function CustomizationForm() {
 
                 <div className="space-y-2">
                     <Label>Theme Color</Label>
-                    <div className="flex items-center gap-2">
-                        <Palette className="h-4 w-4" />
-                        <Input type="color" value={cvData.themeColor || ''} onChange={handleColorChange} className="p-1 h-10"/>
+                    <div className="relative flex items-center">
+                        <Palette className="absolute left-3 h-4 w-4 text-muted-foreground" />
+                        <Input 
+                            type="text" 
+                            value={cvData.themeColor || ''} 
+                            onChange={handleColorChange} 
+                            className="pl-9"
+                            placeholder="#000000"
+                        />
+                        <Input 
+                            type="color" 
+                            value={cvData.themeColor || ''} 
+                            onChange={handleColorChange} 
+                            className="absolute right-1 top-1/2 -translate-y-1/2 h-8 w-8 p-1 cursor-pointer"
+                        />
                     </div>
                 </div>
                 <div className="space-y-2">
