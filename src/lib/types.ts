@@ -34,6 +34,8 @@ export interface Skill {
   name: string;
 }
 
+export type FontSize = 'sm' | 'base' | 'lg';
+
 export interface CVData {
   personalDetails: PersonalDetails;
   workExperience: WorkExperience[];
@@ -42,4 +44,5 @@ export interface CVData {
   template: 'default' | 'left-sidebar' | 'right-sidebar';
   themeColor: string;
   fontFamily: string;
+  fontSize: FontSize;
 }

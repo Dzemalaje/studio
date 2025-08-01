@@ -3,17 +3,26 @@
 import { useCvData } from "@/hooks/use-cv-data";
 import { Briefcase, GraduationCap, Calendar, Mail, Phone, Globe, MapPin } from "lucide-react";
 import React from "react";
+import { cn } from "@/lib/utils";
+
+const FONT_SIZE_MAP = {
+    sm: "text-sm",
+    base: "text-base",
+    lg: "text-lg",
+};
 
 const DefaultTemplate = () => {
   const { cvData } = useCvData();
-  const { personalDetails, workExperience, education, skills } = cvData;
+  const { personalDetails, workExperience, education, skills, fontSize } = cvData;
+
+  const baseTextSize = FONT_SIZE_MAP[fontSize];
 
   return (
     <>
       <header className="text-center mb-8">
-        <h1 className="text-4xl font-bold font-headline text-primary">{personalDetails.name}</h1>
-        <p className="text-xl text-muted-foreground font-light">{personalDetails.title}</p>
-        <div className="flex justify-center items-center flex-wrap gap-x-4 gap-y-2 mt-4 text-sm text-muted-foreground">
+        <h1 className={cn("text-4xl font-bold font-headline text-primary", { 'text-5xl': fontSize === 'lg', 'text-3xl': fontSize === 'sm' })}>{personalDetails.name}</h1>
+        <p className={cn("text-xl text-muted-foreground font-light", {'text-2xl': fontSize === 'lg', 'text-lg': fontSize === 'sm'})}>{personalDetails.title}</p>
+        <div className={cn("flex justify-center items-center flex-wrap gap-x-4 gap-y-2 mt-4 text-sm text-muted-foreground", baseTextSize)}>
           {personalDetails.email && <div className="flex items-center gap-2"><Mail className="h-4 w-4" /><span>{personalDetails.email}</span></div>}
           {personalDetails.phone && <div className="flex items-center gap-2"><Phone className="h-4 w-4" /><span>{personalDetails.phone}</span></div>}
           {personalDetails.website && <div className="flex items-center gap-2"><Globe className="h-4 w-4" /><span>{personalDetails.website}</span></div>}
@@ -21,11 +30,11 @@ const DefaultTemplate = () => {
         </div>
       </header>
 
-      <main>
+      <main className={baseTextSize}>
         {personalDetails.summary && (
           <section className="mb-8">
             <h2 className="text-2xl font-bold font-headline border-b-2 border-primary pb-2 mb-4 text-primary">Summary</h2>
-            <p className="text-sm text-foreground/80 whitespace-pre-wrap">{personalDetails.summary}</p>
+            <p className="whitespace-pre-wrap text-foreground/80">{personalDetails.summary}</p>
           </section>
         )}
         
@@ -45,10 +54,10 @@ const DefaultTemplate = () => {
                   <p className="text-md font-semibold text-primary">{job.company}</p>
                   {job.summary && (
                      <div className="mt-2 p-3 bg-primary/5 border-l-4 border-primary rounded-r-md">
-                        <p className="text-sm text-foreground/90 italic whitespace-pre-wrap">{job.summary}</p>
+                        <p className="italic whitespace-pre-wrap text-foreground/90">{job.summary}</p>
                      </div>
                   )}
-                  <p className="text-sm text-foreground/80 mt-2 whitespace-pre-wrap">{job.description}</p>
+                  <p className="mt-2 whitespace-pre-wrap text-foreground/80">{job.description}</p>
                 </div>
               ))}
             </div>
@@ -80,7 +89,7 @@ const DefaultTemplate = () => {
             <h2 className="text-2xl font-bold font-headline border-b-2 border-primary pb-2 mb-4 text-primary">Skills</h2>
             <div className="flex flex-wrap gap-2">
               {skills.map((skill) => (
-                <div key={skill.id} className="bg-primary/10 text-primary font-medium text-sm px-3 py-1 rounded-full">
+                <div key={skill.id} className="bg-primary/10 text-primary font-medium px-3 py-1 rounded-full">
                   {skill.name}
                 </div>
               ))}
@@ -94,17 +103,18 @@ const DefaultTemplate = () => {
 
 const SidebarTemplate = ({ sidebarPosition }: { sidebarPosition: 'left' | 'right' }) => {
   const { cvData } = useCvData();
-  const { personalDetails, workExperience, education, skills } = cvData;
+  const { personalDetails, workExperience, education, skills, fontSize } = cvData;
+  const baseTextSize = FONT_SIZE_MAP[fontSize];
 
   const sidebar = (
-    <aside className="bg-primary/5 p-6 rounded-lg space-y-6">
+    <aside className={cn("bg-primary/5 p-6 rounded-lg space-y-6", baseTextSize)}>
        <div className="text-center">
-        <h1 className="text-3xl font-bold font-headline text-primary">{personalDetails.name}</h1>
-        <p className="text-lg text-muted-foreground font-light">{personalDetails.title}</p>
+        <h1 className={cn("text-3xl font-bold font-headline text-primary", { 'text-4xl': fontSize === 'lg', 'text-2xl': fontSize === 'sm' })}>{personalDetails.name}</h1>
+        <p className={cn("text-lg text-muted-foreground font-light", { 'text-xl': fontSize === 'lg', 'text-base': fontSize === 'sm' })}>{personalDetails.title}</p>
       </div>
       <div>
         <h2 className="text-xl font-bold font-headline border-b-2 border-primary pb-2 mb-4 text-primary">Contact</h2>
-        <div className="space-y-3 text-sm">
+        <div className="space-y-3">
             {personalDetails.email && <div className="flex items-center gap-2"><Mail className="h-4 w-4 text-primary"/><span>{personalDetails.email}</span></div>}
             {personalDetails.phone && <div className="flex items-center gap-2"><Phone className="h-4 w-4 text-primary"/><span>{personalDetails.phone}</span></div>}
             {personalDetails.website && <div className="flex items-center gap-2"><Globe className="h-4 w-4 text-primary"/><span>{personalDetails.website}</span></div>}
@@ -116,7 +126,7 @@ const SidebarTemplate = ({ sidebarPosition }: { sidebarPosition: 'left' | 'right
             <h2 className="text-xl font-bold font-headline border-b-2 border-primary pb-2 mb-4 text-primary">Skills</h2>
             <div className="flex flex-wrap gap-2">
               {skills.map((skill) => (
-                <div key={skill.id} className="bg-primary/10 text-primary font-medium text-sm px-3 py-1 rounded-full">
+                <div key={skill.id} className="bg-primary/10 text-primary font-medium px-3 py-1 rounded-full">
                   {skill.name}
                 </div>
               ))}
@@ -129,7 +139,7 @@ const SidebarTemplate = ({ sidebarPosition }: { sidebarPosition: 'left' | 'right
             <div className="space-y-4">
               {education.map((edu) => (
                 <div key={edu.id}>
-                    <h3 className="text-md font-bold">{edu.degree}</h3>
+                    <h3 className="font-bold">{edu.degree}</h3>
                     <p className="text-sm text-muted-foreground">{edu.institution}</p>
                     <div className="text-xs text-muted-foreground/80 flex items-center gap-2 mt-1">
                         <Calendar className="h-3 w-3"/>
@@ -144,11 +154,11 @@ const SidebarTemplate = ({ sidebarPosition }: { sidebarPosition: 'left' | 'right
   );
 
   const mainContent = (
-     <main className="space-y-8">
+     <main className={cn("space-y-8", baseTextSize)}>
         {personalDetails.summary && (
           <section>
             <h2 className="text-2xl font-bold font-headline border-b-2 border-primary pb-2 mb-4 text-primary">Summary</h2>
-            <p className="text-sm text-foreground/80 whitespace-pre-wrap">{personalDetails.summary}</p>
+            <p className="whitespace-pre-wrap text-foreground/80">{personalDetails.summary}</p>
           </section>
         )}
         {workExperience.length > 0 && (
@@ -167,10 +177,10 @@ const SidebarTemplate = ({ sidebarPosition }: { sidebarPosition: 'left' | 'right
                   <p className="text-md font-semibold text-primary">{job.company}</p>
                    {job.summary && (
                      <div className="mt-2 p-3 bg-primary/5 border-l-4 border-primary rounded-r-md">
-                        <p className="text-sm text-foreground/90 italic whitespace-pre-wrap">{job.summary}</p>
+                        <p className="italic whitespace-pre-wrap text-foreground/90">{job.summary}</p>
                      </div>
                   )}
-                  <p className="text-sm text-foreground/80 mt-2 whitespace-pre-wrap">{job.description}</p>
+                  <p className="mt-2 whitespace-pre-wrap text-foreground/80">{job.description}</p>
                 </div>
               ))}
             </div>
@@ -229,14 +239,20 @@ export function CVPreview() {
   }
 
   const [h, s, l] = hexToHsl(cvData.themeColor);
+  const baseFontSize = FONT_SIZE_MAP[cvData.fontSize];
 
   return (
     <div 
-      className="bg-card text-card-foreground shadow-lg rounded-lg p-8 aspect-[210/297] w-full max-w-[800px] mx-auto overflow-y-auto cv-preview"
+      className={cn(
+        "bg-card text-card-foreground shadow-lg rounded-lg p-8 aspect-[210/297] w-full max-w-[800px] mx-auto overflow-y-auto cv-preview",
+        baseFontSize
+      )}
       style={{
         fontFamily: `'${cvData.fontFamily}', sans-serif`,
-        '--primary-hsl': `${h} ${s}% ${l}%`,
-        '--primary-foreground-hsl': `${h} ${s}% ${l > 50 ? 10 : 90}%`,
+        '--primary-h': h,
+        '--primary-s': `${s}%`,
+        '--primary-l': `${l}%`,
+        '--primary-foreground-l': `${l > 50 ? 10 : 90}%`,
       } as React.CSSProperties}
     >
       {renderTemplate()}

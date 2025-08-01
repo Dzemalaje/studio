@@ -8,11 +8,12 @@ import {
     SelectValue,
 } from "@/components/ui/select";
 import { Label } from "@/components/ui/label";
-import { Languages, LayoutTemplate, Palette, Type } from "lucide-react";
+import { Languages, LayoutTemplate, Palette, Type, Scaling } from "lucide-react";
 import { useCvData } from "@/hooks/use-cv-data";
 import { Input } from "../ui/input";
 import { cn } from "@/lib/utils";
 import { Button } from "../ui/button";
+import { FontSize } from "@/lib/types";
 
 const FONT_OPTIONS = [
     { label: "PT Sans", value: "PT Sans" },
@@ -28,6 +29,12 @@ const TEMPLATE_OPTIONS: { value: 'default' | 'left-sidebar' | 'right-sidebar', l
     { value: 'left-sidebar', label: 'Left Sidebar' },
     { value: 'right-sidebar', label: 'Right Sidebar' },
 ];
+
+const FONT_SIZE_OPTIONS: { value: FontSize, label: string }[] = [
+    { value: 'sm', label: 'Small' },
+    { value: 'base', label: 'Medium' },
+    { value: 'lg', label: 'Large' },
+]
 
 const LayoutPreview = ({ layout }: { layout: 'default' | 'left-sidebar' | 'right-sidebar' }) => {
     return (
@@ -63,6 +70,10 @@ export function CustomizationForm() {
 
     const handleFontChange = (value: string) => {
         setCvData(prev => ({...prev, fontFamily: value}));
+    }
+
+    const handleFontSizeChange = (value: FontSize) => {
+        setCvData(prev => ({...prev, fontSize: value}));
     }
 
     return (
@@ -136,6 +147,24 @@ export function CustomizationForm() {
                            {FONT_OPTIONS.map(font => (
                                 <SelectItem key={font.value} value={font.value} style={{fontFamily: font.value}}>
                                     {font.label}
+                                </SelectItem>
+                           ))}
+                        </SelectContent>
+                    </Select>
+                </div>
+                 <div className="space-y-2">
+                    <Label>Font Size</Label>
+                    <Select value={cvData.fontSize} onValueChange={handleFontSizeChange}>
+                        <SelectTrigger>
+                             <div className="flex items-center gap-2">
+                                <Scaling className="h-4 w-4" />
+                                <SelectValue placeholder="Font Size" />
+                            </div>
+                        </SelectTrigger>
+                        <SelectContent>
+                           {FONT_SIZE_OPTIONS.map(option => (
+                                <SelectItem key={option.value} value={option.value}>
+                                    {option.label}
                                 </SelectItem>
                            ))}
                         </SelectContent>
