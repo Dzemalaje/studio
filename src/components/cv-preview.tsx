@@ -244,7 +244,7 @@ export function CVPreview() {
   return (
     <div 
       className={cn(
-        "bg-card text-card-foreground shadow-lg rounded-lg p-8 aspect-[210/297] w-full max-w-[800px] mx-auto overflow-y-auto cv-preview",
+        "bg-card text-card-foreground shadow-lg rounded-lg p-8 aspect-[210/297] w-full max-w-[800px] mx-auto overflow-y-auto cv-preview transition-all duration-300 ease-in-out",
         baseFontSize
       )}
       style={{
