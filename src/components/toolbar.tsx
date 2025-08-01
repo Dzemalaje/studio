@@ -42,7 +42,7 @@ export function Toolbar() {
                 strokeWidth="16"
               />
             </svg>
-          <h1 className="text-xl sm:text-2xl font-bold font-headline">CV Canvas</h1>
+          <h1 className="text-xl sm:text-2xl font-bold font-headline">ProfiCV</h1>
         </div>
         <div className="flex items-center gap-2 sm:gap-4">
           <Select defaultValue="en">

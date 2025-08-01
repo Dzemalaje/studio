@@ -28,7 +28,7 @@ export const CVDataProvider = ({ children }: { children: ReactNode }) => {
 
   useEffect(() => {
     try {
-      const item = window.localStorage.getItem('cv-canvas-data');
+      const item = window.localStorage.getItem('proficv-data');
       if (item) {
         const parsedData = JSON.parse(item);
         setCvData(ensureIds(parsedData));
@@ -46,7 +46,7 @@ export const CVDataProvider = ({ children }: { children: ReactNode }) => {
   useEffect(() => {
     if (isMounted) {
       try {
-        window.localStorage.setItem('cv-canvas-data', JSON.stringify(cvData));
+        window.localStorage.setItem('proficv-data', JSON.stringify(cvData));
       } catch (error) {
         console.error("Failed to write to localStorage", error);
       }
