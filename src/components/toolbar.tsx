@@ -9,10 +9,11 @@ export function Toolbar() {
   };
 
   return (
-    <header className="sticky top-0 z-10 bg-card shadow-sm">
-      <div className="container mx-auto px-4 sm:px-8 h-16 flex items-center justify-between">
-        <div className="flex items-center gap-2">
-           <svg
+    <header className="sticky top-0 z-10 bg-card shadow-sm no-print">
+      <div className="container mx-auto px-4 sm:px-8">
+        <div className="h-16 flex items-center justify-between">
+          <div className="flex items-center gap-2">
+            <svg
               xmlns="http://www.w3.org/2000/svg"
               viewBox="0 0 256 256"
               className="h-8 w-8 text-primary"
@@ -35,13 +36,16 @@ export function Toolbar() {
                 strokeWidth="16"
               />
             </svg>
-          <h1 className="text-xl sm:text-2xl font-bold font-headline">ProfiCV</h1>
-        </div>
-        <div className="flex items-center gap-2 sm:gap-4">
-          <Button onClick={handlePrint}>
-            <Download className="mr-0 sm:mr-2 h-4 w-4" />
-            <span className="hidden sm:inline">Download PDF</span>
-          </Button>
+            <h1 className="text-xl sm:text-2xl font-bold font-headline">
+              ProfiCV
+            </h1>
+          </div>
+          <div className="flex items-center gap-2 sm:gap-4">
+            <Button onClick={handlePrint}>
+              <Download className="mr-0 sm:mr-2 h-4 w-4" />
+              <span className="hidden sm:inline">Download PDF</span>
+            </Button>
+          </div>
         </div>
       </div>
     </header>
