@@ -18,6 +18,17 @@ import { ProjectsForm } from "./sections/projects-form";
 import { CertificationsForm } from "./sections/certifications-form";
 import { LanguagesForm } from "./sections/languages-form";
 
+const formSections = [
+    { id: 'customization', icon: Palette, title: 'Customization', component: <CustomizationForm /> },
+    { id: 'personal', icon: User, title: 'Personal Details', component: <PersonalDetailsForm /> },
+    { id: 'experience', icon: Briefcase, title: 'Work Experience', component: <ExperienceForm /> },
+    { id: 'education', icon: GraduationCap, title: 'Education', component: <EducationForm /> },
+    { id: 'projects', icon: AppWindow, title: 'Projects', component: <ProjectsForm /> },
+    { id: 'skills', icon: Wrench, title: 'Skills', component: <SkillsForm /> },
+    { id: 'certifications', icon: Award, title: 'Certifications', component: <CertificationsForm /> },
+    { id: 'languages', icon: LanguagesIcon, title: 'Languages', component: <LanguagesForm /> },
+];
+
 export function CVForm() {
   return (
     <Accordion
@@ -26,110 +37,21 @@ export function CVForm() {
       collapsible
       className="w-full space-y-4"
     >
-      <Card>
-        <AccordionItem value="customization" className="border-b-0">
-          <AccordionTrigger className="px-6">
-            <div className="flex items-center gap-2">
-              <Palette className="h-5 w-5" />
-              <span className="text-lg font-headline">Customization</span>
-            </div>
-          </AccordionTrigger>
-          <AccordionContent className="px-6">
-            <CustomizationForm />
-          </AccordionContent>
-        </AccordionItem>
-      </Card>
-      <Card>
-        <AccordionItem value="personal" className="border-b-0">
-          <AccordionTrigger className="px-6">
-            <div className="flex items-center gap-2">
-              <User className="h-5 w-5" />
-              <span className="text-lg font-headline">Personal Details</span>
-            </div>
-          </AccordionTrigger>
-          <AccordionContent className="px-6">
-            <PersonalDetailsForm />
-          </AccordionContent>
-        </AccordionItem>
-      </Card>
-      <Card>
-        <AccordionItem value="experience" className="border-b-0">
-          <AccordionTrigger className="px-6">
-            <div className="flex items-center gap-2">
-              <Briefcase className="h-5 w-5" />
-              <span className="text-lg font-headline">Work Experience</span>
-            </div>
-          </AccordionTrigger>
-          <AccordionContent className="px-6">
-            <ExperienceForm />
-          </AccordionContent>
-        </AccordionItem>
-      </Card>
-      <Card>
-        <AccordionItem value="education" className="border-b-0">
-          <AccordionTrigger className="px-6">
-            <div className="flex items-center gap-2">
-              <GraduationCap className="h-5 w-5" />
-              <span className="text-lg font-headline">Education</span>
-            </div>
-          </AccordionTrigger>
-          <AccordionContent className="px-6">
-            <EducationForm />
-          </AccordionContent>
-        </AccordionItem>
-      </Card>
-       <Card>
-        <AccordionItem value="projects" className="border-b-0">
-          <AccordionTrigger className="px-6">
-            <div className="flex items-center gap-2">
-              <AppWindow className="h-5 w-5" />
-              <span className="text-lg font-headline">Projects</span>
-            </div>
-          </AccordionTrigger>
-          <AccordionContent className="px-6">
-            <ProjectsForm />
-          </AccordionContent>
-        </AccordionItem>
-      </Card>
-      <Card>
-        <AccordionItem value="skills" className="border-b-0">
-          <AccordionTrigger className="px-6">
-            <div className="flex items-center gap-2">
-              <Wrench className="h-5 w-5" />
-              <span className="text-lg font-headline">Skills</span>
-            </div>
-          </AccordionTrigger>
-          <AccordionContent className="px-6">
-            <SkillsForm />
-          </AccordionContent>
-        </AccordionItem>
-      </Card>
-       <Card>
-        <AccordionItem value="certifications" className="border-b-0">
-          <AccordionTrigger className="px-6">
-            <div className="flex items-center gap-2">
-              <Award className="h-5 w-5" />
-              <span className="text-lg font-headline">Certifications</span>
-            </div>
-          </AccordionTrigger>
-          <AccordionContent className="px-6">
-            <CertificationsForm />
-          </AccordionContent>
-        </AccordionItem>
-      </Card>
-       <Card>
-        <AccordionItem value="languages" className="border-b-0">
-          <AccordionTrigger className="px-6">
-            <div className="flex items-center gap-2">
-              <LanguagesIcon className="h-5 w-5" />
-              <span className="text-lg font-headline">Languages</span>
-            </div>
-          </AccordionTrigger>
-          <AccordionContent className="px-6">
-            <LanguagesForm />
-          </AccordionContent>
-        </AccordionItem>
-      </Card>
+      {formSections.map(({ id, icon: Icon, title, component }) => (
+          <Card key={id}>
+            <AccordionItem value={id} className="border-b-0">
+              <AccordionTrigger className="px-6">
+                <div className="flex items-center gap-2">
+                  <Icon className="h-5 w-5" />
+                  <span className="text-lg font-headline">{title}</span>
+                </div>
+              </AccordionTrigger>
+              <AccordionContent className="px-6">
+                {component}
+              </AccordionContent>
+            </AccordionItem>
+          </Card>
+      ))}
     </Accordion>
   );
 }

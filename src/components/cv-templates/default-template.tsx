@@ -3,7 +3,6 @@
 
 import { useCvData } from "@/hooks/use-cv-data";
 import { Briefcase, GraduationCap, Calendar, Mail, Phone, Globe, MapPin, AppWindow, Award, Languages, Link as LinkIcon } from "lucide-react";
-import { cn } from "@/lib/utils";
 import { motion } from "framer-motion";
 import Image from "next/image";
 import { Progress } from "../ui/progress";
@@ -20,13 +19,10 @@ export const DefaultTemplate = () => {
   };
 
   return (
-    <motion.div layout className="bg-card text-card-foreground p-8 space-y-8">
+    <motion.div layout className="bg-card text-card-foreground p-8 space-y-8 break-inside-avoid">
       <MotionDiv
         layoutId="personal-details-section"
-        className={cn(
-          'mb-8 break-inside-avoid',
-          { 'bg-primary/5 p-8 rounded-lg': personalDetailsBackground }
-        )}
+        className={`mb-8 break-inside-avoid ${personalDetailsBackground ? 'bg-primary/5 p-8 rounded-lg' : ''}`}
       >
         <header className="text-center">
           {personalDetails.profilePicture && (

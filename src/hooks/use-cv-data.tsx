@@ -1,7 +1,7 @@
 
 "use client";
 
-import { createContext, useContext, useState, Dispatch, SetStateAction, useEffect, ReactNode } from 'react';
+import { createContext, useContext, useState, Dispatch, SetStateAction, useEffect, ReactNode, useMemo } from 'react';
 import { CVData } from '@/lib/types';
 import { initialCVData } from '@/lib/initial-data';
 import { v4 as uuidv4 } from 'uuid';
@@ -13,50 +13,58 @@ interface CVDataContextType {
 
 const CVDataContext = createContext<CVDataContextType | undefined>(undefined);
 
-const ensureIds = (data: CVData): CVData => {
+const ensureIds = (data: Partial<CVData>): CVData => {
+  const fullData = { ...initialCVData, ...data };
   return {
-    ...data,
-    personalDetails: { ...initialCVData.personalDetails, ...data.personalDetails },
-    workExperience: (data.workExperience || []).map(item => ({ ...item, id: item.id || uuidv4() })),
-    education: (data.education || []).map(item => ({ ...item, id: item.id || uuidv4() })),
-    skills: (data.skills || []).map(item => ({ ...item, id: item.id || uuidv4() })),
-    projects: (data.projects || []).map(item => ({ ...item, id: item.id || uuidv4() })),
-    certifications: (data.certifications || []).map(item => ({ ...item, id: item.id || uuidv4() })),
-    languages: (data.languages || []).map(item => ({ ...item, id: item.id || uuidv4() })),
-    personalDetailsBackground: data.personalDetailsBackground ?? true,
+    ...fullData,
+    personalDetails: { ...initialCVData.personalDetails, ...fullData.personalDetails },
+    workExperience: (fullData.workExperience || []).map(item => ({ ...item, id: item.id || uuidv4() })),
+    education: (fullData.education || []).map(item => ({ ...item, id: item.id || uuidv4() })),
+    skills: (fullData.skills || []).map(item => ({ ...item, id: item.id || uuidv4() })),
+    projects: (fullData.projects || []).map(item => ({ ...item, id: item.id || uuidv4() })),
+    certifications: (fullData.certifications || []).map(item => ({ ...item, id: item.id || uuidv4() })),
+    languages: (fullData.languages || []).map(item => ({ ...item, id: item.id || uuidv4() })),
+    personalDetailsBackground: fullData.personalDetailsBackground ?? true,
   };
 };
 
 export const CVDataProvider = ({ children }: { children: ReactNode }) => {
   const [isMounted, setIsMounted] = useState(false);
-  const [cvData, setCvData] = useState<CVData>(ensureIds(initialCVData));
+
+  const [cvData, setCvData] = useState<CVData>(() => {
+    if (typeof window === 'undefined') {
+      return initialCVData;
+    }
+    try {
+      const storedData = window.localStorage.getItem('proficv-data');
+      return storedData ? ensureIds(JSON.parse(storedData)) : initialCVData;
+    } catch (error) {
+      console.error("Failed to read from localStorage on init", error);
+      return initialCVData;
+    }
+  });
 
   useEffect(() => {
-    let storedData;
-    try {
-      storedData = window.localStorage.getItem('proficv-data');
-      if (storedData) {
-        const parsedData = JSON.parse(storedData);
-        setCvData(ensureIds(parsedData));
-      }
-    } catch (error) {
-      console.error("Failed to read from localStorage", error);
+    if (!isMounted) {
+      setIsMounted(true);
     }
-    setIsMounted(true);
-  }, []);
+  }, [isMounted]);
 
   useEffect(() => {
     if (isMounted) {
       try {
-        window.localStorage.setItem('proficv-data', JSON.stringify(cvData));
+        const dataToStore = JSON.stringify(cvData);
+        window.localStorage.setItem('proficv-data', dataToStore);
       } catch (error) {
         console.error("Failed to write to localStorage", error);
       }
     }
   }, [cvData, isMounted]);
 
+  const contextValue = useMemo(() => ({ cvData, setCvData }), [cvData]);
+
   return (
-    <CVDataContext.Provider value={{ cvData, setCvData }}>
+    <CVDataContext.Provider value={contextValue}>
       {children}
     </CVDataContext.Provider>
   );

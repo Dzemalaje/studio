@@ -19,8 +19,8 @@ export default {
     extend: {
       fontFamily: {
         body: ['var(--font-pt-sans)', 'sans-serif'],
-        headline: ['var(--font-playfair-display)', 'serif'],
-        logo: ['var(--font-playfair-display)', 'serif'],
+        headline: ['var(--font-poppins)', 'serif'],
+        logo: ['var(--font-poppins)', 'serif'],
       },
       colors: {
         border: "hsl(var(--border))",
@@ -30,7 +30,7 @@ export default {
         foreground: "hsl(var(--foreground))",
         primary: {
           DEFAULT: "hsl(var(--primary-h) var(--primary-s) var(--primary-l))",
-          foreground: "hsl(var(--primary-foreground))",
+          foreground: "hsl(var(--primary-foreground-hsl))",
         },
         secondary: {
           DEFAULT: "hsl(var(--secondary))",

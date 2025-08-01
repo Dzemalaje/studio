@@ -3,7 +3,6 @@
 
 import { useCvData } from "@/hooks/use-cv-data";
 import { Briefcase, GraduationCap, Calendar, Mail, Phone, Globe, MapPin, AppWindow, Link as LinkIcon, Award, Languages as LanguagesIcon } from "lucide-react";
-import { cn } from "@/lib/utils";
 import { motion } from "framer-motion";
 import Image from "next/image";
 import { Progress } from "../ui/progress";
@@ -22,10 +21,7 @@ export const SidebarTemplate = ({ sidebarPosition }: { sidebarPosition: 'left' |
   const sidebar = (
     <motion.aside
       layoutId="sidebar"
-      className={cn(
-        "p-6 rounded-lg space-y-6 h-full break-inside-avoid",
-        { 'bg-primary/5': personalDetailsBackground }
-      )}
+      className={`p-6 rounded-lg space-y-6 h-full break-inside-avoid ${personalDetailsBackground ? 'bg-primary/5' : ''}`}
     >
       <MotionDiv layoutId="personal-details-section">
         <div className="text-center">
@@ -163,7 +159,7 @@ export const SidebarTemplate = ({ sidebarPosition }: { sidebarPosition: 'left' |
   );
 
   return (
-    <motion.div layout className="grid grid-cols-1 md:grid-cols-3 gap-8 bg-card text-card-foreground p-8">
+    <motion.div layout className="grid grid-cols-1 md:grid-cols-3 gap-8 bg-card text-card-foreground p-8 break-inside-avoid">
         {sidebarPosition === 'left' ? (
             <>
                 <div className="md:col-span-1">{sidebar}</div>

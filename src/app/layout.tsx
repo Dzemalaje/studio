@@ -1,7 +1,8 @@
+
 import type { Metadata } from 'next';
 import { Toaster } from "@/components/ui/toaster"
 import './globals.css';
-import { Playfair_Display, PT_Sans } from 'next/font/google';
+import { Poppins, PT_Sans } from 'next/font/google';
 import { cn } from '@/lib/utils';
 
 export const metadata: Metadata = {
@@ -15,9 +16,10 @@ const ptSans = PT_Sans({
   variable: '--font-pt-sans',
 });
 
-const playfairDisplay = Playfair_Display({
+const poppins = Poppins({
   subsets: ['latin'],
-  variable: '--font-playfair-display',
+  weight: ['400', '500', '600', '700'],
+  variable: '--font-poppins',
 });
 
 
@@ -28,7 +30,7 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en" suppressHydrationWarning>
-      <body className={cn("antialiased", ptSans.variable, playfairDisplay.variable)}>
+      <body className={cn("antialiased", ptSans.variable, poppins.variable)}>
         {children}
         <Toaster />
       </body>

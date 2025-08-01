@@ -7,11 +7,9 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
-import { GripVertical, Loader2, PlusCircle, Sparkles, Trash2 } from "lucide-react";
+import { GripVertical, PlusCircle, Trash2 } from "lucide-react";
 import { v4 as uuidv4 } from "uuid";
-import { useState, useCallback, memo } from "react";
-import { useToast } from "@/hooks/use-toast";
-import { generateJobSummary } from "@/ai/flows/generate-job-summary";
+import { memo, useCallback } from "react";
 import { WorkExperience } from "@/lib/types";
 import { DndContext, closestCenter, KeyboardSensor, PointerSensor, useSensor, useSensors, DragEndEvent } from '@dnd-kit/core';
 import { arrayMove, SortableContext, sortableKeyboardCoordinates, useSortable, verticalListSortingStrategy } from '@dnd-kit/sortable';
@@ -21,14 +19,10 @@ const SortableExperienceItem = memo(({
     exp,
     onRemove,
     onChange,
-    onGenerateSummary,
-    isLoading
 }: {
     exp: WorkExperience;
     onRemove: (id: string) => void;
     onChange: (id: string, field: keyof WorkExperience, value: string) => void;
-    onGenerateSummary: (id: string) => void;
-    isLoading: boolean;
 }) => {
     const {
         attributes,
@@ -75,18 +69,8 @@ const SortableExperienceItem = memo(({
                                 <Textarea id={`description-${exp.id}`} value={exp.description} onChange={(e) => onChange(exp.id, 'description', e.target.value)} placeholder="Describe your responsibilities and achievements..." />
                             </div>
                             <div className="space-y-2">
-                                <Label htmlFor={`summary-${exp.id}`}>AI Generated Summary</Label>
-                                <Textarea id={`summary-${exp.id}`} value={exp.summary} onChange={(e) => onChange(exp.id, 'summary', e.target.value)} placeholder="Click 'Generate with AI' or write your own summary." className="italic bg-primary/5"/>
-                            </div>
-                            <div className="flex justify-between items-center">
-                                <Button variant="outline" size="sm" onClick={() => onGenerateSummary(exp.id)} disabled={isLoading}>
-                                    {isLoading ? (
-                                        <Loader2 className="mr-2 h-4 w-4 animate-spin" />
-                                    ) : (
-                                        <Sparkles className="mr-2 h-4 w-4" />
-                                    )}
-                                    Generate with AI
-                                </Button>
+                                <Label htmlFor={`summary-${exp.id}`}>Key Achievements / Summary</Label>
+                                <Textarea id={`summary-${exp.id}`} value={exp.summary} onChange={(e) => onChange(exp.id, 'summary', e.target.value)} placeholder="Summarize your key achievements in this role." className="italic bg-primary/5"/>
                             </div>
                         </div>
                         <Button variant="ghost" size="icon" className="text-destructive hover:bg-destructive/10" onClick={() => onRemove(exp.id)}>
@@ -103,8 +87,6 @@ SortableExperienceItem.displayName = 'SortableExperienceItem';
 
 export function ExperienceForm() {
   const { cvData, setCvData } = useCvData();
-  const [isLoading, setIsLoading] = useState<string | null>(null);
-  const { toast } = useToast();
 
    const sensors = useSensors(
     useSensor(PointerSensor),
@@ -147,46 +129,6 @@ export function ExperienceForm() {
     }));
   }, [setCvData]);
 
-  const handleGenerateSummary = useCallback(async (experienceId: string) => {
-    setIsLoading(experienceId);
-    const experience = cvData.workExperience.find(
-      (exp) => exp.id === experienceId
-    );
-    if (!experience || !experience.role || !experience.description) {
-      toast({
-        title: "Missing Information",
-        description:
-          "Please provide a role and responsibilities to generate a summary.",
-        variant: "destructive",
-      });
-      setIsLoading(null);
-      return;
-    }
-
-    try {
-      const result = await generateJobSummary({
-        role: experience.role,
-        responsibilities: experience.description,
-      });
-
-      handleChange(experienceId, 'summary', result.summary);
-      
-      toast({
-        title: "Summary Generated",
-        description: "AI summary has been successfully added.",
-      });
-    } catch (error) {
-      console.error(error);
-      toast({
-        title: "Error",
-        description: "Failed to generate summary. Please try again.",
-        variant: "destructive",
-      });
-    } finally {
-      setIsLoading(null);
-    }
-  }, [cvData.workExperience, handleChange, toast]);
-
   const handleDragEnd = useCallback((event: DragEndEvent) => {
     const { active, over } = event;
     if (over && active.id !== over.id) {
@@ -219,8 +161,6 @@ export function ExperienceForm() {
                         exp={exp}
                         onRemove={handleRemoveExperience}
                         onChange={handleChange}
-                        onGenerateSummary={handleGenerateSummary}
-                        isLoading={isLoading === exp.id}
                     />
                 ))}
             </div>
