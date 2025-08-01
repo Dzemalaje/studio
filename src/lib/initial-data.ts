@@ -12,7 +12,8 @@ export const initialCVData: CVData = {
     phone: "(123) 456-7890",
     location: "San Francisco, CA",
     website: "janedoe.dev",
-    summary: "Dedicated and innovative Full Stack Developer with 5+ years of experience in building and maintaining web applications. Proficient in JavaScript, React, Node.js, and cloud technologies. Passionate about creating seamless user experiences and writing clean, efficient code."
+    summary: "Dedicated and innovative Full Stack Developer with 5+ years of experience in building and maintaining web applications. Proficient in JavaScript, React, Node.js, and cloud technologies. Passionate about creating seamless user experiences and writing clean, efficient code.",
+    profilePicture: "",
   },
   workExperience: [
     {

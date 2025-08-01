@@ -8,6 +8,7 @@ export const PersonalDetailsSchema = z.object({
   location: z.string().optional(),
   website: z.string().optional(),
   summary: z.string().optional(),
+  profilePicture: z.string().optional(),
 });
 export type PersonalDetails = z.infer<typeof PersonalDetailsSchema>;
 

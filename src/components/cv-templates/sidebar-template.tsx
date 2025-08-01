@@ -4,6 +4,7 @@ import { useCvData } from "@/hooks/use-cv-data";
 import { Briefcase, GraduationCap, Calendar, Mail, Phone, Globe, MapPin } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { motion } from "framer-motion";
+import Image from "next/image";
 
 const FONT_SIZE_MAP = {
     sm: "text-sm",
@@ -22,6 +23,11 @@ export const SidebarTemplate = ({ sidebarPosition }: { sidebarPosition: 'left' |
     <motion.aside layoutId="sidebar" className={cn("bg-primary/5 p-6 rounded-lg space-y-6", baseTextSize)}>
       <MotionDiv layoutId="personal-details-section">
         <div className="text-center">
+          {personalDetails.profilePicture && (
+            <motion.div layoutId="profile-picture" className="w-32 h-32 mx-auto rounded-full overflow-hidden mb-4 ring-4 ring-primary/20">
+              <Image src={personalDetails.profilePicture} alt="Profile" width={128} height={128} className="object-cover w-full h-full" />
+            </motion.div>
+          )}
           <h1 className={cn("text-3xl font-bold font-headline text-primary", { 'text-4xl': fontSize === 'lg', 'text-2xl': fontSize === 'sm' })}>{personalDetails.name}</h1>
           <p className={cn("text-lg text-muted-foreground font-light", { 'text-xl': fontSize === 'lg', 'text-base': fontSize === 'sm' })}>{personalDetails.title}</p>
         </div>
