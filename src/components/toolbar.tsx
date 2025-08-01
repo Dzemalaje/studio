@@ -2,54 +2,12 @@
 "use client";
 
 import { Button } from "@/components/ui/button";
-import { Download, Loader2 } from "lucide-react";
-import { useState } from "react";
-import { useToast } from "@/hooks/use-toast";
+import { Download } from "lucide-react";
 
 export function Toolbar() {
-  const [isGenerating, setIsGenerating] = useState(false);
-  const { toast } = useToast();
-
-  const handleDownloadPdf = async () => {
-    setIsGenerating(true);
-    
-    const element = document.getElementById('cv-preview');
-    if (!element) {
-      toast({
-        title: "Error",
-        description: "CV preview element not found.",
-        variant: "destructive",
-      });
-      setIsGenerating(false);
-      return;
-    }
-
-    try {
-      const html2pdf = (await import('html2pdf.js')).default;
-      
-      const opt = {
-        margin: 10,
-        filename: 'CV-Canvas.pdf',
-        image: { type: 'jpeg', quality: 0.98 },
-        html2canvas: { scale: 2, useCORS: true, logging: false },
-        jsPDF: { unit: 'mm', format: 'a4', orientation: 'portrait' },
-        pagebreak: { mode: ['css', 'legacy'] }
-      };
-
-      await html2pdf().from(element).set(opt).save();
-
-    } catch (err) {
-      console.error(err);
-      toast({
-        title: "PDF Generation Failed",
-        description: "An unexpected error occurred. Please try again.",
-        variant: "destructive",
-      });
-    } finally {
-      setIsGenerating(false);
-    }
+  const handleDownloadPdf = () => {
+    window.print();
   };
-
 
   return (
     <header className="sticky top-0 z-10 w-full border-b bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60 no-print">
@@ -64,14 +22,9 @@ export function Toolbar() {
               onClick={handleDownloadPdf} 
               size="sm"
               className="shadow-sm transition-transform hover:scale-105 text-white"
-              disabled={isGenerating}
             >
-              {isGenerating ? (
-                <Loader2 className="mr-2 h-4 w-4 animate-spin" />
-              ) : (
-                <Download className="mr-2 h-4 w-4" />
-              )}
-              {isGenerating ? 'Generating...' : 'Download PDF'}
+              <Download className="mr-2 h-4 w-4" />
+              Download PDF
             </Button>
         </div>
       </div>
