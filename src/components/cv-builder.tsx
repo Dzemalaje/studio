@@ -1,3 +1,4 @@
+
 "use client";
 
 import { CVForm } from '@/components/cv-form';
@@ -12,9 +13,7 @@ export function CVBuilder() {
 
   return (
     <div className="min-h-screen bg-background text-foreground">
-      <div className="no-print">
-        <Toolbar />
-      </div>
+      <Toolbar />
       <main className="grid grid-cols-1 lg:grid-cols-2 gap-8 p-4 sm:p-8">
         <div className="lg:hidden no-print mb-4">
           <div className="flex justify-center gap-2">
@@ -40,7 +39,7 @@ export function CVBuilder() {
         </div>
         
         <div className={`${mobileView === 'preview' ? 'block' : 'hidden'} lg:block`}>
-          <div className="lg:sticky lg:top-8 cv-preview-container">
+          <div className="lg:sticky lg:top-24 cv-preview-container">
             <CVPreview />
           </div>
         </div>
