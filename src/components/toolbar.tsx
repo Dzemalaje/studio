@@ -8,7 +8,7 @@ export function Toolbar() {
   const handleDownloadPdf = async () => {
     const element = document.getElementById('cv-preview');
     if (!element) return;
-    
+
     // Dynamically import the library only on the client-side
     const html2pdf = (await import('html2pdf.js')).default;
 
@@ -25,14 +25,18 @@ export function Toolbar() {
       margin:       5,
       filename:     'cv-canvas-resume.pdf',
       image:        { type: 'jpeg', quality: 0.98 },
-      html2canvas:  { scale: 3 },
+      html2canvas:  { scale: 3, useCORS: true },
       jsPDF:        { unit: 'mm', format: 'a4', orientation: 'portrait' }
     };
 
-    html2pdf().from(clonedElement).set(opt).save().then(() => {
-        // Clean up the cloned element after PDF is generated
-        document.body.removeChild(clonedElement);
-    });
+    try {
+      await html2pdf().from(clonedElement).set(opt).save();
+    } catch (error) {
+      console.error("Failed to generate PDF:", error);
+    } finally {
+      // Clean up the cloned element after PDF is generated or if an error occurs
+      document.body.removeChild(clonedElement);
+    }
   };
 
   return (
