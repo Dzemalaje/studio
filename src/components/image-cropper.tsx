@@ -1,7 +1,7 @@
 
 "use client";
 
-import { useState, useRef } from 'react';
+import { useState, useRef, useCallback, memo } from 'react';
 import ReactCrop, { centerCrop, makeAspectCrop, Crop, PixelCrop } from 'react-image-crop';
 import 'react-image-crop/dist/ReactCrop.css';
 import { Button } from './ui/button';
@@ -33,7 +33,7 @@ function centerAspectCrop(
   );
 }
 
-export function ImageCropper({ imageSrc, onCropComplete }: ImageCropperProps) {
+export const ImageCropper = memo(function ImageCropper({ imageSrc, onCropComplete }: ImageCropperProps) {
   const [crop, setCrop] = useState<Crop>();
   const [completedCrop, setCompletedCrop] = useState<PixelCrop>();
   const [scale, setScale] = useState(1);
@@ -42,15 +42,14 @@ export function ImageCropper({ imageSrc, onCropComplete }: ImageCropperProps) {
   const imgRef = useRef<HTMLImageElement>(null);
   const previewCanvasRef = useRef<HTMLCanvasElement>(null);
 
-
-  function onImageLoad(e: React.SyntheticEvent<HTMLImageElement>) {
+  const onImageLoad = useCallback((e: React.SyntheticEvent<HTMLImageElement>) => {
     if (aspect) {
       const { width, height } = e.currentTarget;
       setCrop(centerAspectCrop(width, height, aspect));
     }
-  }
+  }, [aspect]);
   
-  function handleCropImage() {
+  const handleCropImage = useCallback(() => {
     if (
       !completedCrop ||
       !previewCanvasRef.current ||
@@ -95,7 +94,11 @@ export function ImageCropper({ imageSrc, onCropComplete }: ImageCropperProps) {
     finalCtx.drawImage(offscreen.transferToImageBitmap(), 0, 0, 512, 512);
 
     onCropComplete(finalCanvas.toDataURL('image/jpeg'));
-  }
+  }, [completedCrop, onCropComplete]);
+
+  const handleScaleChange = useCallback((values: number[]) => {
+    setScale(values[0]);
+  }, []);
 
   return (
     <div className="space-y-4">
@@ -124,7 +127,7 @@ export function ImageCropper({ imageSrc, onCropComplete }: ImageCropperProps) {
             min={0.5}
             max={2}
             step={0.01}
-            onValueChange={(values) => setScale(values[0])}
+            onValueChange={handleScaleChange}
         />
         <ZoomIn className="text-muted-foreground" />
       </div>
@@ -142,4 +145,3 @@ export function ImageCropper({ imageSrc, onCropComplete }: ImageCropperProps) {
       )}
     </div>
   );
-}

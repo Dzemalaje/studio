@@ -1,4 +1,3 @@
-
 "use client";
 
 import { useCvData } from "@/hooks/use-cv-data";
@@ -15,14 +14,56 @@ import {
   FormLabel,
   FormMessage,
 } from "@/components/ui/form";
-import { useEffect, useCallback, useState, useRef } from "react";
+import { useEffect, useCallback, useState, useRef, memo } from "react";
 import Image from "next/image";
 import { Button } from "@/components/ui/button";
 import { Camera, Trash2 } from "lucide-react";
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
 import { ImageCropper } from "../image-cropper";
 
-export function PersonalDetailsForm() {
+// Memoize the profile picture component
+const ProfilePicture = memo(({ profilePicture, onFileSelect, onRemove }: {
+  profilePicture: string;
+  onFileSelect: () => void;
+  onRemove: () => void;
+}) => (
+  <div className="relative group">
+    <div className="w-24 h-24 rounded-full bg-muted flex items-center justify-center overflow-hidden">
+      {profilePicture ? (
+        <Image 
+          src={profilePicture} 
+          alt="Profile" 
+          width={96} 
+          height={96} 
+          className="object-cover w-full h-full"
+          priority={false}
+          loading="lazy"
+        />
+      ) : (
+        <Camera className="w-8 h-8 text-muted-foreground" />
+      )}
+    </div>
+    <Button
+      type="button"
+      variant="outline"
+      size="icon"
+      className="absolute bottom-0 right-0 rounded-full w-8 h-8"
+      onClick={onFileSelect}
+    >
+      <Camera className="w-4 h-4" />
+    </Button>
+    {profilePicture && (
+      <div className="absolute inset-0 bg-black/50 rounded-full flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity">
+        <Button type="button" variant="ghost" size="icon" className="text-destructive-foreground hover:text-destructive-foreground" onClick={onRemove}>
+          <Trash2 className="w-5 h-5" />
+        </Button>
+      </div>
+    )}
+  </div>
+));
+ProfilePicture.displayName = 'ProfilePicture';
+
+export const PersonalDetailsForm = memo(function PersonalDetailsForm() {
   const { cvData, setCvData, debouncedSetCvData } = useCvData();
   const [dialogOpen, setDialogOpen] = useState(false);
   const [imageSrc, setImageSrc] = useState<string | null>(null);
@@ -34,6 +75,7 @@ export function PersonalDetailsForm() {
     mode: "onChange",
   });
 
+  // Memoize handlers to prevent unnecessary re-renders
   const handleUpdateProfilePicture = useCallback((dataUrl: string) => {
     setCvData((prev) => ({
       ...prev,
@@ -46,35 +88,8 @@ export function PersonalDetailsForm() {
     setImageSrc(null);
   }, [setCvData]);
   
-  const watchedData = useWatch({ control: form.control });
-
-  useEffect(() => {
-    if (form.formState.isDirty) {
-      debouncedSetCvData({ ...cvData, personalDetails: watchedData });
-    }
-  }, [watchedData, form.formState.isDirty, debouncedSetCvData, cvData]);
-
-
-  useEffect(() => {
-    if (JSON.stringify(form.getValues()) !== JSON.stringify(cvData.personalDetails)) {
-        form.reset(cvData.personalDetails);
-    }
-  }, [cvData.personalDetails, form]);
-
-  const onFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    if (e.target.files && e.target.files.length > 0) {
-      const file = e.target.files[0];
-      const reader = new FileReader();
-      reader.addEventListener('load', () => {
-        setImageSrc(reader.result as string);
-        setDialogOpen(true);
-      });
-      reader.readAsDataURL(file);
-    }
-  };
-
-  const handleRemoveImage = () => {
-     setCvData((prev) => ({
+  const handleRemoveImage = useCallback(() => {
+    setCvData((prev) => ({
       ...prev,
       personalDetails: {
         ...prev.personalDetails,
@@ -84,37 +99,54 @@ export function PersonalDetailsForm() {
     if (fileInputRef.current) {
       fileInputRef.current.value = "";
     }
-  }
+  }, [setCvData]);
+
+  const handleFileSelect = useCallback(() => {
+    fileInputRef.current?.click();
+  }, []);
+
+  const watchedData = useWatch({ control: form.control });
+
+  // Optimize form updates with better debouncing
+  useEffect(() => {
+    if (form.formState.isDirty) {
+      debouncedSetCvData({ ...cvData, personalDetails: watchedData });
+    }
+  }, [watchedData, form.formState.isDirty, debouncedSetCvData, cvData]);
+
+  // Only reset form when data actually changes
+  useEffect(() => {
+    const currentValues = form.getValues();
+    const hasChanged = Object.keys(cvData.personalDetails).some(
+      key => currentValues[key as keyof PersonalDetails] !== cvData.personalDetails[key as keyof PersonalDetails]
+    );
+    
+    if (hasChanged) {
+      form.reset(cvData.personalDetails);
+    }
+  }, [cvData.personalDetails, form]);
+
+  const onFileChange = useCallback((e: React.ChangeEvent<HTMLInputElement>) => {
+    if (e.target.files && e.target.files.length > 0) {
+      const file = e.target.files[0];
+      const reader = new FileReader();
+      reader.addEventListener('load', () => {
+        setImageSrc(reader.result as string);
+        setDialogOpen(true);
+      });
+      reader.readAsDataURL(file);
+    }
+  }, []);
 
   return (
     <Form {...form}>
       <form className="space-y-4 p-1">
         <div className="flex items-center gap-4">
-          <div className="relative group">
-            <div className="w-24 h-24 rounded-full bg-muted flex items-center justify-center overflow-hidden">
-                {cvData.personalDetails.profilePicture ? (
-                    <Image src={cvData.personalDetails.profilePicture} alt="Profile" width={96} height={96} className="object-cover w-full h-full" />
-                ) : (
-                    <Camera className="w-8 h-8 text-muted-foreground" />
-                )}
-            </div>
-             <Button
-                type="button"
-                variant="outline"
-                size="icon"
-                className="absolute bottom-0 right-0 rounded-full w-8 h-8"
-                onClick={() => fileInputRef.current?.click()}
-             >
-                <Camera className="w-4 h-4" />
-             </Button>
-            {cvData.personalDetails.profilePicture && (
-              <div className="absolute inset-0 bg-black/50 rounded-full flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity">
-                <Button type="button" variant="ghost" size="icon" className="text-destructive-foreground hover:text-destructive-foreground" onClick={handleRemoveImage}>
-                  <Trash2 className="w-5 h-5" />
-                </Button>
-              </div>
-            )}
-          </div>
+          <ProfilePicture 
+            profilePicture={cvData.personalDetails.profilePicture}
+            onFileSelect={handleFileSelect}
+            onRemove={handleRemoveImage}
+          />
           <div className="flex-1">
             <FormField
               control={form.control}
@@ -233,4 +265,4 @@ export function PersonalDetailsForm() {
       </form>
     </Form>
   );
-}
+});

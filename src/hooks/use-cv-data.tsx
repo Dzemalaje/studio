@@ -1,7 +1,7 @@
 
 "use client";
 
-import { createContext, useContext, useState, Dispatch, SetStateAction, useEffect, ReactNode, useMemo, useCallback } from 'react';
+import { createContext, useContext, useState, Dispatch, SetStateAction, useEffect, ReactNode, useMemo, useCallback, useRef } from 'react';
 import { CVData } from '@/lib/types';
 import { initialCVData } from '@/lib/initial-data';
 import { v4 as uuidv4 } from 'uuid';
@@ -33,6 +33,7 @@ const ensureIds = (data: Partial<CVData>): CVData => {
 export const CVDataProvider = ({ children }: { children: ReactNode }) => {
   const [cvData, setCvData] = useState<CVData>(initialCVData);
   const [isMounted, setIsMounted] = useState(false);
+  const saveTimeoutRef = useRef<NodeJS.Timeout>();
 
   useEffect(() => {
     try {
@@ -46,27 +47,40 @@ export const CVDataProvider = ({ children }: { children: ReactNode }) => {
     setIsMounted(true);
   }, []);
 
+  // Optimized localStorage saving with batching
   useEffect(() => {
     if (isMounted) {
-      try {
-        const dataToStore = JSON.stringify(cvData);
-        window.localStorage.setItem('proficv-data', dataToStore);
-      } catch (error) {
-        console.error("Failed to write to localStorage", error);
+      // Clear existing timeout
+      if (saveTimeoutRef.current) {
+        clearTimeout(saveTimeoutRef.current);
       }
+      
+      // Batch localStorage writes to avoid blocking the main thread
+      saveTimeoutRef.current = setTimeout(() => {
+        try {
+          const dataToStore = JSON.stringify(cvData);
+          window.localStorage.setItem('proficv-data', dataToStore);
+        } catch (error) {
+          console.error("Failed to write to localStorage", error);
+        }
+      }, 100);
     }
   }, [cvData, isMounted]);
 
+  // Increase debounce delay for better performance
   const debouncedSetCvData = useMemo(
     () => debounce((newData) => {
       setCvData(newData);
-    }, 300),
+    }, 500),
     []
   );
 
   useEffect(() => {
     return () => {
       debouncedSetCvData.cancel();
+      if (saveTimeoutRef.current) {
+        clearTimeout(saveTimeoutRef.current);
+      }
     }
   }, [debouncedSetCvData]);
 
