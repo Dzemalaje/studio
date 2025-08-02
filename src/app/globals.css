@@ -76,3 +76,14 @@
 .break-inside-avoid {
   page-break-inside: avoid;
 }
+
+.printing-pdf > *:not(.cv-preview) {
+  display: none;
+}
+
+.printing-pdf .cv-preview {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+}
