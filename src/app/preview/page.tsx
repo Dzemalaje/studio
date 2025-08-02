@@ -32,8 +32,8 @@ export default function PreviewPage() {
             </div>
           </div>
         </header>
-        <main className="container mx-auto p-4 sm:p-8">
-          <div id="cv-preview-container" className="my-8">
+        <main id="preview-main">
+          <div id="cv-preview-container">
             <CVPreview />
           </div>
         </main>

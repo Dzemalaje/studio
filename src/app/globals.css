@@ -84,14 +84,13 @@
   .no-print {
     display: none !important;
   }
-  main {
-    display: block;
+  #preview-main {
     padding: 0;
-    margin: 0;
   }
   #cv-preview-container {
     box-shadow: none;
     border: none;
+    margin: 0;
   }
   .cv-preview {
     max-width: 100%;
