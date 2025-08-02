@@ -77,13 +77,27 @@
   page-break-inside: avoid;
 }
 
-.printing-pdf > *:not(.cv-preview) {
-  display: none;
-}
-
-.printing-pdf .cv-preview {
-  position: absolute;
-  top: 0;
-  left: 0;
-  width: 100%;
+@media print {
+  body {
+    background-color: white;
+  }
+  .no-print {
+    display: none !important;
+  }
+  main {
+    display: block;
+    padding: 0;
+    margin: 0;
+  }
+  #cv-preview-container {
+    position: static !important;
+    height: auto !important;
+    overflow: visible !important;
+  }
+  .cv-preview {
+    max-width: 100%;
+    margin: 0;
+    box-shadow: none;
+    border: none;
+  }
 }
