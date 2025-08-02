@@ -21,7 +21,7 @@ export function Toolbar() {
               className="shadow-sm transition-transform hover:scale-105 text-white"
               asChild
             >
-              <Link href="/preview" target="_blank">
+              <Link href="/preview">
                 <Download className="mr-2 h-4 w-4" />
                 Save to PDF
               </Link>
