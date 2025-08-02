@@ -54,3 +54,4 @@ export const CVPreview = memo(function CVPreview() {
         </div>
     </div>
   );
+});

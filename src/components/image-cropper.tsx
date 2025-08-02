@@ -145,3 +145,4 @@ export const ImageCropper = memo(function ImageCropper({ imageSrc, onCropComplet
       )}
     </div>
   );
+});
