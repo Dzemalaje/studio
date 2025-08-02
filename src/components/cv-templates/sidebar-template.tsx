@@ -2,7 +2,7 @@
 "use client";
 
 import { useCvData } from "@/hooks/use-cv-data";
-import { Briefcase, GraduationCap, Calendar, Mail, Phone, Globe, MapPin, AppWindow, Link as LinkIcon, Award, Languages as LanguagesIcon } from "lucide-react";
+import { Briefcase, GraduationCap, Calendar, Mail, Phone, Globe, MapPin, AppWindow, Link as LinkIcon, Award, Languages as LanguagesIcon, User, Wrench } from "lucide-react";
 import { motion } from "framer-motion";
 import Image from "next/image";
 import { Progress } from "../ui/progress";
@@ -21,7 +21,7 @@ export const SidebarTemplate = ({ sidebarPosition }: { sidebarPosition: 'left' |
   const sidebar = (
     <motion.aside
       layoutId="sidebar"
-      className="p-6 rounded-lg space-y-6 h-full break-inside-avoid"
+      className="p-6 rounded-lg space-y-8 h-full break-inside-avoid"
     >
       <MotionDiv layoutId="personal-details-section">
         <div className="text-center">
@@ -45,7 +45,7 @@ export const SidebarTemplate = ({ sidebarPosition }: { sidebarPosition: 'left' |
       </MotionDiv>
        {skills.length > 0 && (
           <MotionDiv layoutId="skills-section">
-            <h2 className="font-bold font-headline border-b-2 border-primary pb-2 mb-4 text-primary" style={getResponsiveValue(1.2)}>Skills</h2>
+            <h2 className="font-bold font-headline border-b-2 border-primary pb-2 mb-4 text-primary flex items-center gap-2" style={getResponsiveValue(1.2)}><Wrench className="h-5 w-5" />Skills</h2>
             <div className="flex flex-wrap gap-2">
               {skills.map((skill) => (
                 <div key={skill.id} className="bg-primary/10 text-primary font-medium px-3 py-1 rounded-full text-sm">
@@ -92,10 +92,10 @@ export const SidebarTemplate = ({ sidebarPosition }: { sidebarPosition: 'left' |
   );
 
   const mainContent = (
-     <motion.main layoutId="main-content" className="space-y-8 p-6">
+     <MotionDiv layoutId="main-content" className="space-y-8 p-6">
         {personalDetails.summary && (
           <MotionDiv layoutId="summary-section" className="break-inside-avoid">
-            <h2 className="font-bold font-headline border-b-2 border-primary pb-2 mb-4 text-primary" style={getResponsiveValue(1.5)}>Summary</h2>
+            <h2 className="font-bold font-headline border-b-2 border-primary pb-2 mb-4 text-primary flex items-center gap-2" style={getResponsiveValue(1.5)}><User className="h-6 w-6" />Summary</h2>
             <p className="whitespace-pre-wrap text-foreground/80">{personalDetails.summary}</p>
           </MotionDiv>
         )}
@@ -114,12 +114,12 @@ export const SidebarTemplate = ({ sidebarPosition }: { sidebarPosition: 'left' |
                     </div>
                   </div>
                   <p className="font-semibold text-primary" style={getResponsiveValue(1)}>{job.company}</p>
+                   <p className="mt-2 whitespace-pre-wrap text-foreground/80">{job.description}</p>
                    {job.summary && (
                      <div className="mt-2 p-3 bg-primary/5 border-l-4 border-primary rounded-r-md">
                         <p className="italic whitespace-pre-wrap text-foreground/90">{job.summary}</p>
                      </div>
                   )}
-                  <p className="mt-2 whitespace-pre-wrap text-foreground/80">{job.description}</p>
                 </div>
               ))}
             </div>
@@ -155,20 +155,20 @@ export const SidebarTemplate = ({ sidebarPosition }: { sidebarPosition: 'left' |
             </div>
           </MotionDiv>
         )}
-      </motion.main>
+      </MotionDiv>
   );
 
   return (
-    <motion.div layout className="grid grid-cols-1 md:grid-cols-3 gap-8 bg-card text-card-foreground p-8 break-inside-avoid">
+    <motion.div layout className="grid grid-cols-1 md:grid-cols-3 gap-0 bg-card text-card-foreground p-8 break-inside-avoid">
         {sidebarPosition === 'left' ? (
             <>
-                <div className="md:col-span-1">{sidebar}</div>
+                <div className="md:col-span-1 bg-primary/5">{sidebar}</div>
                 <div className="md:col-span-2">{mainContent}</div>
             </>
         ) : (
             <>
                 <div className="md:col-span-2">{mainContent}</div>
-                <div className="md:col-span-1">{sidebar}</div>
+                <div className="md:col-span-1 bg-primary/5">{sidebar}</div>
             </>
         )}
     </motion.div>

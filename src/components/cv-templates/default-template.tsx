@@ -2,7 +2,7 @@
 "use client";
 
 import { useCvData } from "@/hooks/use-cv-data";
-import { Briefcase, GraduationCap, Calendar, Mail, Phone, Globe, MapPin, AppWindow, Award, Languages, Link as LinkIcon } from "lucide-react";
+import { Briefcase, GraduationCap, Calendar, Mail, Phone, Globe, MapPin, AppWindow, Award, Languages, Link as LinkIcon, User, Wrench } from "lucide-react";
 import { motion } from "framer-motion";
 import Image from "next/image";
 import { Progress } from "../ui/progress";
@@ -41,16 +41,16 @@ export const DefaultTemplate = () => {
         </header>
       </MotionDiv>
 
-      <main>
+      <main className="space-y-8">
         {personalDetails.summary && (
-          <MotionDiv layoutId="summary-section" className="mb-8 break-inside-avoid">
-            <h2 className="font-bold font-headline border-b-2 border-primary pb-2 mb-4 text-primary" style={getResponsiveValue(1.5)}>Summary</h2>
+          <MotionDiv layoutId="summary-section" className="break-inside-avoid">
+            <h2 className="font-bold font-headline border-b-2 border-primary pb-2 mb-4 text-primary flex items-center gap-2" style={getResponsiveValue(1.5)}><User className="h-6 w-6" />Summary</h2>
             <p className="whitespace-pre-wrap text-foreground/80">{personalDetails.summary}</p>
           </MotionDiv>
         )}
         
         {workExperience.length > 0 && (
-          <MotionDiv layoutId="experience-section" className="mb-8 break-inside-avoid">
+          <MotionDiv layoutId="experience-section" className="break-inside-avoid">
             <h2 className="font-bold font-headline border-b-2 border-primary pb-2 mb-4 text-primary flex items-center gap-2" style={getResponsiveValue(1.5)}><Briefcase className="h-6 w-6"/>Work Experience</h2>
             <div className="space-y-6">
               {workExperience.map((job) => (
@@ -63,12 +63,12 @@ export const DefaultTemplate = () => {
                     </div>
                   </div>
                   <p className="font-semibold text-primary" style={getResponsiveValue(1)}>{job.company}</p>
+                  <p className="mt-2 whitespace-pre-wrap text-foreground/80">{job.description}</p>
                   {job.summary && (
                      <div className="mt-2 p-3 bg-primary/5 border-l-4 border-primary rounded-r-md">
                         <p className="italic whitespace-pre-wrap text-foreground/90">{job.summary}</p>
                      </div>
                   )}
-                  <p className="mt-2 whitespace-pre-wrap text-foreground/80">{job.description}</p>
                 </div>
               ))}
             </div>
@@ -76,7 +76,7 @@ export const DefaultTemplate = () => {
         )}
 
         {projects.length > 0 && (
-          <MotionDiv layoutId="projects-section" className="mb-8 break-inside-avoid">
+          <MotionDiv layoutId="projects-section" className="break-inside-avoid">
             <h2 className="font-bold font-headline border-b-2 border-primary pb-2 mb-4 text-primary flex items-center gap-2" style={getResponsiveValue(1.5)}><AppWindow className="h-6 w-6"/>Projects</h2>
             <div className="space-y-6">
               {projects.map((proj) => (
@@ -93,7 +93,7 @@ export const DefaultTemplate = () => {
         )}
 
         {education.length > 0 && (
-           <MotionDiv layoutId="education-section" className="mb-8 break-inside-avoid">
+           <MotionDiv layoutId="education-section" className="break-inside-avoid">
             <h2 className="font-bold font-headline border-b-2 border-primary pb-2 mb-4 text-primary flex items-center gap-2" style={getResponsiveValue(1.5)}><GraduationCap className="h-6 w-6"/>Education</h2>
             <div className="space-y-4">
               {education.map((edu) => (
@@ -113,8 +113,8 @@ export const DefaultTemplate = () => {
         )}
 
         {skills.length > 0 && (
-          <MotionDiv layoutId="skills-section" className="mb-8 break-inside-avoid">
-            <h2 className="font-bold font-headline border-b-2 border-primary pb-2 mb-4 text-primary" style={getResponsiveValue(1.5)}>Skills</h2>
+          <MotionDiv layoutId="skills-section" className="break-inside-avoid">
+            <h2 className="font-bold font-headline border-b-2 border-primary pb-2 mb-4 text-primary flex items-center gap-2" style={getResponsiveValue(1.5)}><Wrench className="h-6 w-6" />Skills</h2>
             <div className="flex flex-wrap gap-2">
               {skills.map((skill) => (
                 <div key={skill.id} className="bg-primary/10 text-primary font-medium px-3 py-1 rounded-full text-sm">
@@ -126,7 +126,7 @@ export const DefaultTemplate = () => {
         )}
 
         {certifications.length > 0 && (
-          <MotionDiv layoutId="certifications-section" className="mb-8 break-inside-avoid">
+          <MotionDiv layoutId="certifications-section" className="break-inside-avoid">
             <h2 className="font-bold font-headline border-b-2 border-primary pb-2 mb-4 text-primary flex items-center gap-2" style={getResponsiveValue(1.5)}><Award className="h-6 w-6"/>Certifications</h2>
             <div className="space-y-4">
               {certifications.map((cert) => (
