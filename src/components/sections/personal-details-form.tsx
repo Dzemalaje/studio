@@ -16,7 +16,6 @@ import {
   FormMessage,
 } from "@/components/ui/form";
 import { useEffect, useCallback, useState, useRef } from "react";
-import debounce from 'lodash.debounce';
 import Image from "next/image";
 import { Button } from "@/components/ui/button";
 import { Camera, Trash2 } from "lucide-react";
@@ -24,7 +23,7 @@ import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from 
 import { ImageCropper } from "../image-cropper";
 
 export function PersonalDetailsForm() {
-  const { cvData, setCvData } = useCvData();
+  const { cvData, setCvData, debouncedSetCvData } = useCvData();
   const [dialogOpen, setDialogOpen] = useState(false);
   const [imageSrc, setImageSrc] = useState<string | null>(null);
   const fileInputRef = useRef<HTMLInputElement>(null);
@@ -47,30 +46,13 @@ export function PersonalDetailsForm() {
     setImageSrc(null);
   }, [setCvData]);
   
-  const debouncedSetCvData = useCallback(
-    debounce((data: PersonalDetails) => {
-      setCvData((prev) => ({
-        ...prev,
-        personalDetails: {
-          ...prev.personalDetails,
-          ...data,
-        }
-      }));
-    }, 300),
-    [setCvData]
-  );
-
   const watchedData = useWatch({ control: form.control });
 
   useEffect(() => {
-    const { profilePicture, ...rest } = watchedData;
     if (form.formState.isDirty) {
-      debouncedSetCvData(rest as PersonalDetails);
+      debouncedSetCvData({ ...cvData, personalDetails: watchedData });
     }
-    return () => {
-      debouncedSetCvData.cancel();
-    };
-  }, [watchedData, form.formState.isDirty, debouncedSetCvData]);
+  }, [watchedData, form.formState.isDirty, debouncedSetCvData, cvData]);
 
 
   useEffect(() => {
@@ -252,5 +234,3 @@ export function PersonalDetailsForm() {
     </Form>
   );
 }
-
-    

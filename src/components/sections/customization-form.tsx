@@ -15,8 +15,6 @@ import { cn } from "@/lib/utils";
 import { FontSize } from "@/lib/types";
 import { useCallback } from "react";
 import { ModernColorPicker } from "../modern-color-picker";
-import debounce from 'lodash.debounce';
-import { Checkbox } from "../ui/checkbox";
 
 const FONT_OPTIONS = [
     { label: "PT Sans", value: "PT Sans" },
@@ -61,22 +59,16 @@ const LayoutPreview = ({ layout }: { layout: 'default' | 'left-sidebar' | 'right
 
 
 export function CustomizationForm() {
-    const { cvData, setCvData } = useCvData();
+    const { cvData, setCvData, debouncedSetCvData } = useCvData();
 
     const handleTemplateChange = useCallback((value: 'default' | 'left-sidebar' | 'right-sidebar') => {
         setCvData((prev) => ({...prev, template: value}));
     }, [setCvData]);
 
-    const debouncedSetColor = useCallback(
-        debounce((color: string) => {
-          setCvData(prev => ({ ...prev, themeColor: color }));
-        }, 200),
-        [setCvData]
-    );
 
     const handleColorChange = useCallback((color: string) => {
-        debouncedSetColor(color);
-    }, [debouncedSetColor]);
+        debouncedSetCvData({ ...cvData, themeColor: color });
+    }, [cvData, debouncedSetCvData]);
 
     const handleFontChange = useCallback((value: string) => {
         setCvData(prev => ({...prev, fontFamily: value}));

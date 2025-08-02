@@ -49,28 +49,28 @@ const SortableExperienceItem = memo(({
                             <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                                 <div className="space-y-2">
                                     <Label htmlFor={`role-${exp.id}`}>Role</Label>
-                                    <Input id={`role-${exp.id}`} value={exp.role} onChange={(e) => onChange(exp.id, 'role', e.target.value)} placeholder="e.g., Senior Developer" />
+                                    <Input id={`role-${exp.id}`} defaultValue={exp.role} onChange={(e) => onChange(exp.id, 'role', e.target.value)} placeholder="e.g., Senior Developer" />
                                 </div>
                                 <div className="space-y-2">
                                     <Label htmlFor={`company-${exp.id}`}>Company</Label>
-                                    <Input id={`company-${exp.id}`} value={exp.company} onChange={(e) => onChange(exp.id, 'company', e.target.value)} placeholder="e.g., Tech Solutions Inc." />
+                                    <Input id={`company-${exp.id}`} defaultValue={exp.company} onChange={(e) => onChange(exp.id, 'company', e.target.value)} placeholder="e.g., Tech Solutions Inc." />
                                 </div>
                                 <div className="space-y-2">
                                     <Label htmlFor={`start-date-${exp.id}`}>Start Date</Label>
-                                    <Input id={`start-date-${exp.id}`} value={exp.startDate} onChange={(e) => onChange(exp.id, 'startDate', e.target.value)} placeholder="e.g., Jan 2020" />
+                                    <Input id={`start-date-${exp.id}`} defaultValue={exp.startDate} onChange={(e) => onChange(exp.id, 'startDate', e.target.value)} placeholder="e.g., Jan 2020" />
                                 </div>
                                 <div className="space-y-2">
                                     <Label htmlFor={`end-date-${exp.id}`}>End Date</Label>
-                                    <Input id={`end-date-${exp.id}`} value={exp.endDate} onChange={(e) => onChange(exp.id, 'endDate', e.target.value)} placeholder="e.g., Present" />
+                                    <Input id={`end-date-${exp.id}`} defaultValue={exp.endDate} onChange={(e) => onChange(exp.id, 'endDate', e.target.value)} placeholder="e.g., Present" />
                                 </div>
                             </div>
                             <div className="space-y-2">
                                 <Label htmlFor={`description-${exp.id}`}>Description / Responsibilities</Label>
-                                <Textarea id={`description-${exp.id}`} value={exp.description} onChange={(e) => onChange(exp.id, 'description', e.target.value)} placeholder="Describe your responsibilities and achievements..." />
+                                <Textarea id={`description-${exp.id}`} defaultValue={exp.description} onChange={(e) => onChange(exp.id, 'description', e.target.value)} placeholder="Describe your responsibilities and achievements..." />
                             </div>
                             <div className="space-y-2">
                                 <Label htmlFor={`summary-${exp.id}`}>Key Achievements / Summary</Label>
-                                <Textarea id={`summary-${exp.id}`} value={exp.summary} onChange={(e) => onChange(exp.id, 'summary', e.target.value)} placeholder="Summarize your key achievements in this role." className="italic bg-primary/5"/>
+                                <Textarea id={`summary-${exp.id}`} defaultValue={exp.summary} onChange={(e) => onChange(exp.id, 'summary', e.target.value)} placeholder="Summarize your key achievements in this role." className="italic bg-primary/5"/>
                             </div>
                         </div>
                         <Button variant="ghost" size="icon" className="text-destructive hover:bg-destructive/10" onClick={() => onRemove(exp.id)}>
@@ -86,7 +86,7 @@ SortableExperienceItem.displayName = 'SortableExperienceItem';
 
 
 export function ExperienceForm() {
-  const { cvData, setCvData } = useCvData();
+  const { cvData, setCvData, debouncedSetCvData } = useCvData();
 
    const sensors = useSensors(
     useSensor(PointerSensor),
@@ -121,13 +121,11 @@ export function ExperienceForm() {
   }, [setCvData]);
 
   const handleChange = useCallback((id: string, field: keyof WorkExperience, value: string) => {
-    setCvData((prev) => ({
-      ...prev,
-      workExperience: prev.workExperience.map((exp) =>
-        exp.id === id ? { ...exp, [field]: value } : exp
-      ),
-    }));
-  }, [setCvData]);
+    const newWorkExperience = cvData.workExperience.map((exp) =>
+      exp.id === id ? { ...exp, [field]: value } : exp
+    );
+    debouncedSetCvData({ ...cvData, workExperience: newWorkExperience });
+  }, [cvData, debouncedSetCvData]);
 
   const handleDragEnd = useCallback((event: DragEndEvent) => {
     const { active, over } = event;

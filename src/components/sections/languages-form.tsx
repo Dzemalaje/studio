@@ -44,7 +44,7 @@ const SortableLanguageItem = memo(({ lang, onRemove, onChange }: { lang: Languag
                             <Label htmlFor={`lang-name-${lang.id}`}>Language</Label>
                             <Input
                               id={`lang-name-${lang.id}`}
-                              value={lang.name}
+                              defaultValue={lang.name}
                               onChange={(e) => onChange(lang.id, "name", e.target.value)}
                               placeholder="e.g., Spanish"
                             />
@@ -79,7 +79,7 @@ SortableLanguageItem.displayName = 'SortableLanguageItem';
 
 
 export function LanguagesForm() {
-  const { cvData, setCvData } = useCvData();
+  const { cvData, setCvData, debouncedSetCvData } = useCvData();
   const sensors = useSensors(
     useSensor(PointerSensor),
     useSensor(KeyboardSensor, {
@@ -105,13 +105,15 @@ export function LanguagesForm() {
   }, [setCvData]);
 
   const handleChange = useCallback((id: string, field: keyof Language, value: any) => {
-    setCvData((prev) => ({
-      ...prev,
-      languages: prev.languages.map((lang) =>
-        lang.id === id ? { ...lang, [field]: value } : lang
-      ),
-    }));
-  }, [setCvData]);
+    const newLanguages = cvData.languages.map((lang) =>
+      lang.id === id ? { ...lang, [field]: value } : lang
+    );
+    if (field === 'level') { // Slider updates are fast, so we can update directly
+        setCvData(prev => ({ ...prev, languages: newLanguages }));
+    } else {
+        debouncedSetCvData({ ...cvData, languages: newLanguages });
+    }
+  }, [cvData, setCvData, debouncedSetCvData]);
 
   const handleDragEnd = useCallback((event: DragEndEvent) => {
     const { active, over } = event;

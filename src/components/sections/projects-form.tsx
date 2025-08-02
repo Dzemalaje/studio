@@ -42,7 +42,7 @@ const SortableProjectItem = memo(({ proj, onRemove, onChange }: { proj: Project;
                             <Label htmlFor={`project-name-${proj.id}`}>Project Name</Label>
                             <Input
                               id={`project-name-${proj.id}`}
-                              value={proj.name}
+                              defaultValue={proj.name}
                               onChange={(e) => onChange(proj.id, "name", e.target.value)}
                               placeholder="e.g., My Awesome App"
                             />
@@ -51,7 +51,7 @@ const SortableProjectItem = memo(({ proj, onRemove, onChange }: { proj: Project;
                             <Label htmlFor={`project-link-${proj.id}`}>Link</Label>
                             <Input
                               id={`project-link-${proj.id}`}
-                              value={proj.link}
+                              defaultValue={proj.link}
                               onChange={(e) => onChange(proj.id, "link", e.target.value)}
                               placeholder="e.g., myawesomeapp.com"
                             />
@@ -60,7 +60,7 @@ const SortableProjectItem = memo(({ proj, onRemove, onChange }: { proj: Project;
                             <Label htmlFor={`project-description-${proj.id}`}>Description</Label>
                             <Textarea
                               id={`project-description-${proj.id}`}
-                              value={proj.description}
+                              defaultValue={proj.description}
                               onChange={(e) => onChange(proj.id, "description", e.target.value)}
                               placeholder="Describe your project"
                             />
@@ -85,7 +85,7 @@ SortableProjectItem.displayName = 'SortableProjectItem';
 
 
 export function ProjectsForm() {
-  const { cvData, setCvData } = useCvData();
+  const { cvData, setCvData, debouncedSetCvData } = useCvData();
   const sensors = useSensors(
     useSensor(PointerSensor),
     useSensor(KeyboardSensor, {
@@ -111,13 +111,11 @@ export function ProjectsForm() {
   }, [setCvData]);
 
   const handleChange = useCallback((id: string, field: keyof Project, value: string) => {
-    setCvData((prev) => ({
-      ...prev,
-      projects: prev.projects.map((proj) =>
+    const newProjects = cvData.projects.map((proj) =>
         proj.id === id ? { ...proj, [field]: value } : proj
-      ),
-    }));
-  }, [setCvData]);
+    );
+    debouncedSetCvData({ ...cvData, projects: newProjects });
+  }, [cvData, debouncedSetCvData]);
 
   const handleDragEnd = useCallback((event: DragEndEvent) => {
     const { active, over } = event;

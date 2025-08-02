@@ -1,14 +1,17 @@
 
 "use client";
 
-import { createContext, useContext, useState, Dispatch, SetStateAction, useEffect, ReactNode, useMemo } from 'react';
+import { createContext, useContext, useState, Dispatch, SetStateAction, useEffect, ReactNode, useMemo, useCallback } from 'react';
 import { CVData } from '@/lib/types';
 import { initialCVData } from '@/lib/initial-data';
 import { v4 as uuidv4 } from 'uuid';
+import debounce from 'lodash.debounce';
+
 
 interface CVDataContextType {
   cvData: CVData;
   setCvData: Dispatch<SetStateAction<CVData>>;
+  debouncedSetCvData: (data: CVData) => void;
 }
 
 const CVDataContext = createContext<CVDataContextType | undefined>(undefined);
@@ -32,7 +35,6 @@ export const CVDataProvider = ({ children }: { children: ReactNode }) => {
   const [isMounted, setIsMounted] = useState(false);
 
   useEffect(() => {
-    // This effect runs only on the client, after the initial render.
     try {
       const storedData = window.localStorage.getItem('proficv-data');
       if (storedData) {
@@ -45,8 +47,6 @@ export const CVDataProvider = ({ children }: { children: ReactNode }) => {
   }, []);
 
   useEffect(() => {
-    // This effect runs only on the client and only after the component has mounted.
-    // This prevents overwriting localStorage with initial data on the first render.
     if (isMounted) {
       try {
         const dataToStore = JSON.stringify(cvData);
@@ -57,7 +57,21 @@ export const CVDataProvider = ({ children }: { children: ReactNode }) => {
     }
   }, [cvData, isMounted]);
 
-  const contextValue = useMemo(() => ({ cvData, setCvData }), [cvData]);
+  const debouncedSetCvData = useMemo(
+    () => debounce((newData) => {
+      setCvData(newData);
+    }, 300),
+    []
+  );
+
+  useEffect(() => {
+    return () => {
+      debouncedSetCvData.cancel();
+    }
+  }, [debouncedSetCvData]);
+
+
+  const contextValue = useMemo(() => ({ cvData, setCvData, debouncedSetCvData }), [cvData, setCvData, debouncedSetCvData]);
 
   return (
     <CVDataContext.Provider value={contextValue}>

@@ -41,7 +41,7 @@ const SortableEducationItem = memo(({ edu, onRemove, onChange }: { edu: Educatio
                                 <Label htmlFor={`degree-${edu.id}`}>Degree/Certificate</Label>
                                 <Input
                                 id={`degree-${edu.id}`}
-                                value={edu.degree}
+                                defaultValue={edu.degree}
                                 onChange={(e) => onChange(edu.id, "degree", e.target.value)}
                                 placeholder="e.g., B.S. in Computer Science"
                                 />
@@ -50,7 +50,7 @@ const SortableEducationItem = memo(({ edu, onRemove, onChange }: { edu: Educatio
                                 <Label htmlFor={`institution-${edu.id}`}>Institution</Label>
                                 <Input
                                 id={`institution-${edu.id}`}
-                                value={edu.institution}
+                                defaultValue={edu.institution}
                                 onChange={(e) => onChange(edu.id, "institution", e.target.value)}
                                 placeholder="e.g., University of Technology"
                                 />
@@ -59,7 +59,7 @@ const SortableEducationItem = memo(({ edu, onRemove, onChange }: { edu: Educatio
                                 <Label htmlFor={`edu-start-date-${edu.id}`}>Start Date</Label>
                                 <Input
                                 id={`edu-start-date-${edu.id}`}
-                                value={edu.startDate}
+                                defaultValue={edu.startDate}
                                 onChange={(e) => onChange(edu.id, "startDate", e.target.value)}
                                 placeholder="e.g., Sept 2018"
                                 />
@@ -68,7 +68,7 @@ const SortableEducationItem = memo(({ edu, onRemove, onChange }: { edu: Educatio
                                 <Label htmlFor={`edu-end-date-${edu.id}`}>End Date</Label>
                                 <Input
                                 id={`edu-end-date-${edu.id}`}
-                                value={edu.endDate}
+                                defaultValue={edu.endDate}
                                 onChange={(e) => onChange(edu.id, "endDate", e.target.value)}
                                 placeholder="e.g., June 2022"
                                 />
@@ -93,7 +93,7 @@ SortableEducationItem.displayName = 'SortableEducationItem';
 
 
 export function EducationForm() {
-  const { cvData, setCvData } = useCvData();
+  const { cvData, setCvData, debouncedSetCvData } = useCvData();
   const sensors = useSensors(
     useSensor(PointerSensor),
     useSensor(KeyboardSensor, {
@@ -119,13 +119,11 @@ export function EducationForm() {
   }, [setCvData]);
 
   const handleChange = useCallback((id: string, field: keyof Education, value: string) => {
-    setCvData((prev) => ({
-      ...prev,
-      education: prev.education.map((edu) =>
-        edu.id === id ? { ...edu, [field]: value } : edu
-      ),
-    }));
-  }, [setCvData]);
+    const newEducation = cvData.education.map((edu) =>
+      edu.id === id ? { ...edu, [field]: value } : edu
+    );
+    debouncedSetCvData({ ...cvData, education: newEducation });
+  }, [cvData, debouncedSetCvData]);
 
   const handleDragEnd = useCallback((event: DragEndEvent) => {
     const { active, over } = event;

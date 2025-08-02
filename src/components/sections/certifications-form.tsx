@@ -41,7 +41,7 @@ const SortableCertificationItem = memo(({ cert, onRemove, onChange }: { cert: Ce
                             <Label htmlFor={`cert-name-${cert.id}`}>Certification Name</Label>
                             <Input
                               id={`cert-name-${cert.id}`}
-                              value={cert.name}
+                              defaultValue={cert.name}
                               onChange={(e) => onChange(cert.id, "name", e.target.value)}
                               placeholder="e.g., Certified Kubernetes Administrator"
                             />
@@ -50,7 +50,7 @@ const SortableCertificationItem = memo(({ cert, onRemove, onChange }: { cert: Ce
                             <Label htmlFor={`cert-issuer-${cert.id}`}>Issuer</Label>
                             <Input
                               id={`cert-issuer-${cert.id}`}
-                              value={cert.issuer}
+                              defaultValue={cert.issuer}
                               onChange={(e) => onChange(cert.id, "issuer", e.target.value)}
                               placeholder="e.g., The Linux Foundation"
                             />
@@ -59,7 +59,7 @@ const SortableCertificationItem = memo(({ cert, onRemove, onChange }: { cert: Ce
                             <Label htmlFor={`cert-date-${cert.id}`}>Date</Label>
                             <Input
                               id={`cert-date-${cert.id}`}
-                              value={cert.date}
+                              defaultValue={cert.date}
                               onChange={(e) => onChange(cert.id, "date", e.target.value)}
                               placeholder="e.g., 2023"
                             />
@@ -83,7 +83,7 @@ const SortableCertificationItem = memo(({ cert, onRemove, onChange }: { cert: Ce
 SortableCertificationItem.displayName = 'SortableCertificationItem';
 
 export function CertificationsForm() {
-  const { cvData, setCvData } = useCvData();
+  const { cvData, setCvData, debouncedSetCvData } = useCvData();
   const sensors = useSensors(
     useSensor(PointerSensor),
     useSensor(KeyboardSensor, {
@@ -110,13 +110,11 @@ export function CertificationsForm() {
   }, [setCvData]);
 
   const handleChange = useCallback((id: string, field: keyof Certification, value: string) => {
-    setCvData((prev) => ({
-      ...prev,
-      certifications: prev.certifications.map((cert) =>
+    const newCertifications = prev.certifications.map((cert) =>
         cert.id === id ? { ...cert, [field]: value } : cert
-      ),
-    }));
-  }, [setCvData]);
+    );
+    debouncedSetCvData({ ...cvData, certifications: newCertifications });
+  }, [cvData, debouncedSetCvData]);
   
   const handleDragEnd = useCallback((event: DragEndEvent) => {
     const { active, over } = event;
