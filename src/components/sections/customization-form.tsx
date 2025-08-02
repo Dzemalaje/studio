@@ -32,9 +32,9 @@ const TEMPLATE_OPTIONS: { value: 'default' | 'left-sidebar' | 'right-sidebar', l
 ];
 
 const FONT_SIZE_OPTIONS: { value: FontSize, label: string }[] = [
-    { value: 10, label: '10px' },
-    { value: 12, label: '12px' },
-    { value: 14, label: '14px' },
+    { value: 10, label: 'Small' },
+    { value: 12, label: 'Medium' },
+    { value: 14, label: 'Large' },
 ]
 
 const LayoutPreview = ({ layout }: { layout: 'default' | 'left-sidebar' | 'right-sidebar' }) => {
