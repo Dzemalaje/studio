@@ -2,20 +2,10 @@
 "use client";
 
 import { Button } from "@/components/ui/button";
-import { Download, Info } from "lucide-react";
-import {
-  Tooltip,
-  TooltipContent,
-  TooltipProvider,
-  TooltipTrigger,
-} from "@/components/ui/tooltip"
-
+import { Download } from "lucide-react";
+import Link from "next/link";
 
 export function Toolbar() {
-
-  const handlePrint = () => {
-    window.print();
-  }
 
   return (
     <header className="sticky top-0 z-10 w-full border-b bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60 no-print">
@@ -26,23 +16,16 @@ export function Toolbar() {
           </h1>
         </div>
         <div className="flex flex-1 items-center justify-end space-x-2">
-            <TooltipProvider>
-              <Tooltip>
-                <TooltipTrigger asChild>
-                  <Button 
-                    onClick={handlePrint} 
-                    size="sm"
-                    className="shadow-sm transition-transform hover:scale-105 text-white"
-                  >
-                    <Download className="mr-2 h-4 w-4" />
-                    Save to PDF
-                  </Button>
-                </TooltipTrigger>
-                <TooltipContent>
-                  <p>Use your browser's "Save as PDF" option to download.</p>
-                </TooltipContent>
-              </Tooltip>
-            </TooltipProvider>
+            <Button 
+              size="sm"
+              className="shadow-sm transition-transform hover:scale-105 text-white"
+              asChild
+            >
+              <Link href="/preview" target="_blank">
+                <Download className="mr-2 h-4 w-4" />
+                Save to PDF
+              </Link>
+            </Button>
         </div>
       </div>
     </header>

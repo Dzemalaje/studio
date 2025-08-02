@@ -90,9 +90,8 @@
     margin: 0;
   }
   #cv-preview-container {
-    position: static !important;
-    height: auto !important;
-    overflow: visible !important;
+    box-shadow: none;
+    border: none;
   }
   .cv-preview {
     max-width: 100%;
