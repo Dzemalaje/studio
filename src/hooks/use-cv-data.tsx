@@ -1,3 +1,4 @@
+
 "use client";
 
 import { createContext, useContext, useState, useCallback, useEffect, ReactNode, useMemo } from 'react';
@@ -30,6 +31,8 @@ const ensureIds = (data: Partial<CVData>): CVData => {
 // Debounced localStorage save
 let saveTimeout: NodeJS.Timeout;
 const saveToLocalStorage = (data: CVData) => {
+  if (typeof window === 'undefined') return;
+  
   clearTimeout(saveTimeout);
   saveTimeout = setTimeout(() => {
     try {
@@ -41,33 +44,41 @@ const saveToLocalStorage = (data: CVData) => {
 };
 
 export const CVDataProvider = ({ children }: { children: ReactNode }) => {
-  const [cvData, setCvData] = useState<CVData>(() => {
+  const [cvData, setCvData] = useState<CVData>(initialCVData);
+  const [isHydrated, setIsHydrated] = useState(false);
+
+  // Load data from localStorage only on client side after hydration
+  useEffect(() => {
     if (typeof window !== 'undefined') {
       try {
         const stored = localStorage.getItem('proficv-data');
         if (stored) {
-          return ensureIds(JSON.parse(stored));
+          setCvData(ensureIds(JSON.parse(stored)));
         }
       } catch (error) {
         console.error("Failed to load from localStorage:", error);
       }
+      setIsHydrated(true);
     }
-    return initialCVData;
-  });
+  }, []);
 
   // Immediate update function
   const updateCvData = useCallback((updates: Partial<CVData> | ((prev: CVData) => CVData)) => {
     setCvData(prev => {
       const newData = typeof updates === 'function' ? updates(prev) : { ...prev, ...updates };
-      saveToLocalStorage(newData);
+      if (isHydrated) {
+        saveToLocalStorage(newData);
+      }
       return newData;
     });
-  }, []);
+  }, [isHydrated]);
 
   const resetCvData = useCallback(() => {
     setCvData(initialCVData);
-    saveToLocalStorage(initialCVData);
-  }, []);
+    if (isHydrated) {
+      saveToLocalStorage(initialCVData);
+    }
+  }, [isHydrated]);
 
   const contextValue = useMemo(() => ({
     cvData,
