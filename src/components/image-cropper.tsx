@@ -6,109 +6,94 @@ import ReactCrop, { centerCrop, makeAspectCrop, Crop, PixelCrop } from 'react-im
 import 'react-image-crop/dist/ReactCrop.css';
 import { Button } from './ui/button';
 import { Slider } from './ui/slider';
-import { Crop as CropIcon, ZoomIn, ZoomOut } from 'lucide-react';
+import { Crop as CropIcon, ZoomIn, ZoomOut, RotateCw, Download } from 'lucide-react';
 
 interface ImageCropperProps {
   imageSrc: string;
-  onCropComplete: (croppedImageUrl: string) => void;
+  onCrop: (croppedImageUrl: string) => void;
+  onCancel: () => void;
 }
 
-function centerAspectCrop(
-  mediaWidth: number,
-  mediaHeight: number,
-  aspect: number
-) {
-  return centerCrop(
-    makeAspectCrop(
-      {
-        unit: '%',
-        width: 90,
-      },
-      aspect,
-      mediaWidth,
-      mediaHeight
-    ),
-    mediaWidth,
-    mediaHeight
-  );
-}
-
-export const ImageCropper = memo(function ImageCropper({ imageSrc, onCropComplete }: ImageCropperProps) {
+export const ImageCropper = memo(function ImageCropper({ imageSrc, onCrop, onCancel }: ImageCropperProps) {
   const [crop, setCrop] = useState<Crop>();
   const [completedCrop, setCompletedCrop] = useState<PixelCrop>();
   const [scale, setScale] = useState(1);
   const [rotate, setRotate] = useState(0);
-  const aspect = 1;
   const imgRef = useRef<HTMLImageElement>(null);
-  const previewCanvasRef = useRef<HTMLCanvasElement>(null);
 
   const onImageLoad = useCallback((e: React.SyntheticEvent<HTMLImageElement>) => {
-    if (aspect) {
-      const { width, height } = e.currentTarget;
-      setCrop(centerAspectCrop(width, height, aspect));
-    }
-  }, [aspect]);
-  
-  const handleCropImage = useCallback(() => {
-    if (
-      !completedCrop ||
-      !previewCanvasRef.current ||
-      !imgRef.current
-    ) {
-      return;
-    }
-  
-    const image = imgRef.current;
-    const canvas = previewCanvasRef.current;
-    const crop = completedCrop;
-  
-    const scaleX = image.naturalWidth / image.width;
-    const scaleY = image.naturalHeight / image.height;
-  
-    const offscreen = new OffscreenCanvas(crop.width * scaleX, crop.height * scaleY);
-    const ctx = offscreen.getContext('2d');
-    if (!ctx) {
-      throw new Error('No 2d context');
-    }
-  
-    ctx.drawImage(
-      image,
-      crop.x * scaleX,
-      crop.y * scaleY,
-      crop.width * scaleX,
-      crop.height * scaleY,
-      0,
-      0,
-      crop.width * scaleX,
-      crop.height * scaleY
+    const { width, height } = e.currentTarget;
+    const crop = centerCrop(
+      makeAspectCrop(
+        {
+          unit: '%',
+          width: 90,
+        },
+        1,
+        width,
+        height,
+      ),
+      width,
+      height,
     );
-    
-    // Create a new canvas to draw the scaled and rotated image to avoid quality loss
-    const finalCanvas = document.createElement('canvas');
-    const finalCtx = finalCanvas.getContext('2d');
-    if (!finalCtx) return;
-
-    finalCanvas.width = 512;
-    finalCanvas.height = 512;
-
-    finalCtx.drawImage(offscreen.transferToImageBitmap(), 0, 0, 512, 512);
-
-    onCropComplete(finalCanvas.toDataURL('image/jpeg'));
-  }, [completedCrop, onCropComplete]);
-
-  const handleScaleChange = useCallback((values: number[]) => {
-    setScale(values[0]);
+    setCrop(crop);
   }, []);
 
+  const handleCrop = useCallback(async () => {
+    if (!imgRef.current || !completedCrop) return;
+
+    const canvas = document.createElement('canvas');
+    const ctx = canvas.getContext('2d');
+    if (!ctx) return;
+
+    const image = imgRef.current;
+    const scaleX = image.naturalWidth / image.width;
+    const scaleY = image.naturalHeight / image.height;
+
+    canvas.width = completedCrop.width * scaleX;
+    canvas.height = completedCrop.height * scaleY;
+
+    ctx.imageSmoothingQuality = 'high';
+    ctx.save();
+
+    // Apply rotation
+    if (rotate !== 0) {
+      ctx.translate(canvas.width / 2, canvas.height / 2);
+      ctx.rotate((rotate * Math.PI) / 180);
+      ctx.translate(-canvas.width / 2, -canvas.height / 2);
+    }
+
+    ctx.drawImage(
+      image,
+      completedCrop.x * scaleX,
+      completedCrop.y * scaleY,
+      completedCrop.width * scaleX,
+      completedCrop.height * scaleY,
+      0,
+      0,
+      canvas.width,
+      canvas.height,
+    );
+
+    ctx.restore();
+
+    canvas.toBlob((blob) => {
+      if (blob) {
+        const croppedImageUrl = URL.createObjectURL(blob);
+        onCrop(croppedImageUrl);
+      }
+    }, 'image/jpeg', 0.9);
+  }, [completedCrop, rotate, onCrop]);
+
   return (
-    <div className="space-y-4">
-      <div className="flex justify-center bg-muted rounded-md overflow-hidden">
+    <div className="space-y-6 p-4">
+      <div className="relative overflow-hidden rounded-lg border bg-muted/20">
         <ReactCrop
           crop={crop}
           onChange={(_, percentCrop) => setCrop(percentCrop)}
           onComplete={(c) => setCompletedCrop(c)}
-          aspect={aspect}
-          circularCrop
+          aspect={1}
+          className="max-h-96"
         >
           <img
             ref={imgRef}
@@ -116,33 +101,50 @@ export const ImageCropper = memo(function ImageCropper({ imageSrc, onCropComplet
             src={imageSrc}
             style={{ transform: `scale(${scale}) rotate(${rotate}deg)` }}
             onLoad={onImageLoad}
+            className="max-w-full h-auto transition-transform duration-200"
           />
         </ReactCrop>
       </div>
 
-       <div className="flex items-center gap-4">
-        <ZoomOut className="text-muted-foreground"/>
-        <Slider
+      <div className="space-y-4">
+        <div className="space-y-2">
+          <div className="flex items-center gap-2 text-sm font-medium">
+            <ZoomIn className="h-4 w-4" />
+            Zoom: {Math.round(scale * 100)}%
+          </div>
+          <Slider
             value={[scale]}
+            onValueChange={(value) => setScale(value[0])}
+            max={3}
             min={0.5}
-            max={2}
-            step={0.01}
-            onValueChange={handleScaleChange}
-        />
-        <ZoomIn className="text-muted-foreground" />
+            step={0.1}
+            className="w-full"
+          />
+        </div>
+
+        <div className="flex items-center gap-2">
+          <Button
+            variant="outline"
+            size="sm"
+            onClick={() => setRotate((prev) => prev + 90)}
+            className="flex items-center gap-2"
+          >
+            <RotateCw className="h-4 w-4" />
+            Rotate
+          </Button>
+          <span className="text-sm text-muted-foreground">{rotate}°</span>
+        </div>
       </div>
 
-      <Button onClick={handleCropImage} className="w-full text-white">
-        <CropIcon className="mr-2" />
-        Crop Image
-      </Button>
-
-      {!!completedCrop && (
-        <canvas
-            ref={previewCanvasRef}
-            className="hidden"
-        />
-      )}
+      <div className="flex justify-end gap-2 pt-4 border-t">
+        <Button variant="outline" onClick={onCancel}>
+          Cancel
+        </Button>
+        <Button onClick={handleCrop} className="bg-primary text-primary-foreground">
+          <Download className="mr-2 h-4 w-4" />
+          Apply Crop
+        </Button>
+      </div>
     </div>
   );
 });

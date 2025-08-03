@@ -6,8 +6,8 @@ import { Poppins, PT_Sans } from 'next/font/google';
 import { cn } from '@/lib/utils';
 
 export const metadata: Metadata = {
-  title: 'CV Canvas',
-  description: 'A modern CV builder to craft your perfect resume.',
+  title: 'ProfiCV',
+  description: 'Professional CV builder - Create stunning resumes with ease.',
 };
 
 const ptSans = PT_Sans({

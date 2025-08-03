@@ -41,17 +41,17 @@ export const CVPreview = memo(function CVPreview() {
   return (
     <div
       id="cv-preview-container"
-      className="w-full max-w-[800px] mx-auto"
+      className="w-full max-w-[800px] mx-auto print:max-w-none print:mx-0 print:shadow-none"
     >
-        <div
-            id="cv-preview"
-            className="cv-preview"
-            style={cssProperties}
-        >
-          <LayoutGroup>
-            {renderTemplate()}
-          </LayoutGroup>
-        </div>
+      <div
+        id="cv-preview"
+        className="cv-preview bg-white shadow-2xl print:shadow-none print:m-0 print:p-0 rounded-lg print:rounded-none overflow-hidden"
+        style={cssProperties}
+      >
+        <LayoutGroup>
+          {renderTemplate()}
+        </LayoutGroup>
+      </div>
     </div>
   );
 });

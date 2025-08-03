@@ -1,0 +1,15 @@
+[deployment]
+run = ["sh", "-c", "npm run start"]
+build = ["sh", "-c", "npm run build"]
+
+[workflows]
+runButton = "Development Server"
+
+[[workflows.workflow]]
+name = "Development Server"
+author = 12096037
+mode = "sequential"
+
+[[workflows.workflow.tasks]]
+task = "shell.exec"
+args = "npm run dev"
