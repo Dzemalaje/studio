@@ -1,3 +1,4 @@
+modules = ["nodejs-20"]
 [deployment]
 run = ["sh", "-c", "npm run start"]
 build = ["sh", "-c", "npm run build"]
@@ -13,3 +14,7 @@ mode = "sequential"
 [[workflows.workflow.tasks]]
 task = "shell.exec"
 args = "npm run dev"
+
+[[ports]]
+localPort = 9002
+externalPort = 80
