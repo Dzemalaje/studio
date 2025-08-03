@@ -16,5 +16,9 @@ task = "shell.exec"
 args = "npx next dev --port 5000 --hostname 0.0.0.0"
 
 [[ports]]
+localPort = 5000
+externalPort = 5000
+
+[[ports]]
 localPort = 9002
 externalPort = 80
