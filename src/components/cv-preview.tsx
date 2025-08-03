@@ -1,12 +1,12 @@
 "use client";
 
 import { memo } from 'react';
-import { useCVData } from '@/hooks/use-cv-data';
+import { useCvData } from '@/hooks/use-cv-data';
 import { DefaultTemplate } from '@/components/cv-templates/default-template';
 import { SidebarTemplate } from '@/components/cv-templates/sidebar-template';
 
 const CVPreview = memo(() => {
-  const { cvData } = useCVData();
+  const { cvData } = useCvData();
 
   const renderTemplate = () => {
     switch (cvData.template) {
