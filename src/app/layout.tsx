@@ -1,27 +1,49 @@
 
-import type { Metadata } from 'next';
-import { Toaster } from "@/components/ui/toaster"
-import './globals.css';
-import { Poppins, PT_Sans } from 'next/font/google';
-import { cn } from '@/lib/utils';
+import type { Metadata } from "next";
+import { Inter, Roboto, Open_Sans, Lato, Poppins } from "next/font/google";
+import "./globals.css";
+import { Toaster } from "@/components/ui/toaster";
 
-export const metadata: Metadata = {
-  title: 'ProfiCV',
-  description: 'Professional CV builder - Create stunning resumes with ease.',
-};
+const inter = Inter({
+  subsets: ["latin"],
+  variable: "--font-inter",
+  display: 'swap',
+});
 
-const ptSans = PT_Sans({
-  subsets: ['latin'],
-  weight: ['400', '700'],
-  variable: '--font-pt-sans',
+const roboto = Roboto({
+  weight: ['300', '400', '500', '700'],
+  subsets: ["latin"],
+  variable: "--font-roboto",
+  display: 'swap',
+});
+
+const openSans = Open_Sans({
+  subsets: ["latin"],
+  variable: "--font-open-sans",
+  display: 'swap',
+});
+
+const lato = Lato({
+  weight: ['300', '400', '700'],
+  subsets: ["latin"],
+  variable: "--font-lato",
+  display: 'swap',
 });
 
 const poppins = Poppins({
-  subsets: ['latin'],
-  weight: ['400', '500', '600', '700'],
-  variable: '--font-poppins',
+  weight: ['300', '400', '500', '600', '700'],
+  subsets: ["latin"],
+  variable: "--font-poppins",
+  display: 'swap',
 });
 
+export const metadata: Metadata = {
+  title: "ProfiCV - Professional Resume Builder",
+  description: "Create beautiful, professional resumes with ProfiCV. Choose from multiple templates, customize colors, and export to PDF instantly.",
+  keywords: "resume, CV, resume builder, professional resume, job application, career",
+  authors: [{ name: "ProfiCV Team" }],
+  viewport: "width=device-width, initial-scale=1",
+};
 
 export default function RootLayout({
   children,
@@ -30,7 +52,7 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en" suppressHydrationWarning>
-      <body className={cn("antialiased", ptSans.variable, poppins.variable)}>
+      <body className={`${inter.variable} ${roboto.variable} ${openSans.variable} ${lato.variable} ${poppins.variable} font-sans antialiased`}>
         {children}
         <Toaster />
       </body>

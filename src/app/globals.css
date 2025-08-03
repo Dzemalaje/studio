@@ -24,13 +24,18 @@
     --border: 214.3 31.8% 91.4%;
     --input: 214.3 31.8% 91.4%;
     --ring: 221.2 83.2% 53.3%;
-    --radius: 0.75rem;
-    
-    /* Dynamic primary color variables */
+    --radius: 0.5rem;
+    --chart-1: 12 76% 61%;
+    --chart-2: 173 58% 39%;
+    --chart-3: 197 37% 24%;
+    --chart-4: 43 74% 66%;
+    --chart-5: 27 87% 67%;
+
+    /* Dynamic primary colors for CV themes */
     --primary-h: 221.2;
     --primary-s: 83.2%;
     --primary-l: 53.3%;
-    --primary-foreground-hsl: 210 40% 98%;
+    --primary-foreground-l: 98%;
   }
 
   .dark {
@@ -53,6 +58,11 @@
     --border: 217.2 32.6% 17.5%;
     --input: 217.2 32.6% 17.5%;
     --ring: 224.3 76.3% 94.1%;
+    --chart-1: 220 70% 50%;
+    --chart-2: 160 60% 45%;
+    --chart-3: 30 80% 55%;
+    --chart-4: 280 65% 60%;
+    --chart-5: 340 75% 55%;
   }
 }
 
@@ -61,142 +71,134 @@
     @apply border-border;
   }
   body {
-    @apply bg-background text-foreground font-body;
-    font-feature-settings: "rlig" 1, "calt" 1;
+    @apply bg-background text-foreground;
   }
 }
 
-@layer components {
-  .cv-preview {
-    background: white !important;
-    color: black !important;
-    font-size: 14px;
-    line-height: 1.5;
-    letter-spacing: 0.01em;
-  }
+/* CV Theme Dynamic Colors */
+.cv-preview {
+  --primary: hsl(var(--primary-h), var(--primary-s), var(--primary-l));
+  --primary-foreground: hsl(var(--primary-h), var(--primary-s), var(--primary-foreground-l));
 }
 
-/* Print Styles */
+/* Print Optimization */
 @media print {
-  @page {
-    margin: 0;
-    size: A4;
-  }
-  
   * {
     -webkit-print-color-adjust: exact !important;
     color-adjust: exact !important;
     print-color-adjust: exact !important;
   }
-  
+
+  @page {
+    size: A4;
+    margin: 0;
+    padding: 0;
+  }
+
   body {
-    font-size: 12pt !important;
+    margin: 0 !important;
+    padding: 0 !important;
+    background: white !important;
+    font-size: 12px !important;
     line-height: 1.4 !important;
   }
-  
-  .no-print,
-  .no-print * {
+
+  /* Hide everything except CV preview */
+  body > *:not(#cv-preview-container) {
     display: none !important;
   }
-  
+
   #cv-preview-container {
+    display: block !important;
+    width: 210mm !important;
+    max-width: 210mm !important;
+    margin: 0 !important;
+    padding: 0 !important;
+    box-shadow: none !important;
+    border: none !important;
+    border-radius: 0 !important;
+    background: white !important;
+  }
+
+  #cv-preview {
+    width: 210mm !important;
+    min-height: 297mm !important;
     max-width: none !important;
     margin: 0 !important;
-    padding: 0 !important;
+    padding: 20mm !important;
     box-shadow: none !important;
+    border: none !important;
     border-radius: 0 !important;
-    width: 100% !important;
-    height: auto !important;
-  }
-  
-  #cv-preview {
-    margin: 0 !important;
-    padding: 0 !important;
-    box-shadow: none !important;
-    border-radius: 0 !important;
-    width: 100% !important;
-    height: auto !important;
+    background: white !important;
     overflow: visible !important;
     page-break-inside: avoid;
   }
-  
-  .cv-preview {
-    background: white !important;
-    color: black !important;
-    margin: 0 !important;
-    padding: 0 !important;
-    width: 100% !important;
-    height: auto !important;
+
+  /* Ensure text is crisp in print */
+  .cv-preview * {
+    text-rendering: optimizeLegibility !important;
+    -webkit-font-smoothing: antialiased !important;
+    -moz-osx-font-smoothing: grayscale !important;
   }
-  
-  /* Ensure proper spacing in print */
-  .cv-preview > * {
+
+  /* Hide interactive elements */
+  button, input, textarea, select, .no-print {
+    display: none !important;
+  }
+
+  /* Optimize spacing for print */
+  .cv-preview h1 {
+    font-size: 24px !important;
+    margin-bottom: 8px !important;
+  }
+
+  .cv-preview h2 {
+    font-size: 18px !important;
+    margin-bottom: 6px !important;
+    margin-top: 16px !important;
+  }
+
+  .cv-preview h3 {
+    font-size: 16px !important;
+    margin-bottom: 4px !important;
+  }
+
+  .cv-preview p {
+    margin-bottom: 4px !important;
+    line-height: 1.4 !important;
+  }
+
+  .cv-preview .space-y-4 > * + * {
+    margin-top: 12px !important;
+  }
+
+  .cv-preview .space-y-2 > * + * {
+    margin-top: 6px !important;
+  }
+
+  /* Ensure profile image prints well */
+  .cv-preview img {
+    max-width: 100% !important;
+    height: auto !important;
     page-break-inside: avoid;
   }
-  
-  /* Hide scroll bars */
-  ::-webkit-scrollbar {
-    display: none;
-  }
-  
-  /* Force print backgrounds */
-  .bg-primary,
-  .bg-accent,
-  .bg-secondary {
-    -webkit-print-color-adjust: exact !important;
-    color-adjust: exact !important;
-    print-color-adjust: exact !important;
-  }
 }
 
-/* Enhanced animations and transitions */
-@layer utilities {
-  .animate-fade-in {
-    animation: fadeIn 0.5s ease-in-out;
-  }
-  
-  .animate-slide-up {
-    animation: slideUp 0.3s ease-out;
-  }
-  
-  .glass-effect {
-    backdrop-filter: blur(10px);
-    background: rgba(255, 255, 255, 0.8);
-    border: 1px solid rgba(255, 255, 255, 0.2);
-  }
-  
-  .gradient-border {
-    background: linear-gradient(white, white) padding-box,
-                linear-gradient(45deg, hsl(var(--primary)), hsl(var(--accent))) border-box;
-    border: 2px solid transparent;
-  }
+/* Accordion animations */
+@keyframes accordion-down {
+  from { height: 0 }
+  to { height: var(--radix-accordion-content-height) }
 }
 
-@keyframes fadeIn {
-  from { opacity: 0; transform: translateY(10px); }
-  to { opacity: 1; transform: translateY(0); }
+@keyframes accordion-up {
+  from { height: var(--radix-accordion-content-height) }
+  to { height: 0 }
 }
 
-@keyframes slideUp {
-  from { transform: translateY(20px); opacity: 0; }
-  to { transform: translateY(0); opacity: 1; }
+.animate-accordion-down {
+  animation: accordion-down 0.2s ease-out;
 }
 
-/* Custom scrollbar */
-::-webkit-scrollbar {
-  width: 8px;
-}
-
-::-webkit-scrollbar-track {
-  background: hsl(var(--muted));
-  border-radius: 4px;
-}
-
-::-webkit-scrollbar-thumb {
-  background: hsl(var(--border));
-  border-radius: 4px;
-}
-
-::-webkit-scrollbar-thumb:hover {
-  background: hsl(var(--primary) / 0.5);
+.animate-accordion-up {
+  animation: accordion-up 0.2s ease-out;
 }

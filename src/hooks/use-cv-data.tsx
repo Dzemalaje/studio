@@ -1,17 +1,14 @@
-
 "use client";
 
-import { createContext, useContext, useState, Dispatch, SetStateAction, useEffect, ReactNode, useMemo, useCallback, useRef } from 'react';
+import { createContext, useContext, useState, useCallback, useEffect, ReactNode, useMemo } from 'react';
 import { CVData } from '@/lib/types';
 import { initialCVData } from '@/lib/initial-data';
 import { v4 as uuidv4 } from 'uuid';
-import debounce from 'lodash.debounce';
-
 
 interface CVDataContextType {
   cvData: CVData;
-  setCvData: Dispatch<SetStateAction<CVData>>;
-  debouncedSetCvData: (data: CVData) => void;
+  updateCvData: (updates: Partial<CVData> | ((prev: CVData) => CVData)) => void;
+  resetCvData: () => void;
 }
 
 const CVDataContext = createContext<CVDataContextType | undefined>(undefined);
@@ -30,62 +27,53 @@ const ensureIds = (data: Partial<CVData>): CVData => {
   };
 };
 
-export const CVDataProvider = ({ children }: { children: ReactNode }) => {
-  const [cvData, setCvData] = useState<CVData>(initialCVData);
-  const [isMounted, setIsMounted] = useState(false);
-  const saveTimeoutRef = useRef<NodeJS.Timeout>();
-
-  useEffect(() => {
+// Debounced localStorage save
+let saveTimeout: NodeJS.Timeout;
+const saveToLocalStorage = (data: CVData) => {
+  clearTimeout(saveTimeout);
+  saveTimeout = setTimeout(() => {
     try {
-      const storedData = window.localStorage.getItem('proficv-data');
-      if (storedData) {
-        setCvData(ensureIds(JSON.parse(storedData)));
-      }
+      localStorage.setItem('proficv-data', JSON.stringify(data));
     } catch (error) {
-      console.error("Failed to read from localStorage on init", error);
+      console.error("Failed to save to localStorage:", error);
     }
-    setIsMounted(true);
+  }, 300);
+};
+
+export const CVDataProvider = ({ children }: { children: ReactNode }) => {
+  const [cvData, setCvData] = useState<CVData>(() => {
+    if (typeof window !== 'undefined') {
+      try {
+        const stored = localStorage.getItem('proficv-data');
+        if (stored) {
+          return ensureIds(JSON.parse(stored));
+        }
+      } catch (error) {
+        console.error("Failed to load from localStorage:", error);
+      }
+    }
+    return initialCVData;
+  });
+
+  // Immediate update function
+  const updateCvData = useCallback((updates: Partial<CVData> | ((prev: CVData) => CVData)) => {
+    setCvData(prev => {
+      const newData = typeof updates === 'function' ? updates(prev) : { ...prev, ...updates };
+      saveToLocalStorage(newData);
+      return newData;
+    });
   }, []);
 
-  // Optimized localStorage saving with batching
-  useEffect(() => {
-    if (isMounted) {
-      // Clear existing timeout
-      if (saveTimeoutRef.current) {
-        clearTimeout(saveTimeoutRef.current);
-      }
-      
-      // Batch localStorage writes to avoid blocking the main thread
-      saveTimeoutRef.current = setTimeout(() => {
-        try {
-          const dataToStore = JSON.stringify(cvData);
-          window.localStorage.setItem('proficv-data', dataToStore);
-        } catch (error) {
-          console.error("Failed to write to localStorage", error);
-        }
-      }, 100);
-    }
-  }, [cvData, isMounted]);
+  const resetCvData = useCallback(() => {
+    setCvData(initialCVData);
+    saveToLocalStorage(initialCVData);
+  }, []);
 
-  // Increase debounce delay for better performance
-  const debouncedSetCvData = useMemo(
-    () => debounce((newData) => {
-      setCvData(newData);
-    }, 500),
-    []
-  );
-
-  useEffect(() => {
-    return () => {
-      debouncedSetCvData.cancel();
-      if (saveTimeoutRef.current) {
-        clearTimeout(saveTimeoutRef.current);
-      }
-    }
-  }, [debouncedSetCvData]);
-
-
-  const contextValue = useMemo(() => ({ cvData, setCvData, debouncedSetCvData }), [cvData, setCvData, debouncedSetCvData]);
+  const contextValue = useMemo(() => ({
+    cvData,
+    updateCvData,
+    resetCvData
+  }), [cvData, updateCvData, resetCvData]);
 
   return (
     <CVDataContext.Provider value={contextValue}>

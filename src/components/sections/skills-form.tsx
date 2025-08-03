@@ -1,4 +1,3 @@
-
 "use client";
 
 import { useCvData } from "@/hooks/use-cv-data";
@@ -49,8 +48,9 @@ const SortableSkill = memo(({ skill, onRemove }: { skill: Skill; onRemove: (id: 
 SortableSkill.displayName = 'SortableSkill';
 
 export function SkillsForm() {
-  const { cvData, setCvData } = useCvData();
-  const [currentSkill, setCurrentSkill] = useState("");
+  const { cvData, updateCvData } = useCvData();
+  const [currentSkill, setCurrentSkill] = useState('');
+
   const sensors = useSensors(
     useSensor(PointerSensor),
     useSensor(KeyboardSensor, {
@@ -60,21 +60,25 @@ export function SkillsForm() {
 
   const handleAddSkill = useCallback(() => {
     if (currentSkill.trim()) {
-      setCvData((prev) => ({
+      const newSkill: Skill = {
+        id: uuidv4(),
+        name: currentSkill.trim(),
+      };
+      updateCvData(prev => ({
         ...prev,
-        skills: [...prev.skills, { id: uuidv4(), name: currentSkill.trim() }],
+        skills: [...prev.skills, newSkill]
       }));
-      setCurrentSkill("");
+      setCurrentSkill('');
     }
-  }, [currentSkill, setCvData]);
+  }, [currentSkill, updateCvData]);
 
   const handleRemoveSkill = useCallback((id: string) => {
-    setCvData((prev) => ({
+    updateCvData(prev => ({
       ...prev,
-      skills: prev.skills.filter((skill) => skill.id !== id),
+      skills: prev.skills.filter(skill => skill.id !== id)
     }));
-  }, [setCvData]);
-  
+  }, [updateCvData]);
+
   const handleKeyPress = useCallback((e: KeyboardEvent<HTMLInputElement>) => {
     if (e.key === 'Enter') {
       e.preventDefault();
@@ -84,17 +88,19 @@ export function SkillsForm() {
 
   const handleDragEnd = useCallback((event: DragEndEvent) => {
     const { active, over } = event;
+
     if (over && active.id !== over.id) {
-      setCvData((prev) => {
-        const oldIndex = prev.skills.findIndex((s) => s.id === active.id);
-        const newIndex = prev.skills.findIndex((s) => s.id === over.id);
+      updateCvData(prev => {
+        const oldIndex = prev.skills.findIndex(skill => skill.id === active.id);
+        const newIndex = prev.skills.findIndex(skill => skill.id === over.id);
+
         return {
           ...prev,
-          skills: arrayMove(prev.skills, oldIndex, newIndex),
+          skills: arrayMove(prev.skills, oldIndex, newIndex)
         };
       });
     }
-  }, [setCvData]);
+  }, [updateCvData]);
 
   return (
     <div className="space-y-4 p-1">

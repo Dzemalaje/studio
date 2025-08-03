@@ -1,4 +1,3 @@
-
 "use client";
 
 import { Button } from "@/components/ui/button";
@@ -6,6 +5,11 @@ import { Download, Sparkles } from "lucide-react";
 import Link from "next/link";
 
 export function Toolbar() {
+  const handlePrint = async () => {
+    const { optimizePrint } = await import('@/lib/print-utils');
+    optimizePrint();
+  };
+
   return (
     <header className="sticky top-0 z-50 w-full border-b bg-background/95 backdrop-blur-md supports-[backdrop-filter]:bg-background/60 no-print">
       <div className="container flex h-16 items-center">

@@ -4,7 +4,6 @@
 import { useCvData } from "@/hooks/use-cv-data";
 import { useMemo, memo } from "react";
 import { cn, hexToHsl } from "@/lib/utils";
-import { LayoutGroup } from "framer-motion";
 import { DefaultTemplate } from "@/components/cv-templates/default-template";
 import { SidebarTemplate } from "@/components/cv-templates/sidebar-template";
 
@@ -13,7 +12,7 @@ export const CVPreview = memo(function CVPreview() {
   const { cvData } = useCvData();
 
   // Memoize template rendering to avoid recreation on every render
-  const renderTemplate = () => {
+  const renderTemplate = useMemo(() => {
     switch (cvData.template) {
       case 'left-sidebar':
         return <SidebarTemplate sidebarPosition="left" />;
@@ -23,7 +22,7 @@ export const CVPreview = memo(function CVPreview() {
       default:
         return <DefaultTemplate />;
     }
-  };
+  }, [cvData.template]);
 
   // Memoize color calculations
   const [h, s, l] = useMemo(() => hexToHsl(cvData.themeColor), [cvData.themeColor]);
@@ -41,16 +40,14 @@ export const CVPreview = memo(function CVPreview() {
   return (
     <div
       id="cv-preview-container"
-      className="w-full max-w-[800px] mx-auto print:max-w-none print:mx-0 print:shadow-none"
+      className="w-full max-w-[210mm] mx-auto print:max-w-none print:mx-0 print:shadow-none print:p-0 print:m-0"
     >
       <div
         id="cv-preview"
-        className="cv-preview bg-white shadow-2xl print:shadow-none print:m-0 print:p-0 rounded-lg print:rounded-none overflow-hidden"
+        className="cv-preview bg-white shadow-2xl print:shadow-none print:m-0 print:p-0 rounded-lg print:rounded-none overflow-hidden min-h-[297mm] print:min-h-[297mm]"
         style={cssProperties}
       >
-        <LayoutGroup>
-          {renderTemplate()}
-        </LayoutGroup>
+        {renderTemplate}
       </div>
     </div>
   );
